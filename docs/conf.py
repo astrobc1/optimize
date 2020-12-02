@@ -63,7 +63,7 @@ html_static_path = ['_static']
 
 #html_style = 'css/mystyle.css'
 
-#html_logo = 'images/pychell_logo.png'
-#html_favicon = 'images/pychell_logo.ico'
+html_logo = 'images/optimize_logo.png'
+html_favicon = 'images/optimize_logo.ico'
 
 master_doc = 'index'
