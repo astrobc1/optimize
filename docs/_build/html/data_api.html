@@ -1,0 +1,215 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>optimize API reference &#8212; optimize  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="optimize API reference" href="knowledge_api.html" />
+    <link rel="prev" title="optimize API reference" href="api.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="optimize-api-reference">
+<h1>optimize API reference<a class="headerlink" href="#optimize-api-reference" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-optimize.data">
+<span id="data"></span><h2>Data<a class="headerlink" href="#module-optimize.data" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="optimize.data.Data">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.data.</code><code class="sig-name descname">Data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">label</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.data.Data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>An base class for general datasets.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="optimize.data.MixedData">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.data.</code><code class="sig-name descname">MixedData</code><a class="headerlink" href="#optimize.data.MixedData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="optimize.data.SimpleData">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.data.</code><code class="sig-name descname">SimpleData</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">yerr</span></em>, <em class="sig-param"><span class="n">mask</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">label</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.data.SimpleData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#optimize.data.Data" title="optimize.data.Data"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.data.Data</span></code></a></p>
+<p>A base class for simple datasets.</p>
+<dl class="py attribute">
+<dt id="optimize.data.SimpleData.x">
+<code class="sig-name descname">x</code><a class="headerlink" href="#optimize.data.SimpleData.x" title="Permalink to this definition">¶</a></dt>
+<dd><p>The effective independent variable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="optimize.data.SimpleData.y">
+<code class="sig-name descname">y</code><a class="headerlink" href="#optimize.data.SimpleData.y" title="Permalink to this definition">¶</a></dt>
+<dd><p>The effective dependent variable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="optimize.data.SimpleData.yerr">
+<code class="sig-name descname">yerr</code><a class="headerlink" href="#optimize.data.SimpleData.yerr" title="Permalink to this definition">¶</a></dt>
+<dd><p>The intrinsic errorbars for y.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="optimize.data.SimpleData.mask">
+<code class="sig-name descname">mask</code><a class="headerlink" href="#optimize.data.SimpleData.mask" title="Permalink to this definition">¶</a></dt>
+<dd><p>An array defining good (=1) and bad (=0) data points, must have the same shape as y. Defaults to None (all good data).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p>Constructs a general dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>np.ndarray</em>) – The effective independent variable.</p></li>
+<li><p><strong>y</strong> (<em>np.ndarray</em>) – The effective dependent variable.</p></li>
+<li><p><strong>mask</strong> (<em>np.ndarray</em>) – An array defining good (=1) and bad (=0) data points, must have the same shape as y. Defaults to None (all good data).</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="optimize.data.SimpleData.compute_errorbars">
+<code class="sig-name descname">compute_errorbars</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.data.SimpleData.compute_errorbars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the effective error bars after including additional white noise (“jitter”) terms. Errors are added in quadrature.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pars</strong> (<a class="reference internal" href="knowledge_api.html#optimize.knowledge.Parameters" title="optimize.knowledge.Parameters"><em>Parameters</em></a>) – The parameters object containing the “jitter” parameter. If not present, the errorbars are returned.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The computed errorbars.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">optimize</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending.html">Extending pychell</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="api.html">API</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="knowledge_api.html">Knowledge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models_api.html">Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kernels_api.html">Kernels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="optimizers_api.html">Optimizers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="frameworks_api.html">Frameworks</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="api.html">optimize API reference</a><ul>
+      <li>Previous: <a href="api.html" title="previous chapter">optimize API reference</a></li>
+      <li>Next: <a href="knowledge_api.html" title="next chapter">optimize API reference</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Bryson Cale.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/data_api.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

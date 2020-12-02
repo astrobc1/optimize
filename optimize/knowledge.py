@@ -268,7 +268,7 @@ class Parameters(dict):
         """
         return self[list(self.keys())[k]]
     
-    def index_from_par(self, name, wrtv=False):
+    def index_from_par(self, name, vary=False):
         """Gets the index of a given parameter name.
 
         Args:
@@ -277,7 +277,9 @@ class Parameters(dict):
         Returns:
             int: The numerical index of the parameter.
         """
-        if wrtv:
+        if vary:
+            return list(self.get_varied().keys()).index(name)
+        else:
             return list(self.get_varied().keys()).index(name)
     
     def get_hard_bounds(self):

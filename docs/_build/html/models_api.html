@@ -1,0 +1,187 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>optimize API reference &#8212; optimize  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="optimize API reference" href="kernels_api.html" />
+    <link rel="prev" title="optimize API reference" href="knowledge_api.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="optimize-api-reference">
+<h1>optimize API reference<a class="headerlink" href="#optimize-api-reference" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-optimize.models">
+<span id="models"></span><h2>Models<a class="headerlink" href="#module-optimize.models" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="optimize.models.BayesianModel">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.models.</code><code class="sig-name descname">BayesianModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">builder</span></em>, <em class="sig-param"><span class="n">kernel</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">args_to_pass</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">kwargs_to_pass</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.models.BayesianModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#optimize.models.Model" title="optimize.models.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.models.Model</span></code></a></p>
+<p>A general class for a Bayesian model to optimize.</p>
+<dl class="py attribute">
+<dt id="optimize.models.BayesianModel.kernel">
+<code class="sig-name descname">kernel</code><a class="headerlink" href="#optimize.models.BayesianModel.kernel" title="Permalink to this definition">¶</a></dt>
+<dd><p>The noise kernel to use.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>NoiseKernel</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p>Constructs a Bayesian model for optimization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>builder</strong> (<em>callable</em>) – Defines the model to use, must be callable via self.builder(<a href="#id1"><span class="problematic" id="id2">*</span></a>self.args_to_pass, <a href="#id3"><span class="problematic" id="id4">**</span></a>kwargs_to_pass)</p></li>
+<li><p><strong>args_to_pass</strong> (<em>tuple</em><em>, </em><em>optional</em>) – The arguments to pass to the build method. Defaults to an empty tuple ().</p></li>
+<li><p><strong>kwargs_to_pass</strong> (<em>dict</em><em>, </em><em>optional</em>) – The keyword arguments to pass to the build method. Defaults to an empty dict {}.</p></li>
+<li><p><strong>kernel</strong> (<em>NoiseKernel</em><em>, </em><em>optional</em>) – The noise kernel to use. Defaults to WhiteNoiseKernel.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="optimize.models.Model">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.models.</code><code class="sig-name descname">Model</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">builder</span></em>, <em class="sig-param"><span class="n">args_to_pass</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">kwargs_to_pass</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.models.Model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A base class for a model to optimize.</p>
+<p>Constructs a base model for optimization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>builder</strong> (<em>callable</em>) – Defines the model to use, must be callable via self.builder(<a href="#id5"><span class="problematic" id="id6">*</span></a>self.args_to_pass, <a href="#id7"><span class="problematic" id="id8">**</span></a>kwargs_to_pass)</p></li>
+<li><p><strong>args_to_pass</strong> (<em>tuple</em><em>, </em><em>optional</em>) – The arguments to pass to the build method. Defaults to ().</p></li>
+<li><p><strong>kwargs_to_pass</strong> (<em>dict</em><em>, </em><em>optional</em>) – The keyword arguments to pass to the build method. Defaults to {}.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="optimize.models.Model.build">
+<code class="sig-name descname">build</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.models.Model.build" title="Permalink to this definition">¶</a></dt>
+<dd><p>Builds the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pars</strong> (<a class="reference internal" href="knowledge_api.html#optimize.knowledge.Parameters" title="optimize.knowledge.Parameters"><em>Parameters</em></a>) – The parameters to use to build the model.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The constructed model.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">optimize</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending.html">Extending pychell</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="api.html">API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="data_api.html">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="knowledge_api.html">Knowledge</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kernels_api.html">Kernels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="optimizers_api.html">Optimizers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="frameworks_api.html">Frameworks</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="api.html">optimize API reference</a><ul>
+      <li>Previous: <a href="knowledge_api.html" title="previous chapter">optimize API reference</a></li>
+      <li>Next: <a href="kernels_api.html" title="next chapter">optimize API reference</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Bryson Cale.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/models_api.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

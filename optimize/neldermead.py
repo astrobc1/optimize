@@ -109,7 +109,7 @@ class NelderMead(optimizers.AbstractMinimizer):
             self.subspace_inds_vary.append([])
             for pname in s:
                 self.subspace_inds[-1].append(self.p0.index_from_par(pname))
-                self.subspace_inds_vary[-1].append(self.p0.inde_from_par(pname, wrtv=True))
+                self.subspace_inds_vary[-1].append(self.p0.index_from_par(pname, vary=True))
 
 
     def init_space(self, subspace_index=None):
