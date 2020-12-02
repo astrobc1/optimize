@@ -116,7 +116,7 @@ class NelderMead(optimizers.AbstractMinimizer):
         
         if subspace_index is not None:
             n = len(self.subspaces[subspace_index])
-            inds = [self.p0.get_index(pname) for pname in self.subspaces[subspace_index]]
+            inds = [self.p0.index_from_par(pname) for pname in self.subspaces[subspace_index]]
             self.current_simplex = np.zeros((n, n+1))
             pbest = self.pmin.unpack(keys='value')['value'][inds]
             pinit = self.p0_numpy['value'][inds]
@@ -292,12 +292,12 @@ class NelderMead(optimizers.AbstractMinimizer):
         # Output variable
         out = {}
         out['status'] = "converged"
-        out['fmin'] = self.fmin
+        out['fbest'] = self.fmin
         out['fcalls'] = self.fcalls
             
         # Recreate new parameter obejcts
         out['pbest'] = self.pmin
-        out['fmin'] = self.fmin
+        out['fbest'] = self.fmin
         out['fcalls'] = self.fcalls
 
         return out

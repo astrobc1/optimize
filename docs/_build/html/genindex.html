@@ -13,6 +13,7 @@
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/language_data.js"></script>
+    <link rel="shortcut icon" href="_static/optimize_logo.ico"/>
     <link rel="index" title="Index" href="#" />
     <link rel="search" title="Search" href="search.html" />
    
@@ -39,7 +40,6 @@
  | <a href="#B"><strong>B</strong></a>
  | <a href="#C"><strong>C</strong></a>
  | <a href="#D"><strong>D</strong></a>
- | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
  | <a href="#I"><strong>I</strong></a>
  | <a href="#J"><strong>J</strong></a>
@@ -76,7 +76,7 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="frameworks_api.html#optimize.frameworks.BayesianProblem">BayesianProblem (class in optimize.frameworks)</a>
 </li>
-      <li><a href="models_api.html#optimize.models.Model.build">build() (optimize.models.Model method)</a>
+      <li><a href="models_api.html#optimize.models.SimpleModel.build">build() (optimize.models.SimpleModel method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -93,18 +93,6 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="data_api.html#optimize.data.Data">Data (class in optimize.data)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="frameworks_api.html#optimize.frameworks.OptProblem.data">data (optimize.frameworks.OptProblem attribute)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="F">F</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="frameworks_api.html#optimize.frameworks.FrequentistProblem">FrequentistProblem (class in optimize.frameworks)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -176,12 +164,6 @@
       </ul></li>
       <li><a href="data_api.html#optimize.data.MixedData">MixedData (class in optimize.data)</a>
 </li>
-      <li><a href="models_api.html#optimize.models.Model">Model (class in optimize.models)</a>
-</li>
-      <li><a href="frameworks_api.html#optimize.frameworks.OptProblem.model">model (optimize.frameworks.OptProblem attribute)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     module
 
@@ -199,6 +181,8 @@
         <li><a href="optimizers_api.html#module-optimize.optimizers">optimize.optimizers</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="knowledge_api.html#optimize.knowledge.Gaussian.mu">mu (optimize.knowledge.Gaussian attribute)</a>
 </li>
   </ul></td>
@@ -242,6 +226,8 @@
         <li><a href="kernels_api.html#module-optimize.kernels">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     optimize.knowledge
 
@@ -249,8 +235,6 @@
         <li><a href="knowledge_api.html#module-optimize.knowledge">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     optimize.models
 
@@ -265,8 +249,6 @@
         <li><a href="optimizers_api.html#module-optimize.optimizers">module</a>
 </li>
       </ul></li>
-      <li><a href="frameworks_api.html#optimize.frameworks.OptProblem.optimizer">optimizer (optimize.frameworks.OptProblem attribute)</a>
-</li>
       <li><a href="frameworks_api.html#optimize.frameworks.OptProblem">OptProblem (class in optimize.frameworks)</a>
 </li>
   </ul></td>
@@ -275,16 +257,14 @@
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="frameworks_api.html#optimize.frameworks.OptProblem.p0">p0 (optimize.frameworks.OptProblem attribute)</a>
-</li>
       <li><a href="knowledge_api.html#optimize.knowledge.Parameters.pack">pack() (optimize.knowledge.Parameters class method)</a>
 </li>
       <li><a href="knowledge_api.html#optimize.knowledge.Parameters.par_from_index">par_from_index() (optimize.knowledge.Parameters method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="knowledge_api.html#optimize.knowledge.Parameter">Parameter (class in optimize.knowledge)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="knowledge_api.html#optimize.knowledge.Parameters">Parameters (class in optimize.knowledge)</a>
 </li>
       <li><a href="knowledge_api.html#optimize.knowledge.Parameters.pretty_print">pretty_print() (optimize.knowledge.Parameters method)</a>
@@ -299,8 +279,6 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="knowledge_api.html#optimize.knowledge.Parameters.sanity_check">sanity_check() (optimize.knowledge.Parameters method)</a>
 </li>
-      <li><a href="frameworks_api.html#optimize.frameworks.OptProblem.scorer">scorer (optimize.frameworks.OptProblem attribute)</a>
-</li>
       <li><a href="knowledge_api.html#optimize.knowledge.Parameter.setv">setv() (optimize.knowledge.Parameter method)</a>
 
       <ul>
@@ -312,6 +290,8 @@
       <li><a href="knowledge_api.html#optimize.knowledge.Gaussian.sigma">sigma (optimize.knowledge.Gaussian attribute)</a>
 </li>
       <li><a href="data_api.html#optimize.data.SimpleData">SimpleData (class in optimize.data)</a>
+</li>
+      <li><a href="models_api.html#optimize.models.SimpleModel">SimpleModel (class in optimize.models)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -370,6 +350,9 @@
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/optimize_logo.png" alt="Logo"/>
+            </a></p>
 <h1 class="logo"><a href="index.html">optimize</a></h1>
 
 
@@ -382,8 +365,9 @@
 <h3>Navigation</h3>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="extending.html">Extending pychell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html#indices-and-tables">Indices and tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending.html">Extending optimize</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
 </ul>
 

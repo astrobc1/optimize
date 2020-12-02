@@ -20,7 +20,7 @@ class SimpleData(Data):
     
     __slots__ = ['label', 'x', 'y', 'yerr', 'mask']
     
-    def __init__(self, x, y, yerr, mask=None, label=None):
+    def __init__(self, x, y, yerr=None, mask=None, label=None):
         """Constructs a general dataset.
 
         Args:
@@ -51,7 +51,7 @@ class SimpleData(Data):
 class MixedData(dict):
     
     def __init__(self):
-        super().__init__(label=label)
+        super().__init__() 
 
     #@lru_cache
     def unpack(self, keys, subkey="x"):

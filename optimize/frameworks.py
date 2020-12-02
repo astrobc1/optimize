@@ -18,7 +18,7 @@ class OptProblem:
         scorer (ScoreFunction, optional): The score function to use. Defaults to MLE/reduced chi-squared for data with errorbars, and a simple MSE loss function for all other cases.
     """
 
-    def __init__(self, data=None, model=None, p0=None, optimizer=None, scorer=None):
+    def __init__(self, data=None, model=None, p0=None, optimizer=None):
         """A base class for optimization problems.
     
         Args:
@@ -33,25 +33,14 @@ class OptProblem:
         self.data = data
         self.model = model
         self.p0 = p0
-        assert data is not None
-        assert model is not None
             
-        # Resolve the Optimizer
-        if optimizer is None:
-            self.optimizer = optimizers.NelderMead()
-        else:
-            self.optimizer = optimizer
-            
-        # Resolve the score function
-        if scorer is None:
-            self.scorer = scorer.MSELossFunction(self.data, self.model)
-        else:
-            self.scorer = scorer
+        # Store the Optimizer
+        self.optimizer = optimizer
             
     def optimize(self):
         pass
 
-class FrequentistProblem(OptProblem):
+class OptProblem(OptProblem):
     
     def optimize(self):
         return self.optimizer.optimize()

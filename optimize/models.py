@@ -2,6 +2,11 @@ import numpy as np
 import optimize.kernels as optnoisekernels
 
 class Model:
+    
+    def __init__(self):
+        pass
+
+class SimpleModel(Model):
     """A base class for a model to optimize.
     """
     

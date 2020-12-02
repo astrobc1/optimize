@@ -7,15 +7,15 @@ class ScoreFunction:
     """An abstract class for a general score function.
     """
     
-    def __init__(self, model, data):
+    def __init__(self, data, model):
         """Stores the basic requirements for a score function.
 
         Args:
             data (Data): A dataset inheriting from optimize.data.Data.
             model (Model): A model inheriting from optimize.models.Model.
         """
-        self.model = model
         self.data = data
+        self.model = model
 
     def compute_score(self, pars):
         """Computes the score from a given set of parameters.
@@ -32,8 +32,8 @@ class MSEScore(ScoreFunction):
     """A class for the standard mean squared error (MSE) loss.
     """
     
-    def __init__(self, model, data):
-        super().__init__(model, data)
+    def __init__(self, data, model):
+        super().__init__(data, model)
     
     def compute_score(self, pars):
         """Computes the mean squared error loss

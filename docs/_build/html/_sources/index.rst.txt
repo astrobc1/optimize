@@ -14,8 +14,8 @@ Below is the remaining documentation, tutorials, and API.
    :maxdepth: 2
 
    Installation <installation>
-   Quickstart <quickstart>
-   Extending pychell <extending>
+   Tutorials <tutorials>
+   Extending optimize <extending>
    API <api>
 
 Indices and tables
