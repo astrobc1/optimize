@@ -58,7 +58,63 @@
 <dl class="py class">
 <dt id="optimize.frameworks.OptProblem">
 <em class="property">class </em><code class="sig-prename descclassname">optimize.frameworks.</code><code class="sig-name descname">OptProblem</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">model</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">p0</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">optimizer</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.frameworks.OptProblem" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#optimize.frameworks.OptProblem" title="optimize.frameworks.OptProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.frameworks.OptProblem</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A base class for optimization problems.</p>
+<dl class="py attribute">
+<dt id="optimize.frameworks.OptProblem.data">
+<code class="sig-name descname">data</code><a class="headerlink" href="#optimize.frameworks.OptProblem.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>A dataset inheriting from optimize.data.Data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="data_api.html#optimize.data.Data" title="optimize.data.Data">Data</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="optimize.frameworks.OptProblem.model">
+<code class="sig-name descname">model</code><a class="headerlink" href="#optimize.frameworks.OptProblem.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>A model inheriting from optimize.models.Model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Model</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="optimize.frameworks.OptProblem.p0">
+<code class="sig-name descname">p0</code><a class="headerlink" href="#optimize.frameworks.OptProblem.p0" title="Permalink to this definition">¶</a></dt>
+<dd><p>The initial parameters to use. Defaults to None.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="knowledge_api.html#optimize.knowledge.Parameters" title="optimize.knowledge.Parameters">Parameters</a>, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="optimize.frameworks.OptProblem.optimizer">
+<code class="sig-name descname">optimizer</code><a class="headerlink" href="#optimize.frameworks.OptProblem.optimizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>The optimizer to use. Defaults to NelderMead (not SciPy).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Optimizer, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="optimize.frameworks.OptProblem.scorer">
+<code class="sig-name descname">scorer</code><a class="headerlink" href="#optimize.frameworks.OptProblem.scorer" title="Permalink to this definition">¶</a></dt>
+<dd><p>The score function to use. Defaults to MLE/reduced chi-squared for data with errorbars, and a simple MSE loss function for all other cases.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ScoreFunction, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
 <p>A base class for optimization problems.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -71,6 +127,17 @@
 </ul>
 </dd>
 </dl>
+<dl class="py method">
+<dt id="optimize.frameworks.OptProblem.print_summary">
+<code class="sig-name descname">print_summary</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">result</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.frameworks.OptProblem.print_summary" title="Permalink to this definition">¶</a></dt>
+<dd><p>A nice print method for the framework</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>result</strong> (<a class="reference internal" href="knowledge_api.html#optimize.knowledge.Parameters" title="optimize.knowledge.Parameters"><em>Parameters</em></a><em>, </em><em>optional</em>) – The parameters to also print. Defaults to p0.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </div>
@@ -98,7 +165,8 @@
 <h3>Navigation</h3>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html#indices-and-tables">Indices and tables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="extending.html">Extending optimize</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="api.html">API</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="data_api.html">Data</a></li>

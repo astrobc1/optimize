@@ -36,14 +36,24 @@ class OptProblem:
             
         # Store the Optimizer
         self.optimizer = optimizer
-            
-    def optimize(self):
-        pass
-
-class OptProblem(OptProblem):
-    
+        
     def optimize(self):
         return self.optimizer.optimize()
+    
+    def print_summary(self, result=None):
+        """A nice print method for the framework
+
+        Args:
+            result (Parameters, optional): The parameters to also print. Defaults to p0.
+        """
+        print(self.data)
+        print(self.model)
+        if result is None:
+            print("Best fit Parameters:")
+            self.p0.pretty_print()
+        else:
+            result.pretty_print()
+        
 
 class BayesianProblem(OptProblem):
     

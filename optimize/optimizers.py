@@ -2,9 +2,23 @@ import optimize.knowledge as optknowledge
 import optimize.score as optscore
 
 
-class AbstractOptimizer:
+class Optimizer:
+    """An base optimizer class.
+    
+    Attributes:
+        scorer (ScoreFunction, optional): . Defaults to MSEScore.
+        p0 (Parameters, optional): [description]. Defaults to None.
+        options (dict, optional): [description]. Defaults to None.
+    """
     
     def __init__(self, scorer=None, p0=None, options=None):
+        """Construct for the base optimization class.
+
+        Args:
+            scorer (ScoreFunction, optional): . Defaults to MSEScore.
+            p0 (Parameters, optional): [description]. Defaults to None.
+            options (dict, optional): [description]. Defaults to None.
+        """
         
         # Store scorer
         self.scorer = scorer
@@ -30,19 +44,19 @@ class AbstractOptimizer:
             self.options[key] = default_value
         
         
-class AbstractMinimizer(AbstractOptimizer):
+class Minimizer(Optimizer):
     
     def __init__(self, scorer=None, p0=None, options=None):
         super().__init__(scorer=scorer, p0=p0, options=options)
 
 
-class AbstractSampler(AbstractOptimizer):
+class Sampler(Optimizer):
     pass
     
-class AffineInvSampler(AbstractSampler):
+class AffineInvSampler(Sampler):
     pass
     
-class MultiNestSampler(AbstractSampler):
+class MultiNestSampler(Sampler):
     pass
 
 # Import into namespace

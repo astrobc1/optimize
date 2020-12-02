@@ -13,7 +13,7 @@ import optimize.score as optscore
 import optimize.optimizers as optimizers
 
 
-class NelderMead(optimizers.AbstractMinimizer):
+class NelderMead(optimizers.Minimizer):
     """A class to interact with the Nelder Mead optimizer.
     
     """

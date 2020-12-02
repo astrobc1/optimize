@@ -34,6 +34,9 @@ class SimpleModel(Model):
         _model = self.builder(pars, *self.args_to_pass, **self.kwargs_to_pass)
         return _model
     
+    def __repr__(self):
+        return 'A Simple Model'
+    
 class BayesianModel(Model):
     """A general class for a Bayesian model to optimize.
     

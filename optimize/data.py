@@ -34,6 +34,9 @@ class SimpleData(Data):
         self.yerr = yerr
         self.mask = mask
         
+    def __repr__(self):
+        return 'A Simple Data Set'
+        
     def compute_errorbars(self, pars):
         """Computes the effective error bars after including additional white noise ("jitter") terms. Errors are added in quadrature.
 

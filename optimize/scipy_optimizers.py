@@ -4,10 +4,10 @@ import copy
 import optimize.knowledge
 import inspect
 import scipy.optimize
-from optimize.optimizers import AbstractMinimizer
+from optimize.optimizers import Minimizer
 
 
-class SciPyMinimizer(AbstractMinimizer):
+class SciPyMinimizer(Minimizer):
     
     def __init__(self, scorer, p0, scipy_kwargs=None, options=None):
         super().__init__(scorer, p0, options=options)

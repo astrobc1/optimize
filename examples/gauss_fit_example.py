@@ -47,11 +47,9 @@ optprob = optframeworks.OptProblem(data=data, model=model, p0=pars_guess, optimi
 
 # Optimize the model
 opt_result = optprob.optimize()
-print(opt_result["fcalls"])
-print(opt_result["fbest"])
-opt_result["pbest"].pretty_print()
-
 pars_fit = opt_result["pbest"]
+pars_fit.pretty_print()
+
 model_best = gauss(pars_fit, x)
 plt.plot(x, y_true, marker='o', lw=0, label=data.label, c='grey', alpha=0.8)
 plt.plot(x, model_guess, label='Starting Model', c='blue')

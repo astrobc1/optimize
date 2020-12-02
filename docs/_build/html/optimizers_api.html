@@ -38,6 +38,152 @@
 <h1>optimize API reference<a class="headerlink" href="#optimize-api-reference" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-optimize.optimizers">
 <span id="optimizers"></span><h2>Optimizers<a class="headerlink" href="#module-optimize.optimizers" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="optimize.optimizers.AffineInvSampler">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.optimizers.</code><code class="sig-name descname">AffineInvSampler</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scorer</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">p0</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">options</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.optimizers.AffineInvSampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#optimize.optimizers.Sampler" title="optimize.optimizers.Sampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.optimizers.Sampler</span></code></a></p>
+<p>Construct for the base optimization class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>scorer</strong> (<em>ScoreFunction</em><em>, </em><em>optional</em>) – . Defaults to MSEScore.</p></li>
+<li><p><strong>p0</strong> (<a class="reference internal" href="knowledge_api.html#optimize.knowledge.Parameters" title="optimize.knowledge.Parameters"><em>Parameters</em></a><em>, </em><em>optional</em>) – [description]. Defaults to None.</p></li>
+<li><p><strong>options</strong> (<em>dict</em><em>, </em><em>optional</em>) – [description]. Defaults to None.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="optimize.optimizers.Minimizer">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.optimizers.</code><code class="sig-name descname">Minimizer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scorer</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">p0</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">options</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.optimizers.Minimizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#optimize.optimizers.Optimizer" title="optimize.optimizers.Optimizer"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.optimizers.Optimizer</span></code></a></p>
+<p>Construct for the base optimization class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>scorer</strong> (<em>ScoreFunction</em><em>, </em><em>optional</em>) – . Defaults to MSEScore.</p></li>
+<li><p><strong>p0</strong> (<a class="reference internal" href="knowledge_api.html#optimize.knowledge.Parameters" title="optimize.knowledge.Parameters"><em>Parameters</em></a><em>, </em><em>optional</em>) – [description]. Defaults to None.</p></li>
+<li><p><strong>options</strong> (<em>dict</em><em>, </em><em>optional</em>) – [description]. Defaults to None.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="optimize.optimizers.MultiNestSampler">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.optimizers.</code><code class="sig-name descname">MultiNestSampler</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scorer</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">p0</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">options</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.optimizers.MultiNestSampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#optimize.optimizers.Sampler" title="optimize.optimizers.Sampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.optimizers.Sampler</span></code></a></p>
+<p>Construct for the base optimization class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>scorer</strong> (<em>ScoreFunction</em><em>, </em><em>optional</em>) – . Defaults to MSEScore.</p></li>
+<li><p><strong>p0</strong> (<a class="reference internal" href="knowledge_api.html#optimize.knowledge.Parameters" title="optimize.knowledge.Parameters"><em>Parameters</em></a><em>, </em><em>optional</em>) – [description]. Defaults to None.</p></li>
+<li><p><strong>options</strong> (<em>dict</em><em>, </em><em>optional</em>) – [description]. Defaults to None.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="optimize.optimizers.Optimizer">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.optimizers.</code><code class="sig-name descname">Optimizer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scorer</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">p0</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">options</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.optimizers.Optimizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>An base optimizer class.</p>
+<dl class="py attribute">
+<dt id="optimize.optimizers.Optimizer.scorer">
+<code class="sig-name descname">scorer</code><a class="headerlink" href="#optimize.optimizers.Optimizer.scorer" title="Permalink to this definition">¶</a></dt>
+<dd><p>. Defaults to MSEScore.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ScoreFunction, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="optimize.optimizers.Optimizer.p0">
+<code class="sig-name descname">p0</code><a class="headerlink" href="#optimize.optimizers.Optimizer.p0" title="Permalink to this definition">¶</a></dt>
+<dd><p>[description]. Defaults to None.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="knowledge_api.html#optimize.knowledge.Parameters" title="optimize.knowledge.Parameters">Parameters</a>, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="optimize.optimizers.Optimizer.options">
+<code class="sig-name descname">options</code><a class="headerlink" href="#optimize.optimizers.Optimizer.options" title="Permalink to this definition">¶</a></dt>
+<dd><p>[description]. Defaults to None.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p>Construct for the base optimization class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>scorer</strong> (<em>ScoreFunction</em><em>, </em><em>optional</em>) – . Defaults to MSEScore.</p></li>
+<li><p><strong>p0</strong> (<a class="reference internal" href="knowledge_api.html#optimize.knowledge.Parameters" title="optimize.knowledge.Parameters"><em>Parameters</em></a><em>, </em><em>optional</em>) – [description]. Defaults to None.</p></li>
+<li><p><strong>options</strong> (<em>dict</em><em>, </em><em>optional</em>) – [description]. Defaults to None.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="optimize.optimizers.Sampler">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.optimizers.</code><code class="sig-name descname">Sampler</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scorer</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">p0</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">options</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.optimizers.Sampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#optimize.optimizers.Optimizer" title="optimize.optimizers.Optimizer"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.optimizers.Optimizer</span></code></a></p>
+<p>Construct for the base optimization class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>scorer</strong> (<em>ScoreFunction</em><em>, </em><em>optional</em>) – . Defaults to MSEScore.</p></li>
+<li><p><strong>p0</strong> (<a class="reference internal" href="knowledge_api.html#optimize.knowledge.Parameters" title="optimize.knowledge.Parameters"><em>Parameters</em></a><em>, </em><em>optional</em>) – [description]. Defaults to None.</p></li>
+<li><p><strong>options</strong> (<em>dict</em><em>, </em><em>optional</em>) – [description]. Defaults to None.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-optimize.neldermead"></span><dl class="py class">
+<dt id="optimize.neldermead.NelderMead">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.neldermead.</code><code class="sig-name descname">NelderMead</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scorer</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">p0</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">options</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.neldermead.NelderMead" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#optimize.optimizers.Minimizer" title="optimize.optimizers.Minimizer"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.optimizers.Minimizer</span></code></a></p>
+<p>A class to interact with the Nelder Mead optimizer.</p>
+<p>Initiate a Nelder Mead solver.</p>
+<p>Args:</p>
+<dl class="py method">
+<dt id="optimize.neldermead.NelderMead.init_params">
+<code class="sig-name descname">init_params</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#optimize.neldermead.NelderMead.init_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the parameters</p>
+<p>Args:</p>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-optimize.scipy_optimizers"></span><dl class="py class">
+<dt id="optimize.scipy_optimizers.SciPyMinimizer">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.scipy_optimizers.</code><code class="sig-name descname">SciPyMinimizer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scorer</span></em>, <em class="sig-param"><span class="n">p0</span></em>, <em class="sig-param"><span class="n">scipy_kwargs</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">options</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.scipy_optimizers.SciPyMinimizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#optimize.optimizers.Minimizer" title="optimize.optimizers.Minimizer"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.optimizers.Minimizer</span></code></a></p>
+<p>Construct for the base optimization class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>scorer</strong> (<em>ScoreFunction</em><em>, </em><em>optional</em>) – . Defaults to MSEScore.</p></li>
+<li><p><strong>p0</strong> (<a class="reference internal" href="knowledge_api.html#optimize.knowledge.Parameters" title="optimize.knowledge.Parameters"><em>Parameters</em></a><em>, </em><em>optional</em>) – [description]. Defaults to None.</p></li>
+<li><p><strong>options</strong> (<em>dict</em><em>, </em><em>optional</em>) – [description]. Defaults to None.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 </div>
 
@@ -63,7 +209,8 @@
 <h3>Navigation</h3>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html#indices-and-tables">Indices and tables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="extending.html">Extending optimize</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="api.html">API</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="data_api.html">Data</a></li>

@@ -38,6 +38,68 @@
 <h1>Tutorials<a class="headerlink" href="#tutorials" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="example-1-fitting-a-gaussian">
 <h2>Example 1: Fitting a Gaussian<a class="headerlink" href="#example-1-fitting-a-gaussian" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+<span class="c1"># Standard imports</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="c1"># Optimize imports</span>
+<span class="kn">import</span> <span class="nn">optimize.knowledge</span> <span class="k">as</span> <span class="nn">optknow</span>
+<span class="kn">import</span> <span class="nn">optimize.models</span> <span class="k">as</span> <span class="nn">optmodels</span>
+<span class="kn">import</span> <span class="nn">optimize.optimizers</span> <span class="k">as</span> <span class="nn">optimizers</span>
+<span class="kn">import</span> <span class="nn">optimize.score</span> <span class="k">as</span> <span class="nn">optscores</span>
+<span class="kn">import</span> <span class="nn">optimize.data</span> <span class="k">as</span> <span class="nn">optdatasets</span>
+<span class="kn">import</span> <span class="nn">optimize.frameworks</span> <span class="k">as</span> <span class="nn">optframeworks</span>
+
+<span class="c1"># Define a build method for the model</span>
+<span class="c1"># By default, models are called via builder(pars, *args, **kwargs)</span>
+<span class="c1"># where pars is an instance of optimize.Parameters</span>
+<span class="c1"># The score (target / obejctive) function comes later</span>
+<span class="k">def</span> <span class="nf">gauss</span><span class="p">(</span><span class="n">pars</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">pars</span><span class="p">[</span><span class="s2">&quot;amp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="n">pars</span><span class="p">[</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="o">/</span> <span class="n">pars</span><span class="p">[</span><span class="s2">&quot;sigma&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># Create some noisy data</span>
+<span class="n">dx</span> <span class="o">=</span> <span class="mf">0.01</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span> <span class="o">+</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dx</span><span class="p">)</span>
+<span class="n">pars_true</span> <span class="o">=</span> <span class="n">optknow</span><span class="o">.</span><span class="n">Parameters</span><span class="p">()</span>
+<span class="n">pars_true</span><span class="p">[</span><span class="s2">&quot;amp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">optknow</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mf">2.5</span><span class="p">)</span>
+<span class="n">pars_true</span><span class="p">[</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">optknow</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">value</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">pars_true</span><span class="p">[</span><span class="s2">&quot;sigma&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">optknow</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+<span class="n">y_true</span> <span class="o">=</span> <span class="n">gauss</span><span class="p">(</span><span class="n">pars_true</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y_true</span><span class="p">)):</span>
+    <span class="n">y_true</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="mf">0.01</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">()</span>
+
+<span class="c1"># Guess parameters and model</span>
+<span class="n">pars_guess</span> <span class="o">=</span> <span class="n">optknow</span><span class="o">.</span><span class="n">Parameters</span><span class="p">()</span>
+<span class="n">pars_guess</span><span class="p">[</span><span class="s2">&quot;amp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">optknow</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
+<span class="n">pars_guess</span><span class="p">[</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">optknow</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">value</span><span class="o">=-</span><span class="mf">0.4</span><span class="p">)</span>
+<span class="n">pars_guess</span><span class="p">[</span><span class="s2">&quot;sigma&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">optknow</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mf">0.4</span><span class="p">)</span>
+<span class="n">model_guess</span> <span class="o">=</span> <span class="n">gauss</span><span class="p">(</span><span class="n">pars_guess</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+
+<span class="c1"># Create dedicated data and model objects</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">optdatasets</span><span class="o">.</span><span class="n">SimpleData</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;Some Data&quot;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y_true</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">optmodels</span><span class="o">.</span><span class="n">SimpleModel</span><span class="p">(</span><span class="n">gauss</span><span class="p">,</span> <span class="n">args_to_pass</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,))</span>
+
+<span class="c1"># Create Optimize objects</span>
+<span class="n">scorer</span> <span class="o">=</span> <span class="n">optscores</span><span class="o">.</span><span class="n">MSEScore</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">optimizers</span><span class="o">.</span><span class="n">NelderMead</span><span class="p">(</span><span class="n">p0</span><span class="o">=</span><span class="n">pars_guess</span><span class="p">,</span> <span class="n">scorer</span><span class="o">=</span><span class="n">scorer</span><span class="p">)</span>
+<span class="n">optprob</span> <span class="o">=</span> <span class="n">optframeworks</span><span class="o">.</span><span class="n">OptProblem</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">p0</span><span class="o">=</span><span class="n">pars_guess</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span><span class="p">)</span>
+
+<span class="c1"># Optimize the model</span>
+<span class="n">opt_result</span> <span class="o">=</span> <span class="n">optprob</span><span class="o">.</span><span class="n">optimize</span><span class="p">()</span>
+<span class="n">pars_fit</span> <span class="o">=</span> <span class="n">opt_result</span><span class="p">[</span><span class="s2">&quot;pbest&quot;</span><span class="p">]</span>
+<span class="n">pars_fit</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">()</span>
+
+<span class="n">model_best</span> <span class="o">=</span> <span class="n">gauss</span><span class="p">(</span><span class="n">pars_fit</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y_true</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">model_guess</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Starting Model&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">model_best</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Best Fit Model&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
 <p>The result …</p>
 <img alt="_images/data_model_example.png" src="_images/data_model_example.png" />
 </div>
