@@ -66,8 +66,7 @@
 <span class="n">pars_true</span><span class="p">[</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">optknow</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">value</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">pars_true</span><span class="p">[</span><span class="s2">&quot;sigma&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">optknow</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
 <span class="n">y_true</span> <span class="o">=</span> <span class="n">gauss</span><span class="p">(</span><span class="n">pars_true</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y_true</span><span class="p">)):</span>
-    <span class="n">y_true</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="mf">0.01</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">()</span>
+<span class="n">y_true</span> <span class="o">+=</span> <span class="mf">0.01</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">y_true</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
 
 <span class="c1"># Guess parameters and model</span>
 <span class="n">pars_guess</span> <span class="o">=</span> <span class="n">optknow</span><span class="o">.</span><span class="n">Parameters</span><span class="p">()</span>
@@ -101,6 +100,9 @@
 </pre></div>
 </div>
 <p>The result …</p>
+<p><code class="docutils literal notranslate"><span class="pre">(Parameter)</span>&#160; <span class="pre">Name:</span> <span class="pre">amp</span> <span class="pre">|</span> <span class="pre">Value:</span> <span class="pre">2.501808472212764</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">(Parameter)</span>&#160; <span class="pre">Name:</span> <span class="pre">mu</span> <span class="pre">|</span> <span class="pre">Value:</span> <span class="pre">-0.9993725521536447</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">(Parameter)</span>&#160; <span class="pre">Name:</span> <span class="pre">sigma</span> <span class="pre">|</span> <span class="pre">Value:</span> <span class="pre">0.799639841776913</span></code></p>
 <img alt="_images/data_model_example.png" src="_images/data_model_example.png" />
 </div>
 </div>

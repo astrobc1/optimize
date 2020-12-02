@@ -26,8 +26,7 @@ pars_true["amp"] = optknow.Parameter(value=2.5)
 pars_true["mu"] = optknow.Parameter(value=-1)
 pars_true["sigma"] = optknow.Parameter(value=0.8)
 y_true = gauss(pars_true, x)
-for i in range(len(y_true)):
-    y_true[i] += 0.01 * np.random.randn()
+y_true += 0.01 * np.random.randn(y_true.size)
 
 # Guess parameters and model
 pars_guess = optknow.Parameters()

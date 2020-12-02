@@ -40,6 +40,13 @@ class OptProblem:
     def optimize(self):
         return self.optimizer.optimize()
     
+    def set_optimizer(self, optimizer=None):
+        if optimizer is None:
+            self.optimizer = optimizers.NelderMead(self.scorer)
+        else:
+            self.optimizer = optimizer
+        
+    
     def print_summary(self, result=None):
         """A nice print method for the framework
 

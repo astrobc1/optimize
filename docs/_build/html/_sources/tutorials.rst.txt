@@ -14,6 +14,14 @@ Example 1: Fitting a Gaussian
 
 The result ...
 
+
+``(Parameter)  Name: amp | Value: 2.501808472212764``
+
+``(Parameter)  Name: mu | Value: -0.9993725521536447``
+
+``(Parameter)  Name: sigma | Value: 0.799639841776913``
+
+
 .. image:: ../examples/data_model_example.png
 
 Indices and tables
