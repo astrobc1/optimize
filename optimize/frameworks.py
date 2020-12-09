@@ -1,79 +1,113 @@
 import optimize.knowledge as optknow
 import optimize.models as optmodels
 import optimize.optimizers as optimizers
-import optimize.score as optscores
+import optimize.scores as optscores
 import optimize.data as optdatasets
 import optimize.frameworks as optframeworks
+
+import matplotlib.pyplot as plt
 
 import numpy as np
 
 class OptProblem:
-    """A base class for optimization problems.
+    """A class for most Bayesian optimization problems.
     
     Attributes:
         data (Data): A dataset inheriting from optimize.data.Data.
         model (Model): A model inheriting from optimize.models.Model.
-        p0 (Parameters, optional): The initial parameters to use. Defaults to None.
+        p0 (Parameters): The initial parameters to use. Defaults to None.
         optimizer (Optimizer, optional): The optimizer to use. Defaults to NelderMead (not SciPy).
-        scorer (ScoreFunction, optional): The score function to use. Defaults to MLE/reduced chi-squared for data with errorbars, and a simple MSE loss function for all other cases.
+        sampler (Sampler, optional): The sampler to use to MCMC analysis.
     """
+    
+    __children__ = ['data', 'model', 'p0', 'optimizer', 'sampler']
 
-    def __init__(self, data=None, model=None, p0=None, optimizer=None):
+    def __init__(self, data=None, model=None, p0=None, optimizer=None, sampler=None):
         """A base class for optimization problems.
     
         Args:
-            data (Data): A dataset inheriting from optimize.data.Data.
-            model (Model): A model inheriting from optimize.models.Model.
+            data (Data, optional): A dataset inheriting from optimize.data.Data.
+            model (Model, optional): A model inheriting from optimize.models.Model.
             p0 (Parameters, optional): The initial parameters to use. Defaults to None.
-            optimizer (Optimizer, optional): The optimizer to use. Defaults to NelderMead (not SciPy).
-            scorer (ScoreFunction, optional): The score function to use. Defaults to MLE/reduced chi-squared for data with errorbars, and a simple MSE loss function for all other cases.
+            optimizer (Optimizer, optional): The optimizer to use.
+            sampler (Sampler, optional): The sampler to use to MCMC analysis.
         """
         
         # Store the data, model, and starting parameters
         self.data = data
         self.model = model
         self.p0 = p0
-            
-        # Store the Optimizer
         self.optimizer = optimizer
+        self.sampler = sampler
         
     def optimize(self):
+        """Generic optimize method, calls self.optimizer.optimize().
+
+        Returns:
+            opt_result (dict): The optimization result.
+        """
         return self.optimizer.optimize()
     
-    def set_optimizer(self, optimizer=None):
-        if optimizer is None:
-            self.optimizer = optimizers.NelderMead(self.scorer)
-        else:
-            self.optimizer = optimizer
-        
-    
-    def print_summary(self, result=None):
-        """A nice print method for the framework
+    def print_summary(self, opt_result):
+        """A nice generic print method for the Bayesian framework.
 
         Args:
-            result (Parameters, optional): The parameters to also print. Defaults to p0.
+            opt_result (dict, optional): The optimization result to print. Defaults to None, and thus prints the initial parameters.
         """
-        print(self.data)
-        print(self.model)
-        if result is None:
-            print("Best fit Parameters:")
-            self.p0.pretty_print()
+        
+        # Print the data and model
+        print(self.data, flush=True)
+        print(self.model, flush=True)
+        
+        # Print the optimizer and sampler
+        if hasattr(self, 'optimizer'):
+            print(self.optimizer, flush=True)
+        if hasattr(self, 'sampler'):
+            print(self.sampler, flush=True)
+            
+        # Print the best fit parameters or initial parameters.
+        print("Parameters:", flush=True)
+        if opt_result is not None:
+            opt_result['pbest'].pretty_print()
         else:
-            result.pretty_print()
-        
+            self.p0.pretty_print()
+            
+    def set_pars(self, pars):
+        """Simple setter method for the parameters that may be extended.
 
-class BayesianProblem(OptProblem):
-    
-    def optimize(self):
-        return self.optimizer.optimize()
-    
-    def residuals_after_kernel(self, pars):
+        Args:
+            pars (Parameters): The new starting parameters to use.
+        """
+        self.p0 = pars
+        self.model.set_pars(pars)
         
-        # Residuals before kernel
-        _res = residuals_beforekernel(pars)
-        mu = self.model.kernel.predict(pars)
+    def residuals_after_kernel(self, pars):
+        """Computes the residuals after subtracting off the best fit noise kernel.
+
+        Args:
+            pars (Parameters): The parameters to use.
+
+        Returns:
+            np.ndarray: The residuals.
+        """
+        _res = self.residuals_before_kernel(pars)
+        _errors = self.sampler.scorer.compute_errorbars(pars)
+        mu = self.model.kernel.realize(pars, xpred=self.data.x, xres=self.data.x, res=_res, errors=_errors, stddev=False)
+        return _res - mu
     
     def residuals_before_kernel(self, pars):
+        """Computes the residuals without subtracting off the best fit noise kernel.
+
+        Args:
+            pars (Parameters): The parameters to use.
+
+        Returns:
+            np.ndarray: The residuals.
+        """
         _model = self.build(self, pars)
         _res = self.data.y - _model
         return _res
+        
+            
+        
+            

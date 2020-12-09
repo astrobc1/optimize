@@ -1,17 +1,19 @@
 import optimize.knowledge as optknowledge
-import optimize.score as optscore
-
+import optimize.scores as optscores
+import matplotlib.pyplot as plt
 
 class Optimizer:
     """An base optimizer class.
     
     Attributes:
         scorer (ScoreFunction, optional): . Defaults to MSEScore.
-        p0 (Parameters, optional): [description]. Defaults to None.
-        options (dict, optional): [description]. Defaults to None.
+        data (Data, optional)
+        options 
     """
     
-    def __init__(self, scorer=None, p0=None, options=None):
+    __children__ = ['scorer']
+    
+    def __init__(self, scorer=None, options=None):
         """Construct for the base optimization class.
 
         Args:
@@ -23,42 +25,45 @@ class Optimizer:
         # Store scorer
         self.scorer = scorer
         
-        # Store init params
-        self.p0 = p0
-        
         # Store the current options dictionary and resolve
         self.options = options
         self.resolve_options()
     
-    def compute_score(self, *args, **kwargs):
+    def compute_score(self, pars):
+        """A wrapper to computes the score from self.scorer. 
+        """
         return self.scorer.compute_score()
     
     def resolve_options(self):
         pass
     
     def optimize(self, *args, **kwargs):
-        return NotImplementedError("Need to implement an optimize method")
+        raise NotImplementedError("Need to implement an optimize method")
     
     def resolve_option(self, key, default_value):
+        """Given an option key and default value, this will set the corresponding item in the options dictionary if not already set.
+
+        Args:
+            key (str): The key to set or check.
+            default_value (object): The default value to use if not set by the user.
+        """
         if key not in self.options:
             self.options[key] = default_value
         
-        
 class Minimizer(Optimizer):
-    
-    def __init__(self, scorer=None, p0=None, options=None):
-        super().__init__(scorer=scorer, p0=p0, options=options)
+    """Right now, just a node in the type tree that offers no additional functionality.
+    """
+    pass
 
 
 class Sampler(Optimizer):
+    """Right now, just a node in the type tree that offers no additional functionality.
+    """
     pass
+        
     
-class AffineInvSampler(Sampler):
-    pass
-    
-class MultiNestSampler(Sampler):
-    pass
 
 # Import into namespace
 from .neldermead import *
 from .scipy_optimizers import *
+from .samplers import *

@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import optimize.knowledge as optknow
 import optimize.models as optmodels
 import optimize.optimizers as optimizers
-import optimize.score as optscores
+import optimize.scores as optscores
 import optimize.data as optdatasets
 import optimize.frameworks as optframeworks
 
@@ -36,20 +36,28 @@ pars_guess["sigma"] = optknow.Parameter(value=0.4)
 model_guess = gauss(pars_guess, x)
 
 # Create dedicated data and model objects
-data = optdatasets.SimpleData(label="Some Data", x=x, y=y_true)
-model = optmodels.SimpleModel(gauss, args_to_pass=(x,))
+data = optdatasets.Data(label="data", x=x, y=y_true)
+model = optmodels.Model(builder=gauss, p0=pars_guess, args_to_pass=(x,))
 
-# Create Optimize objects
-scorer = optscores.MSEScore(data, model)
-optimizer = optimizers.NelderMead(p0=pars_guess, scorer=scorer)
+# Create a mean squared error score function
+scorer = optscores.MSE(data=data, model=model)
+
+# Create an optimizer 
+breakpoint()
+optimizer = optimizers.NelderMead(scorer=scorer)
+
+# Create an optimize problem.
 optprob = optframeworks.OptProblem(data=data, model=model, p0=pars_guess, optimizer=optimizer)
 
-# Optimize the model
+# Optimize the model via Nelder Mead
 opt_result = optprob.optimize()
 pars_fit = opt_result["pbest"]
 pars_fit.pretty_print()
 
+# Build the best fit model
 model_best = gauss(pars_fit, x)
+
+# Plot
 plt.plot(x, y_true, marker='o', lw=0, label=data.label, c='grey', alpha=0.8)
 plt.plot(x, model_guess, label='Starting Model', c='blue')
 plt.plot(x, model_best, label='Best Fit Model', c='red')

@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 from abc import ABC, abstractmethod
 
 class Parameter:
@@ -55,10 +56,24 @@ class Parameter:
         vlb, vub = -np.inf, np.inf
         if len(self.priors) > 0:
             for prior in self.priors:
-                if isinstance(prior, 'Uniform'):
+                if isinstance(prior, Uniform):
                     vlb, vub = prior.minval, prior.maxval
                     return vlb, vub
         return vlb, vub
+    
+    def compute_crude_scale(self):
+        if not self.vary:
+            return 0
+        if len(self.priors) == 0:
+            return np.abs(self.value) / 10
+        for prior in self.priors:
+            if isinstance(prior, Gaussian):
+                return prior.sigma * 2
+            if isinstance(prior, Uniform):
+                return (prior.maxval - prior.minval)  / 10
+            if isinstance(prior, Jeffreys):
+                return np.abs(prior.maxval - prior.minval)  / 10
+        return np.abs(self.value) / 10
             
     @property
     def value_str(self):
@@ -80,6 +95,11 @@ class Parameter:
     @property
     def hard_bounds(self):
         return self.get_hard_bounds()
+    
+    def add_prior(self, prior):
+        self.priors.append(prior)
+        
+        
 
 class Parameters(dict):
     """A container for a set of model parameters which extends the Python 3 dictionary, which is ordered by default.
@@ -124,6 +144,10 @@ class Parameters(dict):
             par (Parameter): The parameter to add.
         """
         self[par.name] = par
+        
+    def compute_crude_scales(self):
+        scales = np.array([self[pname].compute_crude_scale() for pname in self])
+        return scales
             
     def unpack(self, keys=None, vary_only=False):
         """Unpacks values to a dict of numpy arrays.
@@ -169,7 +193,7 @@ class Parameters(dict):
 
                 
     def __setitem__(self, key, par):
-        if par.name is None or par.name is None:
+        if par.name is None:
             par.setv(name=key)
         super().__setitem__(key, par)
                 
@@ -257,30 +281,35 @@ class Parameters(dict):
                 sub_pars.add_parameter(self[par_names[k]])
         return sub_pars
     
-    def par_from_index(self, k, wrtv=False):
+    def par_from_index(self, k, rel_vary=False):
         """Gets the parameter at a given numerical index.
 
         Args:
             k (int): The numerical index.
+            rel_vary (bool, optional): Whether or not this index is relative to all parameters or only varied parameters. Defaults to False.
 
         Returns:
             Parameter: The parameter at the given index.
         """
-        return self[list(self.keys())[k]]
+        if rel_vary:
+            return self[list(self.get_varied().keys())[k]]
+        else:
+            return self[list(self.keys())[k]]
     
-    def index_from_par(self, name, vary=False):
+    def index_from_par(self, name, rel_vary=False):
         """Gets the index of a given parameter name.
 
         Args:
             name (str): The name of the parameter.
+            rel_vary (bool, optional): Whether or not to return an index which is relative to all parameters or only varied parameters. Defaults to False.
 
         Returns:
             int: The numerical index of the parameter.
         """
-        if vary:
+        if rel_vary:
             return list(self.get_varied().keys()).index(name)
         else:
-            return list(self.get_varied().keys()).index(name)
+            return list(self.keys()).index(name)
     
     def get_hard_bounds(self):
         """Gets the hard bounds.
@@ -306,9 +335,11 @@ class Parameters(dict):
         n = self.num_varied()
         vlb = np.full(n, -np.inf)
         vub = np.full(n, np.inf)
-        for i, pname in enumerate(self):
+        i = 0
+        for pname in self:
             if self[pname].vary:
                 vlb[i], vub[i] = self[pname].get_hard_bounds()
+                i += 1
         return vlb, vub
     
     def __getitem__(self, key):
@@ -324,7 +355,7 @@ class AbstractPrior(ABC):
     """
     
     @abstractmethod
-    def __init__(self, *arg, **kwargs):
+    def __init__(self, *args, **kwargs):
         pass
     
     @abstractmethod
@@ -395,7 +426,7 @@ class Uniform(AbstractPrior):
             return -np.inf
         
     def __repr__(self):
-        return "Hard Bounds: [" + str(self.minval) + ", " + str(self.maxval) + "]"
+        return "Uniform: [" + str(self.minval) + ", " + str(self.maxval) + "]"
     
     
     
@@ -423,5 +454,4 @@ class Jeffreys(AbstractPrior):
         
     def __repr__(self):
         return "Jeffreys Prior: [" + str(self.minval) + ", " + str(self.maxval) + "]"
-        
         
