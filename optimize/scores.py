@@ -213,6 +213,8 @@ class Likelihood(ScoreFunction):
             _par = pars[par]
             for prior in _par.priors:
                 lnL += prior.logprob(_par.value)
+                if not np.isfinite(lnL):
+                    return lnL
         return lnL
     
     def compute_bic(self, pars):

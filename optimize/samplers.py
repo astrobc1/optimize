@@ -42,7 +42,7 @@ class AffInv(Sampler):
         n_walkers = 2 * n_pars_vary
         self.sampler = emcee.EnsembleSampler(n_walkers, n_pars_vary, self.compute_score) #, backend=emcee.backends.HDFBackend('chains.h5'))
         
-    def sample(self, pars=None, walkers=None, do_burn=True, n_burn_steps=None, n_steps=None):
+    def sample(self, pars=None, walkers=None, do_burn=True, n_burn_steps=None, n_steps=None, rel_tau_thresh=0.01):
         
         if pars is None and walkers is None:
             walkers = self.init_walkers()
@@ -81,7 +81,7 @@ class AffInv(Sampler):
         
         # Convergence testing
         k = 0
-        autocorrs = np.full(n_steps, fill_value=np.nan)
+        autocorrs = []
         old_tau = np.inf
 
         # Sample up to n_steps
@@ -96,12 +96,14 @@ class AffInv(Sampler):
             # Using tol=0 means that we'll always get an estimate even
             # if it isn't trustworthy
             tau = self.sampler.get_autocorr_time(tol=0)
-            autocorrs[k] = np.mean(tau)
+            autocorrs.append(np.nanmean(tau))
             k += 1
 
             # Check convergence
-            #converged = np.all(tau * 500 < self.sampler.iteration)
-            converged = np.all(np.abs(old_tau - tau) / tau < 0.02)
+            converged = np.all(tau * 500 < self.sampler.iteration)
+            rel_tau = np.abs(old_tau - tau) / tau
+            converged &= np.all(rel_tau < rel_tau_thresh)
+            #print("Rel AC Changes: " + str(np.nanmax(rel_tau)) + " , Convergence Tolerance: " + str(rel_tau_thresh), end='\x1b[1K\r')
             if converged:
                 break
                 
@@ -112,6 +114,8 @@ class AffInv(Sampler):
         if converged:
             print("Success!")
         sampler_result["flat_chains"] = self.sampler.flatchain
+        sampler_result["autocorrs"] = np.array(autocorrs)
+        sampler_result["steps"] = n_steps
         pars_mcmc = sampler_result["flat_chains"][np.nanargmax(self.sampler.flatlnprobability)]
         sampler_result["pbest"] = copy.deepcopy(self.scorer.p0)
         par_vec = np.copy(self.test_pars_vec)

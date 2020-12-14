@@ -69,11 +69,7 @@ class Parameter:
         for prior in self.priors:
             if isinstance(prior, Gaussian):
                 return prior.sigma * 2
-            if isinstance(prior, Uniform):
-                return (prior.maxval - prior.minval)  / 10
-            if isinstance(prior, Jeffreys):
-                return np.abs(prior.maxval - prior.minval)  / 10
-        return np.abs(self.value) / 10
+        return np.abs(self.value) / 100
             
     @property
     def value_str(self):
