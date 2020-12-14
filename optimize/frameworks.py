@@ -13,16 +13,14 @@ class OptProblem:
     """A class for most Bayesian optimization problems.
     
     Attributes:
-        data (Data): A dataset inheriting from optimize.data.Data.
-        model (Model): A model inheriting from optimize.models.Model.
+        data (MixedData): A dataset inheriting from optimize.data.MixedData.
         p0 (Parameters): The initial parameters to use. Defaults to None.
+        scores (MixedScores): The score functions.
         optimizer (Optimizer, optional): The optimizer to use. Defaults to NelderMead (not SciPy).
         sampler (Sampler, optional): The sampler to use to MCMC analysis.
     """
-    
-    __children__ = ['data', 'model', 'p0', 'optimizer', 'sampler']
 
-    def __init__(self, data=None, model=None, p0=None, optimizer=None, sampler=None):
+    def __init__(self, data=None, p0=None, optimizer=None, sampler=None, scorer=None):
         """A base class for optimization problems.
     
         Args:
@@ -31,14 +29,15 @@ class OptProblem:
             p0 (Parameters, optional): The initial parameters to use. Defaults to None.
             optimizer (Optimizer, optional): The optimizer to use.
             sampler (Sampler, optional): The sampler to use to MCMC analysis.
+            scorer (Scorer, optional): The score function to use.
         """
         
         # Store the data, model, and starting parameters
         self.data = data
-        self.model = model
         self.p0 = p0
         self.optimizer = optimizer
         self.sampler = sampler
+        self.scorer = scorer
         
     def optimize(self):
         """Generic optimize method, calls self.optimizer.optimize().
@@ -79,34 +78,12 @@ class OptProblem:
             pars (Parameters): The new starting parameters to use.
         """
         self.p0 = pars
-        self.model.set_pars(pars)
-        
-    def residuals_after_kernel(self, pars):
-        """Computes the residuals after subtracting off the best fit noise kernel.
-
-        Args:
-            pars (Parameters): The parameters to use.
-
-        Returns:
-            np.ndarray: The residuals.
-        """
-        _res = self.residuals_before_kernel(pars)
-        _errors = self.sampler.scorer.compute_errorbars(pars)
-        mu = self.model.kernel.realize(pars, xpred=self.data.x, xres=self.data.x, res=_res, errors=_errors, stddev=False)
-        return _res - mu
-    
-    def residuals_before_kernel(self, pars):
-        """Computes the residuals without subtracting off the best fit noise kernel.
-
-        Args:
-            pars (Parameters): The parameters to use.
-
-        Returns:
-            np.ndarray: The residuals.
-        """
-        _model = self.build(self, pars)
-        _res = self.data.y - _model
-        return _res
+        if self.optimizer is not None:
+            self.optimizer.set_pars(pars)
+        if self.scorer is not None:
+           self.scorer.set_pars(pars)
+        if self.sampler is not None:
+            self.sampler.set_pars(pars)
         
             
         

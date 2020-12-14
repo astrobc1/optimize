@@ -402,7 +402,6 @@ class Uniform(AbstractPrior):
             maxval (float): The upper bound.
         """
     
-    
     __slots__ = ['minval', 'maxval']
     
     def __init__(self, minval, maxval):
@@ -412,23 +411,19 @@ class Uniform(AbstractPrior):
             minval (float): The lower bound.
             maxval (float): The upper bound.
         """
-        assert minval <= maxval
+        assert minval < maxval
         self.minval = minval
         self.maxval = maxval
         
     def logprob(self, x):
-        if self.minval <= x <= self.maxval:
-            if np.isfinite(self.minval) & np.isfinite(self.maxval):
-                return np.log(self.maxval - self.minval)
-            else:
-                return 0
+        if self.minval < x < self.maxval:
+            return -1 * np.log(self.maxval - self.minval)
         else:
-            return -np.inf
+           return -np.inf
         
     def __repr__(self):
         return "Uniform: [" + str(self.minval) + ", " + str(self.maxval) + "]"
-    
-    
+
     
 class Jeffreys(AbstractPrior):
     """A prior defined such that its density function is proportional to the square root of the determinant of the Fisher information matrix.

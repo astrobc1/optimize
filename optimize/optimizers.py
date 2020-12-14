@@ -11,8 +11,6 @@ class Optimizer:
         options 
     """
     
-    __children__ = ['scorer']
-    
     def __init__(self, scorer=None, options=None):
         """Construct for the base optimization class.
 
@@ -49,6 +47,9 @@ class Optimizer:
         """
         if key not in self.options:
             self.options[key] = default_value
+            
+    def set_pars(self, pars):
+        self.scorer.set_pars(pars)
         
 class Minimizer(Optimizer):
     """Right now, just a node in the type tree that offers no additional functionality.

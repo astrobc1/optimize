@@ -9,11 +9,9 @@ class ScoreFunction:
     """An base class for a general score function. Not useful to instantiate on its own.
     
     Attributes:
-        data (Data): A dataset inheriting from optimize.data.Data.
-        model (Model): A model inheriting from optimize.models.Model.
+        data (MixedData): A combined dataset.
+        model (Model): A model inheriting from optimize.models.Model. All datasets must use this model.
     """
-    
-    __children__ = ['data', 'model']
     
     def __init__(self, data=None, model=None):
         """Stores the basic requirements for a score function.
@@ -35,6 +33,9 @@ class ScoreFunction:
             NotImplementedError: Must implement this method.
         """
         raise NotImplementedError("Must implement a compute_score method.")
+    
+    def set_pars(self, pars):
+        self.model.set_pars(pars)
         
 class MSE(ScoreFunction):
     """A class for the standard mean squared error (MSE) loss.
@@ -97,13 +98,16 @@ class MSE(ScoreFunction):
         _chi2 = np.nansum((res / errors)**2)
         return _chi2 / ndeg
 
-
 class Likelihood(ScoreFunction):
-    """A Bayesian likelihood score function, Priors are also considered.
+    """A Bayesian likelihood score function.
     """
     
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, label=None, data=None, model=None):
+        super().__init__(data=data, model=model)
+        self.label = label
+        self.data_x = self.data.get_vec('t')
+        self.data_y = self.data.get_vec('rv')
+        self.data_yerr = self.data.get_vec('rverr')
             
     def compute_score(self, pars):
         """Computes the negative log-likelihood score.
@@ -114,12 +118,12 @@ class Likelihood(ScoreFunction):
         Returns:
             float: ln(L).
         """
-        _neglnL = self.compute_negloglikelihood(pars)
-        return _neglnL
+        neglnL = self.compute_neglogL(pars)
+        return neglnL
     
-    def compute_loglikelihood(self, pars, apply_priors=True):
+    def compute_logL(self, pars, apply_priors=True):
         """Computes the log of the likelihood.
-
+    
         Args:
             pars (Parameters): The parameters to use.
             apply_priors (bool, optional): Whether or not to apply the priors. Defaults to True.
@@ -130,45 +134,61 @@ class Likelihood(ScoreFunction):
         
         # Apply priors, see if we even need to compute the model
         if apply_priors:
-            _lnL = self.compute_loglikelihood_priors(pars)
-            if not np.isfinite(_lnL):
-                return _lnL
+            lnL = self.compute_logL_priors(pars)
+            if not np.isfinite(lnL):
+                return -np.inf
         else:
-            _lnL = 0
+            lnL = 0
         
-        # Compute the model
-        _model = self.model.build(pars)
+        # Compute the model (consistent across all data sets for this likelihood).
+        model_arr = self.model.build(pars)
         
-        # Copy the data
-        _data = np.copy(self.data.y)
-            
+        # Copy the full data set
+        data_arr = np.copy(self.data.y)
+
         # Compute the residuals
-        _res = _data - _model
+        residuals = data_arr - model_arr
             
-        # Compute the error bars and cov matrix
-        K = self.model.kernel.compute_cov_matrix(pars, self.compute_errorbars(pars))
-            
+        # Compute the cov matrix
+        K = kernel.compute_cov_matrix(pars, apply_errors=True)
+
         # Compute the determiniant and inverse of K
         try:
-            
-            # Reduce the cov matrix and solve for KX = _RES
-            alpha = cho_solve(cho_factor(K), _res)
+        
+            # Reduce the cov matrix and solve for KX = residuals
+            alpha = cho_solve(cho_factor(K), residuals)
 
             # Compute the determinant of K
             _, detK = np.linalg.slogdet(K)
 
             # Compute the likelihood
             N = len(_data)
-            _lnL = -0.5 * (np.dot(_res, alpha) + detK + N * np.log(2 * np.pi))
-            
-            # Return ln(L)
-            return _lnL
-        
+            lnL += -0.5 * (np.dot(residuals, alpha) + detK + N * np.log(2 * np.pi))
+    
         except:
             # If things fail (matrix decomp) return -inf
             return -np.inf
+        
+        # Return the final ln(L)
+        return lnL
     
-    def compute_negloglikelihood(self, pars):
+    def residuals_after_kernel(self, pars):
+        """Computes the residuals after subtracting off the best fit noise kernel.
+
+        Args:
+            pars (Parameters): The parameters to use.
+
+        Returns:
+            np.ndarray: The residuals.
+        """
+        residuals = self.residuals_before_kernel(pars)
+        x_data = self.data.get_vec(key='x')
+        if self.model.has_gp:
+            gpmean = self.model.kernel.realize(pars, residuals, xpred=x_data, xres=x_data, return_unc=False)
+            residuals -= gpmean
+        return residuals
+    
+    def compute_neglogL(self, pars):
         """Simple wrapper to compute -ln(L).
 
         Args:
@@ -177,7 +197,7 @@ class Likelihood(ScoreFunction):
         Returns:
             float: The negative log likelihood, -ln(L).
         """
-        return -1 * self.compute_loglikelihood(pars)
+        return -1 * self.compute_logL(pars)
     
     def compute_ndeg(self, pars):
         """Computes the number of degrees of freedom, n_data_points - n_vary_pars.
@@ -187,13 +207,13 @@ class Likelihood(ScoreFunction):
         """
         return len(self.data.x) - pars.num_varied()
     
-    def compute_loglikelihood_priors(self, pars):
-        _lnL = 0
+    def compute_logL_priors(self, pars):
+        lnL = 0
         for par in pars:
             _par = pars[par]
             for prior in _par.priors:
-                _lnL += prior.logprob(_par.value)
-        return _lnL
+                lnL += prior.logprob(_par.value)
+        return lnL
     
     def compute_bic(self, pars):
         """Calculate the Bayesian information criterion (BIC).
@@ -206,12 +226,12 @@ class Likelihood(ScoreFunction):
         """
 
         n = len(self.data.rv)
-        k = len(pars.num_varied())
-        _lnL = self.compute_loglikelihood_priors(pars)
-        _bic = np.log(n) * k - 2.0 * _lnL
+        k = len(pars)
+        lnL = self.compute_logL_priors(pars)
+        _bic = np.log(n) * k - 2.0 * lnL
         return _bic
 
-    def compute_aicc(self, pars, ):
+    def compute_aicc(self, pars):
         """Calculate the small sample Akaike information criterion (AICc).
         
         Args:
@@ -223,9 +243,9 @@ class Likelihood(ScoreFunction):
         
         # Simple formula
         n = len(self.data.rv)
-        k = len(pars.num_varied())
-        _lnL = self.compute_loglikelihood_priors(pars)
-        aic = - 2.0 * _lnL + 2.0 * k
+        k = pars.num_varied()
+        lnL = self.compute_logL_priors(pars)
+        aic = - 2.0 * lnL + 2.0 * k
         
         # Small sample correction
         _aicc = aic
@@ -238,5 +258,121 @@ class Likelihood(ScoreFunction):
             _aicc = np.inf
         return _aicc
         
+
+class MixedLikelihood(dict):
+    """A class for joint likelihood functions. This should map 1-1 with the kernels map.
+    """
+    
+    def __init__(self):
+        super().__init__()
+    
+    def __setitem__(self, label, like):
+        """Overrides the default Python dict setter.
+
+        Args:
+            label (str): How to identify this likelihood.
+            like (Likelihood): The likelihood object to set.
+        """
+        if like.label is None:
+            like.label = label
+        super().__setitem__(label, like)
         
-         
+    def compute_score(self, pars):
+        """Computes the negative log-likelihood score.
+        
+        Args:
+            pars (Parameters): The parameters.
+
+        Returns:
+            float: ln(L).
+        """
+        neglnL = 0
+        for like in self.values():
+            neglnL += like.compute_neglogL(pars)
+        return neglnL
+    
+    def compute_logL(self, pars, apply_priors=True):
+        """Computes the log of the likelihood.
+    
+        Args:
+            pars (Parameters): The parameters to use.
+            apply_priors (bool, optional): Whether or not to apply the priors. Defaults to True.
+
+        Returns:
+            float: The log likelihood, ln(L).
+        """
+        lnL = 0
+        for like in self.values():
+            lnL += like.compute_logL(pars, apply_priors=apply_priors)
+        return lnL
+    
+    def compute_neglogL(self, pars):
+        """Simple wrapper to compute -ln(L).
+
+        Args:
+            pars (Parameters): The parameters to use.
+
+        Returns:
+            float: The negative log likelihood, -ln(L).
+        """
+        return -1 * self.compute_logL(pars)
+    
+    def set_pars(self, pars):
+        for like in self.values():
+            like.set_pars(pars)
+          
+    @property  
+    def p0(self):
+        return next(iter(self.values())).p0
+    
+    def compute_bic(self, pars):
+        """Calculate the Bayesian information criterion (BIC).
+
+        Args:
+            pars (Parameters): The parameters to use.
+            
+        Returns:
+            float: The BIC
+        """
+        n = 0
+        for like in self.values():
+            n += len(like.data_x)
+        k = pars.num_varied()
+        lnL = self.compute_logL(pars, apply_priors=True)
+        bic = np.log(n) * k - 2.0 * lnL
+        return bic
+
+    def compute_aicc(self, pars):
+        """Calculate the small sample Akaike information criterion (AICc).
+        
+        Args:
+            pars (Parameters): The parameters to use.
+
+        Returns:
+            float: The AICc.
+        """
+        
+        # Number of data points
+        n = 0
+        for like in self.values():
+            n += len(like.data_x)
+            
+        # Number of estimated parameters
+        k = pars.num_varied()
+        
+        # lnL
+        lnL = self.compute_logL(pars, apply_priors=True)
+        
+        # AIC
+        aic = - 2.0 * lnL + 2.0 * k
+
+        # Small sample correction
+        aicc = aic
+        denom = n - k - 1
+        if denom > 0:
+            aicc += (2.0 * k * (k + 1.0)) / denom
+        else:
+            print("Warning: The number of free parameters is greater than or equal to")
+            print("         the number of data points (- 1). The AICc comparison has returned -inf.")
+            aicc = np.inf
+        return aicc

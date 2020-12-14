@@ -14,15 +14,15 @@ class AffInv(Sampler):
     def __init__(self, scorer=None, options=None):
         super().__init__(scorer=scorer, options=options)
         self.init_sampler()
-        p0_dict = self.scorer.model.p0.unpack()
-        self.test_pars = copy.deepcopy(self.scorer.model.p0)
+        p0_dict = self.scorer.p0.unpack()
+        self.test_pars = copy.deepcopy(self.scorer.p0)
         self.test_pars_vec = np.copy(p0_dict['value'])
         self.p0_vary_inds = np.where(p0_dict["vary"])[0]
         
     def init_walkers(self, pars=None):
         
         if pars is None:
-            pars = self.scorer.model.p0
+            pars = self.scorer.p0
         pars_vary_dict = pars.unpack(vary_only=True)
         n_pars = len(pars)
         n_pars_vary = pars.num_varied()
@@ -30,12 +30,15 @@ class AffInv(Sampler):
         walkers = pars_vary_dict['value'] + search_scales * np.random.randn(self.n_walkers, n_pars_vary)
         return walkers
     
+    def set_pars(self, pars):
+        self.p0 = pars
+    
     @property
     def n_walkers(self):
         return self.sampler.nwalkers
     
     def init_sampler(self):
-        n_pars_vary = self.scorer.model.p0.num_varied()
+        n_pars_vary = self.scorer.p0.num_varied()
         n_walkers = 2 * n_pars_vary
         self.sampler = emcee.EnsembleSampler(n_walkers, n_pars_vary, self.compute_score) #, backend=emcee.backends.HDFBackend('chains.h5'))
         
@@ -43,12 +46,12 @@ class AffInv(Sampler):
         
         if pars is None and walkers is None:
             walkers = self.init_walkers()
-            pars = self.scorer.model.p0
+            pars = self.scorer.p0
         elif pars is not None:
             walkers = self.init_walkers(pars)
             
         if n_steps is None:
-            n_steps = 10000 * pars.num_varied()
+            n_steps = 10_000 * pars.num_varied()
         
         # Burn in
         if do_burn:
@@ -65,7 +68,7 @@ class AffInv(Sampler):
             
             flat_chains = self.sampler.flatchain
             pars_mcmc = flat_chains[np.nanargmax(self.sampler.flatlnprobability)]
-            _pbest = copy.deepcopy(self.scorer.model.p0)
+            _pbest = copy.deepcopy(self.scorer.p0)
             _par_vec = np.copy(self.test_pars_vec)
             _par_vec[self.p0_vary_inds] = pars_mcmc
             _pbest.setv(value=_par_vec)
@@ -82,6 +85,7 @@ class AffInv(Sampler):
         old_tau = np.inf
 
         # Sample up to n_steps
+        converged = False
         for sample in self.sampler.sample(walkers, iterations=n_steps, progress=True):
             
             # Only check convergence every 500 steps
@@ -109,7 +113,7 @@ class AffInv(Sampler):
             print("Success!")
         sampler_result["flat_chains"] = self.sampler.flatchain
         pars_mcmc = sampler_result["flat_chains"][np.nanargmax(self.sampler.flatlnprobability)]
-        sampler_result["pbest"] = copy.deepcopy(self.scorer.model.p0)
+        sampler_result["pbest"] = copy.deepcopy(self.scorer.p0)
         par_vec = np.copy(self.test_pars_vec)
         par_vec[self.p0_vary_inds] = pars_mcmc
         sampler_result["pbest"].setv(value=par_vec)
@@ -118,6 +122,7 @@ class AffInv(Sampler):
         return sampler_result
     
     def corner_plot(self, sampler_result, show=True):
+        plt.clf()
         pbest_vary_dict = sampler_result["pbest"].unpack(vary_only=True)
         truths = pbest_vary_dict["value"]
         labels = pbest_vary_dict["name"]

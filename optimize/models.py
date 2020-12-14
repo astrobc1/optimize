@@ -7,25 +7,23 @@ class Model:
 
         Attributes:
             p0 (Parameters, optional): The initial parameters to use. Defaults to None.
+            data (MixedData, optional): The dataset.
             builder (callable): Defines the model to use. Any methods that construct the model will start at the build method, which 1. must be called as build(pars) and 2. by default calls builder(*args_to_pass, **kwargs_to_pass). A second option is to extend the Model class and implement one's own build method.
-            data (tuple, optional): The arguments to pass to the build method. Defaults to ().
             args_to_pass (tuple, optional): The arguments to pass to the build method. Defaults to ().
             kwargs_to_pass (dict, optional): The keyword arguments to pass to the build method. Defaults to {}.
-            kernel (NoiseKernel): The noise kernel to use for this model and data combo.
+            kernel (NoiseKernel): The noise kernel to use.
     """
-    
-    __children__ = ['kernel', 'data', 'p0']
     
     def __init__(self, p0=None, data=None, builder=None, args_to_pass=None, kwargs_to_pass=None, kernel=None):
         """Constructs a base model for optimization.
 
         Args:
             p0 (Parameters, optional): The initial parameters to use. Defaults to None.
+            data (MixedData, optional): The dataset, must be identical to kernel.data.
             builder (callable): Defines the model to use. Any methods that construct the model will start at the build method, which 1. must be called as build(pars) and 2. by default calls builder(*args_to_pass, **kwargs_to_pass). A second option is to extend the Model class and implement one's own build method.
-            data (tuple, optional): The arguments to pass to the build method. Defaults to ().
             args_to_pass (tuple, optional): The arguments to pass to the build method. Defaults to ().
             kwargs_to_pass (dict, optional): The keyword arguments to pass to the build method. Defaults to {}.
-            kernel (NoiseKernel): The noise kernel to use for this model and data combo.
+            kernel (NoiseKernel): The noise kernel to use.
         """
         self.p0 = p0
         self.data = data
@@ -33,10 +31,12 @@ class Model:
         self.args_to_pass = () if args_to_pass is None else args_to_pass
         self.kwargs_to_pass = {} if kwargs_to_pass is None else kwargs_to_pass
         self.kernel = kernel
-        
         self.has_gp = False
         if isinstance(self.kernel, optnoisekernels.GaussianProcess):
             self.has_gp = True
+        self.data_inds = {}
+        for instname in self.data:
+            self.data_inds[instname] = self.data.get_inds(instname)
     
     def build(self, pars):
         """Builds the model.
@@ -58,5 +58,5 @@ class Model:
         """
         self.p0 = pars
 
-class MixedModel(dict): # Eventually used as a base class for light curve + rv fits?
+class MixedModel(dict):
     pass

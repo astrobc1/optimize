@@ -42,8 +42,7 @@ model = optmodels.Model(builder=gauss, p0=pars_guess, args_to_pass=(x,))
 # Create a mean squared error score function
 scorer = optscores.MSE(data=data, model=model)
 
-# Create an optimizer 
-breakpoint()
+# Create an optimizer
 optimizer = optimizers.NelderMead(scorer=scorer)
 
 # Create an optimize problem.

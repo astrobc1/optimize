@@ -31,15 +31,13 @@ class SciPyMinimizer(Minimizer):
         Returns:
             dict: The optimization result.
         """
-        p0 = self.scorer.model.p0
+        p0 = self.scorer.p0
         p0_dict = p0.unpack()
         self.p0_vary_inds = np.where(p0_dict["vary"])[0]
         p0_vals_vary = p0_dict["value"][self.p0_vary_inds]
-        lower_bounds, upper_bounds = p0.get_hard_bounds_vary()
-        p0_bounds = [(lower_bounds[i], upper_bounds[i]) for i in range(len(upper_bounds))]
         self.test_pars = copy.deepcopy(p0)
         self.test_pars_vec = self.test_pars.unpack(keys="value")["value"]
-        res = scipy.optimize.minimize(self.compute_score, p0_vals_vary, bounds=p0_bounds, options=self.options, **kwargs)
+        res = scipy.optimize.minimize(self.compute_score, p0_vals_vary, options=self.options, **kwargs)
         opt_result = {}
         opt_result["pbest"] = copy.deepcopy(p0)
         par_vec = np.copy(self.test_pars_vec)
@@ -47,5 +45,6 @@ class SciPyMinimizer(Minimizer):
         opt_result["pbest"].setv(value=par_vec)
         opt_result.update(inspect.getmembers(res, lambda a:not(inspect.isroutine(a))))
         opt_result["fbest"] = opt_result["fun"]
-        del opt_result["x"], opt_result["fun"]
+        opt_result["fcalls"] = opt_result["nfev"]
+        del opt_result["x"], opt_result["fun"], opt_result["nfev"]
         return opt_result
