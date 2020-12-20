@@ -4,6 +4,8 @@ import copy
 import optimize.knowledge
 import inspect
 import scipy.optimize
+
+import optimize.scores as optscores
 from optimize.optimizers import Minimizer
 import matplotlib.pyplot as plt
 
@@ -23,7 +25,10 @@ class SciPyMinimizer(Minimizer):
         """
         self.test_pars_vec[self.p0_vary_inds] = pars
         self.test_pars.setv(value=self.test_pars_vec)
-        return self.scorer.compute_score(self.test_pars)
+        if isinstance(self.scorer, optscores.Likelihood) or isinstance(self.scorer, optscores.MixedLikelihood):
+            return -1 * self.scorer.compute_score(self.test_pars)
+        else:
+            return self.scorer.compute_score(self.test_pars)
     
     def optimize(self, **kwargs):
         """Calls the scipy.optimize.minimize routine.

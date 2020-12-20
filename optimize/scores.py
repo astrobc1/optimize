@@ -158,12 +158,12 @@ class Likelihood(ScoreFunction):
             # Reduce the cov matrix and solve for KX = residuals
             alpha = cho_solve(cho_factor(K), residuals)
 
-            # Compute the determinant of K
-            _, detK = np.linalg.slogdet(K)
+            # Compute the log determinant of K
+            _, lndetK = np.linalg.slogdet(K)
 
             # Compute the likelihood
             N = len(_data)
-            lnL += -0.5 * (np.dot(residuals, alpha) + detK + N * np.log(2 * np.pi))
+            lnL += -0.5 * (np.dot(residuals, alpha) + lndetK + N * np.log(2 * np.pi))
     
         except:
             # If things fail (matrix decomp) return -inf
@@ -288,10 +288,18 @@ class MixedLikelihood(dict):
         Returns:
             float: ln(L).
         """
-        neglnL = 0
-        for like in self.values():
-            neglnL += like.compute_neglogL(pars)
+        neglnL = self.compute_logL(pars, apply_priors=True)
         return neglnL
+    
+    def compute_logL_priors(self, pars):
+        lnL = 0
+        for par in pars:
+            _par = pars[par]
+            for prior in _par.priors:
+                lnL += prior.logprob(_par.value)
+                if not np.isfinite(lnL):
+                    return lnL
+        return lnL
     
     def compute_logL(self, pars, apply_priors=True):
         """Computes the log of the likelihood.
@@ -304,11 +312,15 @@ class MixedLikelihood(dict):
             float: The log likelihood, ln(L).
         """
         lnL = 0
+        if apply_priors:
+            lnL += self.compute_logL_priors(pars)
+            if not np.isfinite(lnL):
+                return -np.inf
         for like in self.values():
-            lnL += like.compute_logL(pars, apply_priors=apply_priors)
+            lnL += like.compute_logL(pars, apply_priors=False)
         return lnL
     
-    def compute_neglogL(self, pars):
+    def compute_neglogL(self, pars, apply_priors=True):
         """Simple wrapper to compute -ln(L).
 
         Args:
@@ -317,7 +329,7 @@ class MixedLikelihood(dict):
         Returns:
             float: The negative log likelihood, -ln(L).
         """
-        return -1 * self.compute_logL(pars)
+        return -1 * self.compute_logL(pars, apply_priors=apply_priors)
     
     def set_pars(self, pars):
         for like in self.values():

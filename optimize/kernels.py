@@ -55,6 +55,7 @@ class NoiseKernel:
             np.ndarray: The errors
         """
         errors = self.get_data_errors()
+        errors **= 2
         for label in self.data:
             errors[self.data_inds[label]] += pars['jitter_' + label].value**2
         errors **= 0.5
@@ -122,7 +123,7 @@ class GaussianProcess(NoiseKernel):
         super().__init__(*args, **kwargs)
         self.compute_dist_matrix()
 
-    def realize(self, pars, residuals, xpred=None, xres=None, return_unc=False):
+    def realize(self, pars, residuals, xpred=None, xres=None, return_unc=False, **kwargs):
         """Realize the GP (sample at arbitrary points). Meant to be the same as the predict method offered by other codes.
 
         Args:
@@ -169,6 +170,8 @@ class GaussianProcess(NoiseKernel):
       
 
 class QuasiPeriodic(GaussianProcess):
+    """A Quasiperiodic GP.
+    """
     
     def compute_cov_matrix(self, pars, apply_errors=True):
         

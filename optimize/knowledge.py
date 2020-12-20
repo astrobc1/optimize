@@ -173,7 +173,7 @@ class Parameters(dict):
         """Prints all parameters and attributes in a readable fashion.
         """
         for key in self.keys():
-            print(self[key], flush=True)    
+            print(self[key], flush=True)
     
     def setv(self, **kwargs):
         """Setter method for an attribute(s) for all parameters, in order of insertion.
@@ -344,6 +344,12 @@ class Parameters(dict):
             return super().__getitem__(key)
         elif t is int:
             return self[list(self.keys())[key]]
+        
+    def __repr__(self):
+        s = ''
+        for par in self.items():
+            s += par.__repr__()
+        return s
 
 
 class AbstractPrior(ABC):

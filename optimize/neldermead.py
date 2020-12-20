@@ -91,6 +91,9 @@ class NelderMead(optimizers.Minimizer):
         self.resolve_option('xtol', 1E-6)
         self.resolve_option('ftol', 1E-6)
         
+        # Resolve penalty
+        self.resolve_option('penalty', 1E6)
+        
         # Subspaces
         if 'subspaces' not in self.options:
             self.subspaces = []
@@ -382,5 +385,13 @@ class NelderMead(optimizers.Minimizer):
         
         # Update fcalls
         self.fcalls += 1
+            
+        # Return -lnl or MSE
+        if isinstance(self.scorer, optscores.Likelihood) or isinstance(self.scorer, optscores.MixedLikelihood):
+            f *= -1
+        
+        # If f is not finite, don't return -inf, return a large number
+        if not np.isfinite(f):
+            f = self.options["penalty"]
             
         return f
