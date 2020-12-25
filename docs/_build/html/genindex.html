@@ -44,13 +44,17 @@
  | <a href="#I"><strong>I</strong></a>
  | <a href="#J"><strong>J</strong></a>
  | <a href="#K"><strong>K</strong></a>
+ | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
  | <a href="#O"><strong>O</strong></a>
  | <a href="#P"><strong>P</strong></a>
+ | <a href="#Q"><strong>Q</strong></a>
+ | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
  | <a href="#U"><strong>U</strong></a>
  | <a href="#V"><strong>V</strong></a>
+ | <a href="#W"><strong>W</strong></a>
  | <a href="#X"><strong>X</strong></a>
  | <a href="#Y"><strong>Y</strong></a>
  
@@ -64,7 +68,7 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="knowledge_api.html#optimize.knowledge.Parameters.add_parameter">add_parameter() (optimize.knowledge.Parameters method)</a>
 </li>
-      <li><a href="optimizers_api.html#optimize.optimizers.AffineInvSampler">AffineInvSampler (class in optimize.optimizers)</a>
+      <li><a href="models_api.html#optimize.models.Model.args_to_pass">args_to_pass (optimize.models.Model attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -72,13 +76,11 @@
 <h2 id="B">B</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="models_api.html#optimize.models.BayesianModel">BayesianModel (class in optimize.models)</a>
+      <li><a href="models_api.html#optimize.models.Model.build">build() (optimize.models.Model method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="frameworks_api.html#optimize.frameworks.BayesianProblem">BayesianProblem (class in optimize.frameworks)</a>
-</li>
-      <li><a href="models_api.html#optimize.models.SimpleModel.build">build() (optimize.models.SimpleModel method)</a>
+      <li><a href="models_api.html#optimize.models.Model.builder">builder (optimize.models.Model attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -86,8 +88,68 @@
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="data_api.html#optimize.data.SimpleData.compute_errorbars">compute_errorbars() (optimize.data.SimpleData method)</a>
+      <li><a href="scores_api.html#optimize.scores.Likelihood.compute_aicc">compute_aicc() (optimize.scores.Likelihood method)</a>
+
+      <ul>
+        <li><a href="scores_api.html#optimize.scores.MixedLikelihood.compute_aicc">(optimize.scores.MixedLikelihood method)</a>
 </li>
+      </ul></li>
+      <li><a href="scores_api.html#optimize.scores.Likelihood.compute_bic">compute_bic() (optimize.scores.Likelihood method)</a>
+
+      <ul>
+        <li><a href="scores_api.html#optimize.scores.MixedLikelihood.compute_bic">(optimize.scores.MixedLikelihood method)</a>
+</li>
+      </ul></li>
+      <li><a href="scores_api.html#optimize.scores.MSE.compute_chi2">compute_chi2() (optimize.scores.MSE static method)</a>
+</li>
+      <li><a href="kernels_api.html#optimize.kernels.WhiteNoise.compute_cov_matrix">compute_cov_matrix() (optimize.kernels.WhiteNoise method)</a>
+</li>
+      <li><a href="kernels_api.html#optimize.kernels.NoiseKernel.compute_data_errors">compute_data_errors() (optimize.kernels.NoiseKernel method)</a>
+</li>
+      <li><a href="kernels_api.html#optimize.kernels.NoiseKernel.compute_dist_matrix">compute_dist_matrix() (optimize.kernels.NoiseKernel method)</a>
+</li>
+      <li><a href="data_api.html#optimize.data.Data.compute_errorbars">compute_errorbars() (optimize.data.Data method)</a>
+</li>
+      <li><a href="scores_api.html#optimize.scores.Likelihood.compute_logL">compute_logL() (optimize.scores.Likelihood method)</a>
+
+      <ul>
+        <li><a href="scores_api.html#optimize.scores.MixedLikelihood.compute_logL">(optimize.scores.MixedLikelihood method)</a>
+</li>
+      </ul></li>
+      <li><a href="scores_api.html#optimize.scores.Likelihood.compute_ndeg">compute_ndeg() (optimize.scores.Likelihood method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="scores_api.html#optimize.scores.Likelihood.compute_neglogL">compute_neglogL() (optimize.scores.Likelihood method)</a>
+
+      <ul>
+        <li><a href="scores_api.html#optimize.scores.MixedLikelihood.compute_neglogL">(optimize.scores.MixedLikelihood method)</a>
+</li>
+      </ul></li>
+      <li><a href="scores_api.html#optimize.scores.MixedLikelihood.compute_redchi2">compute_redchi2() (optimize.scores.MixedLikelihood method)</a>
+
+      <ul>
+        <li><a href="scores_api.html#optimize.scores.MSE.compute_redchi2">(optimize.scores.MSE static method)</a>
+</li>
+      </ul></li>
+      <li><a href="scores_api.html#optimize.scores.MSE.compute_rms">compute_rms() (optimize.scores.MSE static method)</a>
+</li>
+      <li><a href="optimizers_api.html#optimize.neldermead.NelderMead.compute_score">compute_score() (optimize.neldermead.NelderMead method)</a>
+
+      <ul>
+        <li><a href="optimizers_api.html#optimize.optimizers.Optimizer.compute_score">(optimize.optimizers.Optimizer method)</a>
+</li>
+        <li><a href="optimizers_api.html#optimize.scipy_optimizers.SciPyMinimizer.compute_score">(optimize.scipy_optimizers.SciPyMinimizer method)</a>
+</li>
+        <li><a href="scores_api.html#optimize.scores.Likelihood.compute_score">(optimize.scores.Likelihood method)</a>
+</li>
+        <li><a href="scores_api.html#optimize.scores.MixedLikelihood.compute_score">(optimize.scores.MixedLikelihood method)</a>
+</li>
+        <li><a href="scores_api.html#optimize.scores.MSE.compute_score">(optimize.scores.MSE method)</a>
+</li>
+        <li><a href="scores_api.html#optimize.scores.ScoreFunction.compute_score">(optimize.scores.ScoreFunction method)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -96,9 +158,19 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="data_api.html#optimize.data.Data">Data (class in optimize.data)</a>
 </li>
+      <li><a href="frameworks_api.html#optimize.frameworks.OptProblem.data">data (optimize.frameworks.OptProblem attribute)</a>
+
+      <ul>
+        <li><a href="models_api.html#optimize.models.Model.data">(optimize.models.Model attribute)</a>
+</li>
+        <li><a href="optimizers_api.html#optimize.optimizers.Optimizer.data">(optimize.optimizers.Optimizer attribute)</a>
+</li>
+        <li><a href="scores_api.html#optimize.scores.ScoreFunction.data">(optimize.scores.ScoreFunction attribute)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="frameworks_api.html#optimize.frameworks.OptProblem.data">data (optimize.frameworks.OptProblem attribute)</a>
+      <li><a href="kernels_api.html#optimize.kernels.NoiseKernel.data_list">data_list (optimize.kernels.NoiseKernel attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -107,6 +179,12 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="knowledge_api.html#optimize.knowledge.Gaussian">Gaussian (class in optimize.knowledge)</a>
+</li>
+      <li><a href="kernels_api.html#optimize.kernels.GaussianProcess">GaussianProcess (class in optimize.kernels)</a>
+</li>
+      <li><a href="data_api.html#optimize.data.MixedData.get">get() (optimize.data.MixedData method)</a>
+</li>
+      <li><a href="kernels_api.html#optimize.kernels.NoiseKernel.get_data_errors">get_data_errors() (optimize.kernels.NoiseKernel method)</a>
 </li>
       <li><a href="knowledge_api.html#optimize.knowledge.Parameter.get_hard_bounds">get_hard_bounds() (optimize.knowledge.Parameter method)</a>
 
@@ -123,6 +201,8 @@
       <li><a href="knowledge_api.html#optimize.knowledge.Parameters.get_subspace">get_subspace() (optimize.knowledge.Parameters method)</a>
 </li>
       <li><a href="knowledge_api.html#optimize.knowledge.Parameters.get_varied">get_varied() (optimize.knowledge.Parameters method)</a>
+</li>
+      <li><a href="data_api.html#optimize.data.MixedData.get_vec">get_vec() (optimize.data.MixedData method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -150,7 +230,25 @@
 <h2 id="K">K</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="models_api.html#optimize.models.BayesianModel.kernel">kernel (optimize.models.BayesianModel attribute)</a>
+      <li><a href="models_api.html#optimize.models.Model.kernel">kernel (optimize.models.Model attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="models_api.html#optimize.models.Model.kwargs_to_pass">kwargs_to_pass (optimize.models.Model attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="L">L</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="data_api.html#optimize.data.Data.label">label (optimize.data.Data attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="knowledge_api.html#optimize.knowledge.Parameter.latex_str">latex_str (optimize.knowledge.Parameter attribute)</a>
+</li>
+      <li><a href="scores_api.html#optimize.scores.Likelihood">Likelihood (class in optimize.scores)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -158,7 +256,7 @@
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="data_api.html#optimize.data.SimpleData.mask">mask (optimize.data.SimpleData attribute)</a>
+      <li><a href="data_api.html#optimize.data.Data.mask">mask (optimize.data.Data attribute)</a>
 </li>
       <li><a href="knowledge_api.html#optimize.knowledge.Jeffreys.maxval">maxval (optimize.knowledge.Jeffreys attribute)</a>
 
@@ -176,8 +274,16 @@
       </ul></li>
       <li><a href="data_api.html#optimize.data.MixedData">MixedData (class in optimize.data)</a>
 </li>
-      <li><a href="frameworks_api.html#optimize.frameworks.OptProblem.model">model (optimize.frameworks.OptProblem attribute)</a>
+      <li><a href="scores_api.html#optimize.scores.MixedLikelihood">MixedLikelihood (class in optimize.scores)</a>
 </li>
+      <li><a href="models_api.html#optimize.models.MixedModel">MixedModel (class in optimize.models)</a>
+</li>
+      <li><a href="models_api.html#optimize.models.Model">Model (class in optimize.models)</a>
+</li>
+      <li><a href="scores_api.html#optimize.scores.ScoreFunction.model">model (optimize.scores.ScoreFunction attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     module
 
@@ -198,12 +304,12 @@
 </li>
         <li><a href="optimizers_api.html#module-optimize.scipy_optimizers">optimize.scipy_optimizers</a>
 </li>
-      </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="knowledge_api.html#optimize.knowledge.Gaussian.mu">mu (optimize.knowledge.Gaussian attribute)</a>
+        <li><a href="scores_api.html#module-optimize.scores">optimize.scores</a>
 </li>
-      <li><a href="optimizers_api.html#optimize.optimizers.MultiNestSampler">MultiNestSampler (class in optimize.optimizers)</a>
+      </ul></li>
+      <li><a href="scores_api.html#optimize.scores.MSE">MSE (class in optimize.scores)</a>
+</li>
+      <li><a href="knowledge_api.html#optimize.knowledge.Gaussian.mu">mu (optimize.knowledge.Gaussian attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -217,6 +323,8 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="kernels_api.html#optimize.kernels.NoiseKernel">NoiseKernel (class in optimize.kernels)</a>
+</li>
       <li><a href="knowledge_api.html#optimize.knowledge.Parameters.num_locked">num_locked() (optimize.knowledge.Parameters method)</a>
 </li>
       <li><a href="knowledge_api.html#optimize.knowledge.Parameters.num_varied">num_varied() (optimize.knowledge.Parameters method)</a>
@@ -227,6 +335,12 @@
 <h2 id="O">O</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="frameworks_api.html#optimize.frameworks.OptProblem.optimize">optimize() (optimize.frameworks.OptProblem method)</a>
+
+      <ul>
+        <li><a href="optimizers_api.html#optimize.scipy_optimizers.SciPyMinimizer.optimize">(optimize.scipy_optimizers.SciPyMinimizer method)</a>
+</li>
+      </ul></li>
       <li>
     optimize.data
 
@@ -285,6 +399,13 @@
         <li><a href="optimizers_api.html#module-optimize.scipy_optimizers">module</a>
 </li>
       </ul></li>
+      <li>
+    optimize.scores
+
+      <ul>
+        <li><a href="scores_api.html#module-optimize.scores">module</a>
+</li>
+      </ul></li>
       <li><a href="optimizers_api.html#optimize.optimizers.Optimizer">Optimizer (class in optimize.optimizers)</a>
 </li>
       <li><a href="frameworks_api.html#optimize.frameworks.OptProblem.optimizer">optimizer (optimize.frameworks.OptProblem attribute)</a>
@@ -302,12 +423,14 @@
       <li><a href="frameworks_api.html#optimize.frameworks.OptProblem.p0">p0 (optimize.frameworks.OptProblem attribute)</a>
 
       <ul>
-        <li><a href="optimizers_api.html#optimize.optimizers.Optimizer.p0">(optimize.optimizers.Optimizer attribute)</a>
+        <li><a href="models_api.html#optimize.models.Model.p0">(optimize.models.Model attribute)</a>
 </li>
       </ul></li>
       <li><a href="knowledge_api.html#optimize.knowledge.Parameters.pack">pack() (optimize.knowledge.Parameters class method)</a>
 </li>
       <li><a href="knowledge_api.html#optimize.knowledge.Parameters.par_from_index">par_from_index() (optimize.knowledge.Parameters method)</a>
+</li>
+      <li><a href="kernels_api.html#optimize.kernels.NoiseKernel.par_names">par_names (optimize.kernels.NoiseKernel attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -324,23 +447,57 @@
   </ul></td>
 </tr></table>
 
+<h2 id="Q">Q</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="kernels_api.html#optimize.kernels.QuasiPeriodic">QuasiPeriodic (class in optimize.kernels)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="R">R</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="kernels_api.html#optimize.kernels.GaussianProcess.realize">realize() (optimize.kernels.GaussianProcess method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="scores_api.html#optimize.scores.Likelihood.residuals_after_kernel">residuals_after_kernel() (optimize.scores.Likelihood method)</a>
+</li>
+      <li><a href="optimizers_api.html#optimize.optimizers.Optimizer.resolve_option">resolve_option() (optimize.optimizers.Optimizer method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="frameworks_api.html#optimize.frameworks.OptProblem.sample">sample() (optimize.frameworks.OptProblem method)</a>
+</li>
       <li><a href="optimizers_api.html#optimize.optimizers.Sampler">Sampler (class in optimize.optimizers)</a>
+</li>
+      <li><a href="frameworks_api.html#optimize.frameworks.OptProblem.sampler">sampler (optimize.frameworks.OptProblem attribute)</a>
 </li>
       <li><a href="knowledge_api.html#optimize.knowledge.Parameters.sanity_check">sanity_check() (optimize.knowledge.Parameters method)</a>
 </li>
+      <li><a href="knowledge_api.html#optimize.knowledge.Parameter.scale">scale (optimize.knowledge.Parameter attribute)</a>
+</li>
       <li><a href="optimizers_api.html#optimize.scipy_optimizers.SciPyMinimizer">SciPyMinimizer (class in optimize.scipy_optimizers)</a>
 </li>
-      <li><a href="frameworks_api.html#optimize.frameworks.OptProblem.scorer">scorer (optimize.frameworks.OptProblem attribute)</a>
-
-      <ul>
-        <li><a href="optimizers_api.html#optimize.optimizers.Optimizer.scorer">(optimize.optimizers.Optimizer attribute)</a>
+      <li><a href="scores_api.html#optimize.scores.ScoreFunction">ScoreFunction (class in optimize.scores)</a>
 </li>
-      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="optimizers_api.html#optimize.optimizers.Optimizer.scorer">scorer (optimize.optimizers.Optimizer attribute)</a>
+</li>
+      <li><a href="frameworks_api.html#optimize.frameworks.OptProblem.scores">scores (optimize.frameworks.OptProblem attribute)</a>
+</li>
+      <li><a href="frameworks_api.html#optimize.frameworks.OptProblem.set_pars">set_pars() (optimize.frameworks.OptProblem method)</a>
+
+      <ul>
+        <li><a href="models_api.html#optimize.models.Model.set_pars">(optimize.models.Model method)</a>
+</li>
+      </ul></li>
       <li><a href="knowledge_api.html#optimize.knowledge.Parameter.setv">setv() (optimize.knowledge.Parameter method)</a>
 
       <ul>
@@ -348,10 +505,6 @@
 </li>
       </ul></li>
       <li><a href="knowledge_api.html#optimize.knowledge.Gaussian.sigma">sigma (optimize.knowledge.Gaussian attribute)</a>
-</li>
-      <li><a href="data_api.html#optimize.data.SimpleData">SimpleData (class in optimize.data)</a>
-</li>
-      <li><a href="models_api.html#optimize.models.SimpleModel">SimpleModel (class in optimize.models)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -382,10 +535,18 @@
   </ul></td>
 </tr></table>
 
+<h2 id="W">W</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="kernels_api.html#optimize.kernels.WhiteNoise">WhiteNoise (class in optimize.kernels)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="X">X</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="data_api.html#optimize.data.SimpleData.x">x (optimize.data.SimpleData attribute)</a>
+      <li><a href="data_api.html#optimize.data.Data.x">x (optimize.data.Data attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -393,11 +554,11 @@
 <h2 id="Y">Y</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="data_api.html#optimize.data.SimpleData.y">y (optimize.data.SimpleData attribute)</a>
+      <li><a href="data_api.html#optimize.data.Data.y">y (optimize.data.Data attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="data_api.html#optimize.data.SimpleData.yerr">yerr (optimize.data.SimpleData attribute)</a>
+      <li><a href="data_api.html#optimize.data.Data.yerr">yerr (optimize.data.Data attribute)</a>
 </li>
   </ul></td>
 </tr></table>

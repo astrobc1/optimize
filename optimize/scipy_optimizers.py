@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 class SciPyMinimizer(Minimizer):
     """A class that interfaces to scipy.optimize.minimize.
     """
-        
+
     def compute_score(self, pars):
         """Computes the score.
 
@@ -36,6 +36,10 @@ class SciPyMinimizer(Minimizer):
         Returns:
             dict: The optimization result.
         """
+        
+        if 'method' not in kwargs:
+            kwargs['method'] = 'Nelder-Mead'
+        
         p0 = self.scorer.p0
         p0_dict = p0.unpack()
         self.p0_vary_inds = np.where(p0_dict["vary"])[0]

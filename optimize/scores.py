@@ -17,14 +17,14 @@ class ScoreFunction:
         """Stores the basic requirements for a score function.
 
         Args:
-            data (Data): A dataset inheriting from optimize.data.Data.
+            data (MixedData): A mixed dataset inheriting from optimize.data.MixedData.
             model (Model): A model inheriting from optimize.models.Model.
         """
         self.data = data
         self.model = model
 
     def compute_score(self, pars):
-        """Computes the score from a given set of parameters.
+        """Computes the score from a given set of parameters. This method must be implemented for each score function.
 
         Args:
             pars (Parameters): The parameters to use.
@@ -38,65 +38,66 @@ class ScoreFunction:
         self.model.set_pars(pars)
         
 class MSE(ScoreFunction):
-    """A class for the standard mean squared error (MSE) loss.
+    """A class for the standard mean squared error (MSE) loss and a namespace for commonly used routines. The loss function used here is just the RMS.
     """
     
     def compute_score(self, pars):
         """Computes the unweighted mean squared error loss.
 
         Args:
-            pars (Parameters): The parameters object to use.
-
-        Returns:
-            float: The score.
-        """
-        _model = self.model.build(pars)
-        _data = self.data.y
-        rms = self.compute_rms(_data, _model)
-        return rms
-    
-    @staticmethod
-    def compute_rms(_data, _model):
-        """Computes the RMS (Root mean squared) loss.
-
-        Args_data 
-            _data (np.ndarray): The data.
-            _model (np.ndarray): The model.
+            pars (Parameters): The parameters to use.
 
         Returns:
             float: The RMS.
         """
-        return np.sqrt(np.nansum((_data - _model)**2) / _data.size)
+        model_arr = self.model.build(pars)
+        data_arr = self.data.y
+        rms = self.compute_rms(data_arr, model_arr)
+        return rms
     
     @staticmethod
-    def compute_chi2(res, errors):
+    def compute_rms(data_arr, model_arr):
+        """Computes the RMS (Root mean squared) loss.
+
+        Args_data 
+            data_arr (np.ndarray): The data array.
+            model_arr (np.ndarray): The model array.
+
+        Returns:
+            float: The RMS.
+        """
+        return np.sqrt(np.nansum((data_arr - model_arr)**2) / data_arr.size)
+    
+    @staticmethod
+    def compute_chi2(residuals, errors):
         """Computes the (non-reduced) chi2 statistic (weighted MSE).
 
         Args:
-            res (np.ndarray): The residuals (data - model)
+            residuals (np.ndarray): The residuals = data - model
             errors (np.ndarray): The effective errorbars (intrinsic and any white noise).
 
         Returns:
             float: The chi-squared statistic.
         """
-        return np.nansum((res / errors)**2)
+        return np.nansum((residuals / errors)**2)
     
     @staticmethod
-    def compute_redchi2(res, errors, ndeg=None):
+    def compute_redchi2(residuals, errors, n_deg=None):
         """Computes the reduced chi2 statistic (weighted MSE).
 
         Args:
-            res (np.ndarray): The residuals (data - model)
+            residuals (np.ndarray): The residuals = data - model
             errors (np.ndarray): The effective errorbars (intrinsic and any white noise).
-            ndeg (int): The degrees of freedom, defaults to len(res) - 1.
+            n_deg (int): The degrees of freedom, defaults to len(res) - 1.
 
         Returns:
             float: The reduced chi-squared statistic.
         """
-        if ndeg is None:
-            ndeg = len(res) - 1
-        _chi2 = np.nansum((res / errors)**2)
-        return _chi2 / ndeg
+        if n_deg is None:
+            n_deg = len(residuals) - 1
+        chi2 = np.nansum((residuals / errors)**2)
+        redchi2 = chi2 / n_deg
+        return redchi2
 
 class Likelihood(ScoreFunction):
     """A Bayesian likelihood score function.
@@ -110,7 +111,7 @@ class Likelihood(ScoreFunction):
         self.data_yerr = self.data.get_vec('rverr')
             
     def compute_score(self, pars):
-        """Computes the negative log-likelihood score.
+        """Computes the negative of the log-likelihood score.
         
         Args:
             pars (Parameters): The parameters.
@@ -123,7 +124,15 @@ class Likelihood(ScoreFunction):
     
     def compute_logL(self, pars, apply_priors=True):
         """Computes the log of the likelihood.
-    
+        
+        .. math::
+            \centering
+            \ln \mathcal{L} &= - \\frac{1}{2} \\vec{r}^{T} \hat{K}^{-1} \\vec{r} -\\frac{1}{2} \ln | \hat{K} | -\\frac{1}{2} N \ln(2 \pi) + \sum_{i} \ln \pi(x_{i}) \\\\
+            N &= \mathrm{Number\ of\ Data\ Points} \\\\
+            \\vec{r} &= \mathrm{Vector\ of\ Residuals} \\\\
+            \hat{K} &= \mathrm{Covariance\ Matrix} \\\\
+            \pi(x_{i}) &= \mathrm{Prior\ Probability\ For\ Parameter} \ x_{i}
+        
         Args:
             pars (Parameters): The parameters to use.
             apply_priors (bool, optional): Whether or not to apply the priors. Defaults to True.
@@ -260,7 +269,6 @@ class Likelihood(ScoreFunction):
             _aicc = np.inf
         return _aicc
         
-
 class MixedLikelihood(dict):
     """A class for joint likelihood functions. This should map 1-1 with the kernels map.
     """
@@ -334,10 +342,35 @@ class MixedLikelihood(dict):
     def set_pars(self, pars):
         for like in self.values():
             like.set_pars(pars)
+            
+    def compute_redchi2(self, pars):
+        """Computes the reduced chi2 statistic (weighted MSE).
+
+        Args:
+            pars (Parameters): The parameters.
+
+        Returns:
+            float: The reduced chi-squared statistic.
+        """
+        
+        chi2 = 0
+        ndeg = 0
+        for like in self.values():
+            residuals = like.residuals_after_kernel(pars)
+            errors = like.model.kernel.compute_data_errors(pars)
+            chi2 += MSE.compute_chi2(residuals, errors)
+            ndeg += len(like.data.get_vec('x'))
+        ndeg -= pars.num_varied()
+        redchi2 = chi2 / ndeg
+        return redchi2
           
-    @property  
+    @property
     def p0(self):
-        return next(iter(self.values())).p0
+        return self.like0.p0
+    
+    @property
+    def like0(self):
+        return next(iter(self.values()))
     
     def compute_bic(self, pars):
         """Calculate the Bayesian information criterion (BIC).

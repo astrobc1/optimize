@@ -40,7 +40,7 @@
 <span id="knowledge"></span><h2>Knowledge<a class="headerlink" href="#module-optimize.knowledge" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="optimize.knowledge.AbstractPrior">
-<em class="property">class </em><code class="sig-prename descclassname">optimize.knowledge.</code><code class="sig-name descname">AbstractPrior</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">arg</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.knowledge.AbstractPrior" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">optimize.knowledge.</code><code class="sig-name descname">AbstractPrior</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.knowledge.AbstractPrior" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
 <p>An interface for a general prior.</p>
 </dd></dl>
@@ -114,7 +114,7 @@
 
 <dl class="py class">
 <dt id="optimize.knowledge.Parameter">
-<em class="property">class </em><code class="sig-prename descclassname">optimize.knowledge.</code><code class="sig-name descname">Parameter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">value</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">vary</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">priors</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.knowledge.Parameter" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">optimize.knowledge.</code><code class="sig-name descname">Parameter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">value</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">vary</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">priors</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">scale</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">latex_str</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.knowledge.Parameter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A class for a model parameter.</p>
 <dl class="py attribute">
@@ -157,6 +157,28 @@
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="optimize.knowledge.Parameter.scale">
+<code class="sig-name descname">scale</code><a class="headerlink" href="#optimize.knowledge.Parameter.scale" title="Permalink to this definition">¶</a></dt>
+<dd><p>A search scale to initiate mcmc walkers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="optimize.knowledge.Parameter.latex_str">
+<code class="sig-name descname">latex_str</code><a class="headerlink" href="#optimize.knowledge.Parameter.latex_str" title="Permalink to this definition">¶</a></dt>
+<dd><p>A string for plot formatting, most likely using latex formatting.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
 </dd></dl>
@@ -304,11 +326,14 @@ np.ndarray: The upper bounds.</p>
 
 <dl class="py method">
 <dt id="optimize.knowledge.Parameters.index_from_par">
-<code class="sig-name descname">index_from_par</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">vary</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.knowledge.Parameters.index_from_par" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">index_from_par</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">rel_vary</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.knowledge.Parameters.index_from_par" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the index of a given parameter name.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – The name of the parameter.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – The name of the parameter.</p></li>
+<li><p><strong>rel_vary</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether or not to return an index which is relative to all parameters or only varied parameters. Defaults to False.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The numerical index of the parameter.</p>
@@ -360,11 +385,14 @@ np.ndarray: The upper bounds.</p>
 
 <dl class="py method">
 <dt id="optimize.knowledge.Parameters.par_from_index">
-<code class="sig-name descname">par_from_index</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">k</span></em>, <em class="sig-param"><span class="n">wrtv</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.knowledge.Parameters.par_from_index" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">par_from_index</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">k</span></em>, <em class="sig-param"><span class="n">rel_vary</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.knowledge.Parameters.par_from_index" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the parameter at a given numerical index.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>k</strong> (<em>int</em>) – The numerical index.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k</strong> (<em>int</em>) – The numerical index.</p></li>
+<li><p><strong>rel_vary</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether or not this index is relative to all parameters or only varied parameters. Defaults to False.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The parameter at the given index.</p>
@@ -491,6 +519,7 @@ Throws:</p>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Knowledge</a></li>
 <li class="toctree-l2"><a class="reference internal" href="models_api.html">Models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="kernels_api.html">Kernels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scores_api.html">Scores</a></li>
 <li class="toctree-l2"><a class="reference internal" href="optimizers_api.html">Optimizers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="frameworks_api.html">Frameworks</a></li>
 </ul>

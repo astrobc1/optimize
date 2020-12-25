@@ -39,13 +39,21 @@ class OptProblem:
         self.sampler = sampler
         self.scorer = scorer
         
-    def optimize(self):
+    def optimize(self, *args, **kwargs):
         """Generic optimize method, calls self.optimizer.optimize().
 
         Returns:
-            opt_result (dict): The optimization result.
+            dict: The optimization result.
         """
-        return self.optimizer.optimize()
+        return self.optimizer.optimize(*args, **kwargs)
+    
+    def sample(self, *args, **kwargs):
+        """Generic sample method, calls self.sampler.sample().
+
+        Returns:
+            dict: The sampler result.
+        """
+        return self.sampler.sample(*args, **kwargs)
     
     def print_summary(self, opt_result):
         """A nice generic print method for the Bayesian framework.
@@ -85,6 +93,5 @@ class OptProblem:
         if self.sampler is not None:
             self.sampler.set_pars(pars)
         
-            
-        
-            
+    def corner_plot(self, *args, opt_result=None, **kwargs):
+        return self.sampler.corner_plot(*args, sampler_result=opt_result, **kwargs)

@@ -47,7 +47,7 @@
 <span class="kn">import</span> <span class="nn">optimize.knowledge</span> <span class="k">as</span> <span class="nn">optknow</span>
 <span class="kn">import</span> <span class="nn">optimize.models</span> <span class="k">as</span> <span class="nn">optmodels</span>
 <span class="kn">import</span> <span class="nn">optimize.optimizers</span> <span class="k">as</span> <span class="nn">optimizers</span>
-<span class="kn">import</span> <span class="nn">optimize.score</span> <span class="k">as</span> <span class="nn">optscores</span>
+<span class="kn">import</span> <span class="nn">optimize.scores</span> <span class="k">as</span> <span class="nn">optscores</span>
 <span class="kn">import</span> <span class="nn">optimize.data</span> <span class="k">as</span> <span class="nn">optdatasets</span>
 <span class="kn">import</span> <span class="nn">optimize.frameworks</span> <span class="k">as</span> <span class="nn">optframeworks</span>
 
@@ -76,20 +76,27 @@
 <span class="n">model_guess</span> <span class="o">=</span> <span class="n">gauss</span><span class="p">(</span><span class="n">pars_guess</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
 
 <span class="c1"># Create dedicated data and model objects</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">optdatasets</span><span class="o">.</span><span class="n">SimpleData</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;Some Data&quot;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y_true</span><span class="p">)</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">optmodels</span><span class="o">.</span><span class="n">SimpleModel</span><span class="p">(</span><span class="n">gauss</span><span class="p">,</span> <span class="n">args_to_pass</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,))</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">optdatasets</span><span class="o">.</span><span class="n">Data</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y_true</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">optmodels</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">builder</span><span class="o">=</span><span class="n">gauss</span><span class="p">,</span> <span class="n">p0</span><span class="o">=</span><span class="n">pars_guess</span><span class="p">,</span> <span class="n">args_to_pass</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,))</span>
 
-<span class="c1"># Create Optimize objects</span>
-<span class="n">scorer</span> <span class="o">=</span> <span class="n">optscores</span><span class="o">.</span><span class="n">MSEScore</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
-<span class="n">optimizer</span> <span class="o">=</span> <span class="n">optimizers</span><span class="o">.</span><span class="n">NelderMead</span><span class="p">(</span><span class="n">p0</span><span class="o">=</span><span class="n">pars_guess</span><span class="p">,</span> <span class="n">scorer</span><span class="o">=</span><span class="n">scorer</span><span class="p">)</span>
+<span class="c1"># Create a mean squared error score function</span>
+<span class="n">scorer</span> <span class="o">=</span> <span class="n">optscores</span><span class="o">.</span><span class="n">MSE</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
+
+<span class="c1"># Create an optimizer</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">optimizers</span><span class="o">.</span><span class="n">NelderMead</span><span class="p">(</span><span class="n">scorer</span><span class="o">=</span><span class="n">scorer</span><span class="p">)</span>
+
+<span class="c1"># Create an optimize problem.</span>
 <span class="n">optprob</span> <span class="o">=</span> <span class="n">optframeworks</span><span class="o">.</span><span class="n">OptProblem</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">p0</span><span class="o">=</span><span class="n">pars_guess</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span><span class="p">)</span>
 
-<span class="c1"># Optimize the model</span>
+<span class="c1"># Optimize the model via Nelder Mead</span>
 <span class="n">opt_result</span> <span class="o">=</span> <span class="n">optprob</span><span class="o">.</span><span class="n">optimize</span><span class="p">()</span>
 <span class="n">pars_fit</span> <span class="o">=</span> <span class="n">opt_result</span><span class="p">[</span><span class="s2">&quot;pbest&quot;</span><span class="p">]</span>
 <span class="n">pars_fit</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">()</span>
 
+<span class="c1"># Build the best fit model</span>
 <span class="n">model_best</span> <span class="o">=</span> <span class="n">gauss</span><span class="p">(</span><span class="n">pars_fit</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+
+<span class="c1"># Plot</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y_true</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">model_guess</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Starting Model&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">model_best</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Best Fit Model&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>

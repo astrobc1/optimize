@@ -39,52 +39,98 @@
 <div class="section" id="module-optimize.models">
 <span id="models"></span><h2>Models<a class="headerlink" href="#module-optimize.models" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
-<dt id="optimize.models.BayesianModel">
-<em class="property">class </em><code class="sig-prename descclassname">optimize.models.</code><code class="sig-name descname">BayesianModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">builder</span></em>, <em class="sig-param"><span class="n">kernel</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">args_to_pass</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">kwargs_to_pass</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.models.BayesianModel" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.models.Model</span></code></p>
-<p>A general class for a Bayesian model to optimize.</p>
-<dl class="py attribute">
-<dt id="optimize.models.BayesianModel.kernel">
-<code class="sig-name descname">kernel</code><a class="headerlink" href="#optimize.models.BayesianModel.kernel" title="Permalink to this definition">¶</a></dt>
-<dd><p>The noise kernel to use.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>NoiseKernel</p>
-</dd>
-</dl>
-</dd></dl>
-
-<p>Constructs a Bayesian model for optimization.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>builder</strong> (<em>callable</em>) – Defines the model to use, must be callable via self.builder(<a href="#id1"><span class="problematic" id="id2">*</span></a>self.args_to_pass, <a href="#id3"><span class="problematic" id="id4">**</span></a>kwargs_to_pass)</p></li>
-<li><p><strong>args_to_pass</strong> (<em>tuple</em><em>, </em><em>optional</em>) – The arguments to pass to the build method. Defaults to an empty tuple ().</p></li>
-<li><p><strong>kwargs_to_pass</strong> (<em>dict</em><em>, </em><em>optional</em>) – The keyword arguments to pass to the build method. Defaults to an empty dict {}.</p></li>
-<li><p><strong>kernel</strong> (<em>NoiseKernel</em><em>, </em><em>optional</em>) – The noise kernel to use. Defaults to WhiteNoiseKernel.</p></li>
-</ul>
-</dd>
-</dl>
+<dt id="optimize.models.MixedModel">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.models.</code><code class="sig-name descname">MixedModel</code><a class="headerlink" href="#optimize.models.MixedModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="optimize.models.SimpleModel">
-<em class="property">class </em><code class="sig-prename descclassname">optimize.models.</code><code class="sig-name descname">SimpleModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">builder</span></em>, <em class="sig-param"><span class="n">args_to_pass</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">kwargs_to_pass</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.models.SimpleModel" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.models.Model</span></code></p>
-<p>A base class for a model to optimize.</p>
+<dt id="optimize.models.Model">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.models.</code><code class="sig-name descname">Model</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">p0</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">builder</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">args_to_pass</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">kwargs_to_pass</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">kernel</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.models.Model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Constructs a Bayesian base model for optimization. This class is useful to instantiate for simple Bayesian optimization problems.</p>
+<dl class="py attribute">
+<dt id="optimize.models.Model.p0">
+<code class="sig-name descname">p0</code><a class="headerlink" href="#optimize.models.Model.p0" title="Permalink to this definition">¶</a></dt>
+<dd><p>The initial parameters to use. Defaults to None.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="knowledge_api.html#optimize.knowledge.Parameters" title="optimize.knowledge.Parameters">Parameters</a>, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="optimize.models.Model.data">
+<code class="sig-name descname">data</code><a class="headerlink" href="#optimize.models.Model.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>The dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="data_api.html#optimize.data.MixedData" title="optimize.data.MixedData">MixedData</a>, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="optimize.models.Model.builder">
+<code class="sig-name descname">builder</code><a class="headerlink" href="#optimize.models.Model.builder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the model to use. Any methods that construct the model will start at the build method, which 1. must be called as build(pars) and 2. by default calls builder(<a href="#id1"><span class="problematic" id="id2">*</span></a>args_to_pass, <a href="#id3"><span class="problematic" id="id4">**</span></a>kwargs_to_pass). A second option is to extend the Model class and implement one’s own build method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>callable</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="optimize.models.Model.args_to_pass">
+<code class="sig-name descname">args_to_pass</code><a class="headerlink" href="#optimize.models.Model.args_to_pass" title="Permalink to this definition">¶</a></dt>
+<dd><p>The arguments to pass to the build method. Defaults to ().</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>tuple, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="optimize.models.Model.kwargs_to_pass">
+<code class="sig-name descname">kwargs_to_pass</code><a class="headerlink" href="#optimize.models.Model.kwargs_to_pass" title="Permalink to this definition">¶</a></dt>
+<dd><p>The keyword arguments to pass to the build method. Defaults to {}.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="optimize.models.Model.kernel">
+<code class="sig-name descname">kernel</code><a class="headerlink" href="#optimize.models.Model.kernel" title="Permalink to this definition">¶</a></dt>
+<dd><p>The noise kernel to use.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="kernels_api.html#optimize.kernels.NoiseKernel" title="optimize.kernels.NoiseKernel">NoiseKernel</a></p>
+</dd>
+</dl>
+</dd></dl>
+
 <p>Constructs a base model for optimization.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>builder</strong> (<em>callable</em>) – Defines the model to use, must be callable via self.builder(<a href="#id5"><span class="problematic" id="id6">*</span></a>self.args_to_pass, <a href="#id7"><span class="problematic" id="id8">**</span></a>kwargs_to_pass)</p></li>
+<li><p><strong>p0</strong> (<a class="reference internal" href="knowledge_api.html#optimize.knowledge.Parameters" title="optimize.knowledge.Parameters"><em>Parameters</em></a><em>, </em><em>optional</em>) – The initial parameters to use. Defaults to None.</p></li>
+<li><p><strong>data</strong> (<a class="reference internal" href="data_api.html#optimize.data.MixedData" title="optimize.data.MixedData"><em>MixedData</em></a><em>, </em><em>optional</em>) – The dataset, must be identical to kernel.data.</p></li>
+<li><p><strong>builder</strong> (<em>callable</em>) – Defines the model to use. Any methods that construct the model will start at the build method, which 1. must be called as build(pars) and 2. by default calls builder(<a href="#id5"><span class="problematic" id="id6">*</span></a>args_to_pass, <a href="#id7"><span class="problematic" id="id8">**</span></a>kwargs_to_pass). A second option is to extend the Model class and implement one’s own build method.</p></li>
 <li><p><strong>args_to_pass</strong> (<em>tuple</em><em>, </em><em>optional</em>) – The arguments to pass to the build method. Defaults to ().</p></li>
 <li><p><strong>kwargs_to_pass</strong> (<em>dict</em><em>, </em><em>optional</em>) – The keyword arguments to pass to the build method. Defaults to {}.</p></li>
+<li><p><strong>kernel</strong> (<a class="reference internal" href="kernels_api.html#optimize.kernels.NoiseKernel" title="optimize.kernels.NoiseKernel"><em>NoiseKernel</em></a>) – The noise kernel to use.</p></li>
 </ul>
 </dd>
 </dl>
 <dl class="py method">
-<dt id="optimize.models.SimpleModel.build">
-<code class="sig-name descname">build</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.models.SimpleModel.build" title="Permalink to this definition">¶</a></dt>
+<dt id="optimize.models.Model.build">
+<code class="sig-name descname">build</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.models.Model.build" title="Permalink to this definition">¶</a></dt>
 <dd><p>Builds the model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -95,6 +141,17 @@
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.models.Model.set_pars">
+<code class="sig-name descname">set_pars</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.models.Model.set_pars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simple setter method for the parameters that may be extended.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pars</strong> (<a class="reference internal" href="knowledge_api.html#optimize.knowledge.Parameters" title="optimize.knowledge.Parameters"><em>Parameters</em></a>) – The new starting parameters to use.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -134,6 +191,7 @@
 <li class="toctree-l2"><a class="reference internal" href="knowledge_api.html">Knowledge</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="kernels_api.html">Kernels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scores_api.html">Scores</a></li>
 <li class="toctree-l2"><a class="reference internal" href="optimizers_api.html">Optimizers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="frameworks_api.html">Frameworks</a></li>
 </ul>

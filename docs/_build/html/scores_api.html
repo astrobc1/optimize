@@ -1,0 +1,529 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>optimize API reference &#8212; optimize  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="shortcut icon" href="_static/optimize_logo.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="optimize API reference" href="optimizers_api.html" />
+    <link rel="prev" title="optimize API reference" href="kernels_api.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="optimize-api-reference">
+<h1>optimize API reference<a class="headerlink" href="#optimize-api-reference" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-optimize.scores">
+<span id="scores"></span><h2>Scores<a class="headerlink" href="#module-optimize.scores" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="optimize.scores.Likelihood">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.scores.</code><code class="sig-name descname">Likelihood</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">label</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">model</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.scores.Likelihood" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#optimize.scores.ScoreFunction" title="optimize.scores.ScoreFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.scores.ScoreFunction</span></code></a></p>
+<p>A Bayesian likelihood score function.</p>
+<p>Stores the basic requirements for a score function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<a class="reference internal" href="data_api.html#optimize.data.MixedData" title="optimize.data.MixedData"><em>MixedData</em></a>) – A mixed dataset inheriting from optimize.data.MixedData.</p></li>
+<li><p><strong>model</strong> (<a class="reference internal" href="models_api.html#optimize.models.Model" title="optimize.models.Model"><em>Model</em></a>) – A model inheriting from optimize.models.Model.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="optimize.scores.Likelihood.compute_aicc">
+<code class="sig-name descname">compute_aicc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.scores.Likelihood.compute_aicc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the small sample Akaike information criterion (AICc).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pars</strong> (<a class="reference internal" href="knowledge_api.html#optimize.knowledge.Parameters" title="optimize.knowledge.Parameters"><em>Parameters</em></a>) – The parameters to use.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The AICc.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.scores.Likelihood.compute_bic">
+<code class="sig-name descname">compute_bic</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.scores.Likelihood.compute_bic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the Bayesian information criterion (BIC).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pars</strong> (<a class="reference internal" href="knowledge_api.html#optimize.knowledge.Parameters" title="optimize.knowledge.Parameters"><em>Parameters</em></a>) – The parameters to use.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The BIC</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.scores.Likelihood.compute_logL">
+<code class="sig-name descname">compute_logL</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em>, <em class="sig-param"><span class="n">apply_priors</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.scores.Likelihood.compute_logL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the log of the likelihood.</p>
+<div class="math">
+<p><img src="_images/math/c4d790c76910daa0e4754ec779a4bdabb58050bc.png" alt="\centering
+\ln \mathcal{L} &amp;= - \frac{1}{2} \vec{r}^{T} \hat{K}^{-1} \vec{r} -\frac{1}{2} \ln | \hat{K} | -\frac{1}{2} N \ln(2 \pi) + \sum_{i} \ln \pi(x_{i}) \\
+N &amp;= \mathrm{Number\ of\ Data\ Points} \\
+\vec{r} &amp;= \mathrm{Vector\ of\ Residuals} \\
+\hat{K} &amp;= \mathrm{Covariance\ Matrix} \\
+\pi(x_{i}) &amp;= \mathrm{Prior\ Probability\ For\ Parameter} \ x_{i}"/></p>
+</div><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pars</strong> (<a class="reference internal" href="knowledge_api.html#optimize.knowledge.Parameters" title="optimize.knowledge.Parameters"><em>Parameters</em></a>) – The parameters to use.</p></li>
+<li><p><strong>apply_priors</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether or not to apply the priors. Defaults to True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The log likelihood, ln(L).</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.scores.Likelihood.compute_ndeg">
+<code class="sig-name descname">compute_ndeg</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.scores.Likelihood.compute_ndeg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the number of degrees of freedom, n_data_points - n_vary_pars.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The degrees of freedom.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.scores.Likelihood.compute_neglogL">
+<code class="sig-name descname">compute_neglogL</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.scores.Likelihood.compute_neglogL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simple wrapper to compute -ln(L).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pars</strong> (<a class="reference internal" href="knowledge_api.html#optimize.knowledge.Parameters" title="optimize.knowledge.Parameters"><em>Parameters</em></a>) – The parameters to use.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The negative log likelihood, -ln(L).</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.scores.Likelihood.compute_score">
+<code class="sig-name descname">compute_score</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.scores.Likelihood.compute_score" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the negative of the log-likelihood score.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pars</strong> (<a class="reference internal" href="knowledge_api.html#optimize.knowledge.Parameters" title="optimize.knowledge.Parameters"><em>Parameters</em></a>) – The parameters.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>ln(L).</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.scores.Likelihood.residuals_after_kernel">
+<code class="sig-name descname">residuals_after_kernel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.scores.Likelihood.residuals_after_kernel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the residuals after subtracting off the best fit noise kernel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pars</strong> (<a class="reference internal" href="knowledge_api.html#optimize.knowledge.Parameters" title="optimize.knowledge.Parameters"><em>Parameters</em></a>) – The parameters to use.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The residuals.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="optimize.scores.MSE">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.scores.</code><code class="sig-name descname">MSE</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">model</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.scores.MSE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#optimize.scores.ScoreFunction" title="optimize.scores.ScoreFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.scores.ScoreFunction</span></code></a></p>
+<p>A class for the standard mean squared error (MSE) loss and a namespace for commonly used routines. The loss function used here is just the RMS.</p>
+<p>Stores the basic requirements for a score function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<a class="reference internal" href="data_api.html#optimize.data.MixedData" title="optimize.data.MixedData"><em>MixedData</em></a>) – A mixed dataset inheriting from optimize.data.MixedData.</p></li>
+<li><p><strong>model</strong> (<a class="reference internal" href="models_api.html#optimize.models.Model" title="optimize.models.Model"><em>Model</em></a>) – A model inheriting from optimize.models.Model.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="optimize.scores.MSE.compute_chi2">
+<em class="property">static </em><code class="sig-name descname">compute_chi2</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">residuals</span></em>, <em class="sig-param"><span class="n">errors</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.scores.MSE.compute_chi2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the (non-reduced) chi2 statistic (weighted MSE).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>residuals</strong> (<em>np.ndarray</em>) – The residuals = data - model</p></li>
+<li><p><strong>errors</strong> (<em>np.ndarray</em>) – The effective errorbars (intrinsic and any white noise).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The chi-squared statistic.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.scores.MSE.compute_redchi2">
+<em class="property">static </em><code class="sig-name descname">compute_redchi2</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">residuals</span></em>, <em class="sig-param"><span class="n">errors</span></em>, <em class="sig-param"><span class="n">n_deg</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.scores.MSE.compute_redchi2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the reduced chi2 statistic (weighted MSE).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>residuals</strong> (<em>np.ndarray</em>) – The residuals = data - model</p></li>
+<li><p><strong>errors</strong> (<em>np.ndarray</em>) – The effective errorbars (intrinsic and any white noise).</p></li>
+<li><p><strong>n_deg</strong> (<em>int</em>) – The degrees of freedom, defaults to len(res) - 1.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The reduced chi-squared statistic.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.scores.MSE.compute_rms">
+<em class="property">static </em><code class="sig-name descname">compute_rms</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data_arr</span></em>, <em class="sig-param"><span class="n">model_arr</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.scores.MSE.compute_rms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the RMS (Root mean squared) loss.</p>
+<dl class="simple">
+<dt>Args_data</dt><dd><p>data_arr (np.ndarray): The data array.
+model_arr (np.ndarray): The model array.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The RMS.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.scores.MSE.compute_score">
+<code class="sig-name descname">compute_score</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.scores.MSE.compute_score" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the unweighted mean squared error loss.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pars</strong> (<a class="reference internal" href="knowledge_api.html#optimize.knowledge.Parameters" title="optimize.knowledge.Parameters"><em>Parameters</em></a>) – The parameters to use.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The RMS.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="optimize.scores.MixedLikelihood">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.scores.</code><code class="sig-name descname">MixedLikelihood</code><a class="headerlink" href="#optimize.scores.MixedLikelihood" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+<p>A class for joint likelihood functions. This should map 1-1 with the kernels map.</p>
+<dl class="py method">
+<dt id="optimize.scores.MixedLikelihood.compute_aicc">
+<code class="sig-name descname">compute_aicc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.scores.MixedLikelihood.compute_aicc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the small sample Akaike information criterion (AICc).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pars</strong> (<a class="reference internal" href="knowledge_api.html#optimize.knowledge.Parameters" title="optimize.knowledge.Parameters"><em>Parameters</em></a>) – The parameters to use.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The AICc.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.scores.MixedLikelihood.compute_bic">
+<code class="sig-name descname">compute_bic</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.scores.MixedLikelihood.compute_bic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the Bayesian information criterion (BIC).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pars</strong> (<a class="reference internal" href="knowledge_api.html#optimize.knowledge.Parameters" title="optimize.knowledge.Parameters"><em>Parameters</em></a>) – The parameters to use.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The BIC</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.scores.MixedLikelihood.compute_logL">
+<code class="sig-name descname">compute_logL</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em>, <em class="sig-param"><span class="n">apply_priors</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.scores.MixedLikelihood.compute_logL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the log of the likelihood.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pars</strong> (<a class="reference internal" href="knowledge_api.html#optimize.knowledge.Parameters" title="optimize.knowledge.Parameters"><em>Parameters</em></a>) – The parameters to use.</p></li>
+<li><p><strong>apply_priors</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether or not to apply the priors. Defaults to True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The log likelihood, ln(L).</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.scores.MixedLikelihood.compute_neglogL">
+<code class="sig-name descname">compute_neglogL</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em>, <em class="sig-param"><span class="n">apply_priors</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.scores.MixedLikelihood.compute_neglogL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simple wrapper to compute -ln(L).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pars</strong> (<a class="reference internal" href="knowledge_api.html#optimize.knowledge.Parameters" title="optimize.knowledge.Parameters"><em>Parameters</em></a>) – The parameters to use.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The negative log likelihood, -ln(L).</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.scores.MixedLikelihood.compute_redchi2">
+<code class="sig-name descname">compute_redchi2</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.scores.MixedLikelihood.compute_redchi2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the reduced chi2 statistic (weighted MSE).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pars</strong> (<a class="reference internal" href="knowledge_api.html#optimize.knowledge.Parameters" title="optimize.knowledge.Parameters"><em>Parameters</em></a>) – The parameters.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The reduced chi-squared statistic.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.scores.MixedLikelihood.compute_score">
+<code class="sig-name descname">compute_score</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.scores.MixedLikelihood.compute_score" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the negative log-likelihood score.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pars</strong> (<a class="reference internal" href="knowledge_api.html#optimize.knowledge.Parameters" title="optimize.knowledge.Parameters"><em>Parameters</em></a>) – The parameters.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>ln(L).</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="optimize.scores.ScoreFunction">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.scores.</code><code class="sig-name descname">ScoreFunction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">model</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.scores.ScoreFunction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>An base class for a general score function. Not useful to instantiate on its own.</p>
+<dl class="py attribute">
+<dt id="optimize.scores.ScoreFunction.data">
+<code class="sig-name descname">data</code><a class="headerlink" href="#optimize.scores.ScoreFunction.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>A combined dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="data_api.html#optimize.data.MixedData" title="optimize.data.MixedData">MixedData</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="optimize.scores.ScoreFunction.model">
+<code class="sig-name descname">model</code><a class="headerlink" href="#optimize.scores.ScoreFunction.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>A model inheriting from optimize.models.Model. All datasets must use this model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="models_api.html#optimize.models.Model" title="optimize.models.Model">Model</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<p>Stores the basic requirements for a score function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<a class="reference internal" href="data_api.html#optimize.data.MixedData" title="optimize.data.MixedData"><em>MixedData</em></a>) – A mixed dataset inheriting from optimize.data.MixedData.</p></li>
+<li><p><strong>model</strong> (<a class="reference internal" href="models_api.html#optimize.models.Model" title="optimize.models.Model"><em>Model</em></a>) – A model inheriting from optimize.models.Model.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="optimize.scores.ScoreFunction.compute_score">
+<code class="sig-name descname">compute_score</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.scores.ScoreFunction.compute_score" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the score from a given set of parameters. This method must be implemented for each score function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pars</strong> (<a class="reference internal" href="knowledge_api.html#optimize.knowledge.Parameters" title="optimize.knowledge.Parameters"><em>Parameters</em></a>) – The parameters to use.</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – Must implement this method.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/optimize_logo.png" alt="Logo"/>
+            </a></p>
+<h1 class="logo"><a href="index.html">optimize</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html#indices-and-tables">Indices and tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending.html">Extending optimize</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="api.html">API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="data_api.html">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="knowledge_api.html">Knowledge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models_api.html">Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kernels_api.html">Kernels</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Scores</a></li>
+<li class="toctree-l2"><a class="reference internal" href="optimizers_api.html">Optimizers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="frameworks_api.html">Frameworks</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="api.html">optimize API reference</a><ul>
+      <li>Previous: <a href="kernels_api.html" title="previous chapter">optimize API reference</a></li>
+      <li>Next: <a href="optimizers_api.html" title="next chapter">optimize API reference</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Bryson Cale.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/scores_api.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

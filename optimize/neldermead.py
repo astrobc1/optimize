@@ -25,21 +25,6 @@ class NelderMead(optimizers.Minimizer):
         """
         
         super().__init__(scorer=scorer, options=options)
-        
-        # Init simplex
-        self.init_params()
-        
-        # test_pars is constantly updated and passed to the target function wrapper
-        self.test_pars = copy.deepcopy(self.scorer.p0)
-        
-        # Copy the original parameters to the current best
-        self.pmin = copy.deepcopy(self.scorer.p0)
-        
-        # f calls
-        self.fcalls = 0
-        
-        # The current fmin = inf
-        self.fmin = np.inf
             
     def init_params(self):
         """Initialize the parameters
@@ -273,6 +258,21 @@ class NelderMead(optimizers.Minimizer):
         
         
     def optimize(self):
+        
+        # Init simplex
+        self.init_params()
+        
+        # test_pars is constantly updated and passed to the target function wrapper
+        self.test_pars = copy.deepcopy(self.scorer.p0)
+        
+        # Copy the original parameters to the current best
+        self.pmin = copy.deepcopy(self.scorer.p0)
+        
+        # f calls
+        self.fcalls = 0
+        
+        # The current fmin = inf
+        self.fmin = np.inf
         
         for iteration in range(self.options["n_iterations"]):
             

@@ -16,7 +16,7 @@
     <link rel="shortcut icon" href="_static/optimize_logo.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="optimize API reference" href="optimizers_api.html" />
+    <link rel="next" title="optimize API reference" href="scores_api.html" />
     <link rel="prev" title="optimize API reference" href="models_api.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -38,6 +38,180 @@
 <h1>optimize API reference<a class="headerlink" href="#optimize-api-reference" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-optimize.kernels">
 <span id="kernels"></span><h2>Kernels<a class="headerlink" href="#module-optimize.kernels" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="optimize.kernels.GaussianProcess">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.kernels.</code><code class="sig-name descname">GaussianProcess</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.kernels.GaussianProcess" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#optimize.kernels.NoiseKernel" title="optimize.kernels.NoiseKernel"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.kernels.NoiseKernel</span></code></a></p>
+<p>A generic Gaussian process kernel.</p>
+<p>Constructs a generic GP. Should be called by any class that extends this class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<a class="reference internal" href="data_api.html#optimize.data.MixedData" title="optimize.data.MixedData"><em>MixedData</em></a>) – The mixed data objects which utilize this noise kernel. The combined and sorted x variables will form the axes for the covariance matrix.</p></li>
+<li><p><strong>par_names</strong> (<em>list</em>) – A list of parameter names. They must be provided in the order specified by the appropriate kernel.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="optimize.kernels.GaussianProcess.realize">
+<code class="sig-name descname">realize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em>, <em class="sig-param"><span class="n">residuals</span></em>, <em class="sig-param"><span class="n">xpred</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">xres</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">return_unc</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.kernels.GaussianProcess.realize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Realize the GP (sample at arbitrary points). Meant to be the same as the predict method offered by other codes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pars</strong> (<a class="reference internal" href="knowledge_api.html#optimize.knowledge.Parameters" title="optimize.knowledge.Parameters"><em>Parameters</em></a>) – The parameters to use.</p></li>
+<li><p><strong>residuals</strong> (<em>np.ndarray</em>) – The residuals before the GP is subtracted.</p></li>
+<li><p><strong>xpred</strong> (<em>np.ndarray</em>) – The vector to realize the GP on.</p></li>
+<li><p><strong>xres</strong> (<em>np.ndarray</em>) – The vector the data is on.</p></li>
+<li><p><strong>errors</strong> (<em>np.ndarray</em>) – The errorbars, added in quadrature.</p></li>
+<li><p><strong>return_unc</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether or not to compute the uncertainty in the GP. If True, both the mean and stddev are returned in a tuple. Defaults to False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>If stddev is False, only the mean GP is returned. If stddev is True, the uncertainty in the GP is computed and returned as well. The mean GP is computed through a linear optimization (i.e, minimiation surface is purely concave or convex).</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray OR tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="optimize.kernels.NoiseKernel">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.kernels.</code><code class="sig-name descname">NoiseKernel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">par_names</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.kernels.NoiseKernel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A base noise kernel class. This class is not useful to instantiate on its own.</p>
+<dl class="py attribute">
+<dt id="optimize.kernels.NoiseKernel.data_list">
+<code class="sig-name descname">data_list</code><a class="headerlink" href="#optimize.kernels.NoiseKernel.data_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list containing the data objects which utilize this noise kernel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="optimize.kernels.NoiseKernel.par_names">
+<code class="sig-name descname">par_names</code><a class="headerlink" href="#optimize.kernels.NoiseKernel.par_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of parameters for this kernel, must be in order of their .</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Examples</p>
+<p>To form one noise kernel for all data sets, construct as</p>
+<p>Constructs a generic GP. Should be called by any class that extends this class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<a class="reference internal" href="data_api.html#optimize.data.MixedData" title="optimize.data.MixedData"><em>MixedData</em></a>) – The mixed data objects which utilize this noise kernel. The combined and sorted x variables will form the axes for the covariance matrix.</p></li>
+<li><p><strong>par_names</strong> (<em>list</em>) – A list of parameter names. They must be provided in the order specified by the appropriate kernel.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="optimize.kernels.NoiseKernel.compute_data_errors">
+<code class="sig-name descname">compute_data_errors</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.kernels.NoiseKernel.compute_data_errors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the errors added in quadrature for all datasets corresponding to this kernel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pars</strong> (<a class="reference internal" href="knowledge_api.html#optimize.knowledge.Parameters" title="optimize.knowledge.Parameters"><em>Parameters</em></a>) – The parameters to use.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The errors</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.kernels.NoiseKernel.compute_dist_matrix">
+<code class="sig-name descname">compute_dist_matrix</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x1</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">x2</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.kernels.NoiseKernel.compute_dist_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default wrapper to compute the cov matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x1</strong> (<em>np.ndarray</em><em>, </em><em>optional</em>) – The x1 vector. Defaults to the Data grid.</p></li>
+<li><p><strong>x2</strong> (<em>np.ndarray</em><em>, </em><em>optional</em>) – The x2 vector. Defaults to the Data grid.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.kernels.NoiseKernel.get_data_errors">
+<code class="sig-name descname">get_data_errors</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#optimize.kernels.NoiseKernel.get_data_errors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates the intrinsic data errors (measured apriori).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The intrinsic data error bars.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="optimize.kernels.QuasiPeriodic">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.kernels.</code><code class="sig-name descname">QuasiPeriodic</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.kernels.QuasiPeriodic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#optimize.kernels.GaussianProcess" title="optimize.kernels.GaussianProcess"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.kernels.GaussianProcess</span></code></a></p>
+<p>A Quasiperiodic GP.</p>
+<p>Constructs a generic GP. Should be called by any class that extends this class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<a class="reference internal" href="data_api.html#optimize.data.MixedData" title="optimize.data.MixedData"><em>MixedData</em></a>) – The mixed data objects which utilize this noise kernel. The combined and sorted x variables will form the axes for the covariance matrix.</p></li>
+<li><p><strong>par_names</strong> (<em>list</em>) – A list of parameter names. They must be provided in the order specified by the appropriate kernel.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="optimize.kernels.WhiteNoise">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.kernels.</code><code class="sig-name descname">WhiteNoise</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">par_names</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.kernels.WhiteNoise" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#optimize.kernels.NoiseKernel" title="optimize.kernels.NoiseKernel"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.kernels.NoiseKernel</span></code></a></p>
+<p>A noise kernel for white noise, where all diagonal terms in the covariance matrix are zero. The noise kernel is computed by adding a jitter term and the intrinsic error bars in quadrature.</p>
+<p>Constructs a generic GP. Should be called by any class that extends this class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<a class="reference internal" href="data_api.html#optimize.data.MixedData" title="optimize.data.MixedData"><em>MixedData</em></a>) – The mixed data objects which utilize this noise kernel. The combined and sorted x variables will form the axes for the covariance matrix.</p></li>
+<li><p><strong>par_names</strong> (<em>list</em>) – A list of parameter names. They must be provided in the order specified by the appropriate kernel.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="optimize.kernels.WhiteNoise.compute_cov_matrix">
+<code class="sig-name descname">compute_cov_matrix</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em>, <em class="sig-param"><span class="n">apply_errors</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.kernels.WhiteNoise.compute_cov_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the covariance matrix for white noise by filling the diagonal with provided errors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pars</strong> (<a class="reference internal" href="knowledge_api.html#optimize.knowledge.Parameters" title="optimize.knowledge.Parameters"><em>Parameters</em></a>) – The parameters to use.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The covariance matrix.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 </div>
 
@@ -71,6 +245,7 @@
 <li class="toctree-l2"><a class="reference internal" href="knowledge_api.html">Knowledge</a></li>
 <li class="toctree-l2"><a class="reference internal" href="models_api.html">Models</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Kernels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scores_api.html">Scores</a></li>
 <li class="toctree-l2"><a class="reference internal" href="optimizers_api.html">Optimizers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="frameworks_api.html">Frameworks</a></li>
 </ul>
@@ -83,7 +258,7 @@
   <li><a href="index.html">Documentation overview</a><ul>
   <li><a href="api.html">optimize API reference</a><ul>
       <li>Previous: <a href="models_api.html" title="previous chapter">optimize API reference</a></li>
-      <li>Next: <a href="optimizers_api.html" title="next chapter">optimize API reference</a></li>
+      <li>Next: <a href="scores_api.html" title="next chapter">optimize API reference</a></li>
   </ul></li>
   </ul></li>
 </ul>

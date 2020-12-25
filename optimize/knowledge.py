@@ -11,11 +11,13 @@ class Parameter:
         value (str): The current value of the parameter.
         vary (bool): Whether or not to vary (optimize) this parameter.
         priors (list): A list of priors to apply.
+        scale (float): A search scale to initiate mcmc walkers.
+        latex_str (str): A string for plot formatting, most likely using latex formatting.
     """
     
-    __slots__ = ['name', 'value', 'vary', 'priors']
+    __slots__ = ['name', 'value', 'vary', 'priors', 'scale', 'latex_str']
 
-    def __init__(self, name=None, value=None, vary=True, priors=None):
+    def __init__(self, name=None, value=None, vary=True, priors=None, scale=None, latex_str=None):
         """Creates a Parameter object.
 
         Args:
@@ -35,6 +37,8 @@ class Parameter:
             self.priors = [priors]
         else:
             self.priors = []
+        self.scale = scale
+        self.latex_str = self.name if latex_str is None else latex_str
 
     def __repr__(self):
         s = '(Parameter)  Name: ' + self.name + ' | Value: ' + self.value_str
@@ -45,6 +49,11 @@ class Parameter:
             for prior in self.priors:
                 s += "   " + prior.__repr__() + "\n"
         return s
+    
+    def set_name(self, name):
+        self.name = name
+        if self.latex_str is None:
+            self.latex_str = name
     
     def get_hard_bounds(self):
         """Gets the hard bounds from uniform priors if present, otherwise assumes +/- inf.
@@ -64,6 +73,8 @@ class Parameter:
     def compute_crude_scale(self):
         if not self.vary:
             return 0
+        if self.scale is not None:
+            return self.scale
         if len(self.priors) == 0:
             return np.abs(self.value) / 10
         for prior in self.priors:
@@ -86,7 +97,10 @@ class Parameter:
         kwargs: Any available atrributes.
         """
         for key in kwargs:
-            setattr(self, key, kwargs[key])
+            if key == 'name':
+                self.set_name(kwargs[key])
+            else:
+                setattr(self, key, kwargs[key])
         
     @property
     def hard_bounds(self):
@@ -347,8 +361,8 @@ class Parameters(dict):
         
     def __repr__(self):
         s = ''
-        for par in self.items():
-            s += par.__repr__()
+        for par in self.values():
+            s += repr(par) + '\n'
         return s
 
 
