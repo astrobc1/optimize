@@ -99,18 +99,15 @@ class AffInv(Sampler):
         
         # Number of steps
         if n_burn_steps is None:
-            n_burn_steps = 500 * pars.num_varied()
+            n_burn_steps = 100 * pars.num_varied()
         if n_steps is None:
-            n_steps = 30_000 * pars.num_varied()
+            n_steps = 10_000 * pars.num_varied()
         
         # Burn in
         if n_burn_steps > 0:
-    
-            # Number of burn in steps
-            if n_burn_steps is None:
-                n_burn_steps = 100 * pars.num_varied()
             
             # Run burn in
+            print("Running Burn-in MCMC Phase [" + str(n_burn_steps) + "]")
             walkers = self.sampler.run_mcmc(walkers, n_burn_steps, progress=True)
             
             print("Burn in complete ...")
@@ -135,11 +132,12 @@ class AffInv(Sampler):
 
         # Sample up to n_steps
         converged = False
-        _trange = tqdm.trange(n_steps, desc="Running MCMC ...", leave=True)
+        print("Running Full MCMC Phase ...")
+        _trange = tqdm.trange(n_steps, desc="Running Min Steps = " + str(n_min_steps), leave=True)
         for _, sample in zip(_trange, self.sampler.sample(walkers, iterations=n_steps, progress=False)):
             
             # Only check convergence every 100 steps and run at least a minimum number of steps
-            if self.sampler.iteration % 100:
+            if self.sampler.iteration % 200:
                 continue
 
             # Compute the autocorrelation time so far
