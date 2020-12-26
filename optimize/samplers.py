@@ -154,7 +154,7 @@ class AffInv(Sampler):
             rel_tau = np.abs(old_tau - med_tau) / med_tau
             converged &= rel_tau < rel_tau_thresh
             converged &= self.sampler.iteration > n_min_steps
-            _trange.set_description("\u03C4 = " + str(round(med_tau, 5)) + ", rel change = " + str(round(rel_tau, 5)) + " / " + str(round(rel_tau_thresh, 5)))
+            _trange.set_description("\u03C4 = " + str(round(med_tau, 5)) + " / x" + str(n_taus_thresh) + ", rel change = " + str(round(rel_tau, 5)) + " / " + str(round(rel_tau_thresh, 5)))
             if converged:
                 print("Success!")
                 break
