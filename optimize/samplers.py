@@ -69,7 +69,7 @@ class AffInv(Sampler):
         """
         n_pars_vary = self.scorer.p0.num_varied()
         n_walkers = 2 * n_pars_vary
-        self.sampler = emcee.EnsembleSampler(n_walkers, n_pars_vary, self.compute_score, vectorize=True)
+        self.sampler = emcee.EnsembleSampler(n_walkers, n_pars_vary, self.compute_score)
         
     def sample(self, pars=None, walkers=None, n_burn_steps=None, n_steps=None, rel_tau_thresh=0.01, n_min_steps=1000, n_cores=1, n_taus_thresh=50):
         """Wrapper to perform a burn-in + full MCMC exploration.
@@ -240,7 +240,7 @@ class AffInv(Sampler):
         # Store the errors
         sampler_result["punc"] = punc
         
-    def compute_score(self, walkers):
+    def compute_score(self, pars):
         """Wrapper to compute the score, only to be called by the emcee Ensemble Sampler.
 
         Args:
@@ -249,20 +249,10 @@ class AffInv(Sampler):
         Returns:
             float: The log(likelihood)
         """
-        args_pass = []
-        for i in range(walkers.shape[0]):
-            args_pass.append((self.scorer.compute_logL, self.p0_vary_inds, self.test_pars_vec, self.test_pars, walkers[i, :]))
-            
-        lnLs = Parallel(n_jobs=self.n_cores)(delayed(self._compute_score_single_walker)(*args_pass[i]) for i in range(walkers.shape[0]))
-        return lnLs
-    
-    @staticmethod
-    def _compute_score_single_walker(func, p0_vary_inds, test_pars_vec, test_pars, pars):
-        test_pars_vec[p0_vary_inds] = pars
-        test_pars.setv(value=test_pars_vec)
-        lnL = func(test_pars)
+        self.test_pars_vec[self.p0_vary_inds] = pars
+        self.test_pars.setv(value=self.test_pars_vec)
+        lnL = self.scorer.compute_logL(self.test_pars)
         return lnL
-        
     
     
 class MultiNest(Sampler):
