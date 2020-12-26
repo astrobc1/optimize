@@ -71,7 +71,7 @@ class AffInv(Sampler):
         n_walkers = 2 * n_pars_vary
         self.sampler = emcee.EnsembleSampler(n_walkers, n_pars_vary, self.compute_score)
         
-    def sample(self, pars=None, walkers=None, n_burn_steps=None, n_steps=None, rel_tau_thresh=0.01, n_min_steps=1000, n_threads=1, n_taus_thresh=50):
+    def sample(self, pars=None, walkers=None, n_burn_steps=None, n_steps=None, rel_tau_thresh=0.01, n_min_steps=1000, n_cores=1, n_taus_thresh=50):
         """Wrapper to perform a burn-in + full MCMC exploration.
 
         Args:
@@ -86,9 +86,6 @@ class AffInv(Sampler):
         Returns:
             dict: The sampler result, with keys: flat_chains, autocorrs, steps, pbest, errors, lnL.
         """
-        
-        # Number of threads to use
-        self.sampler.n_threads = n_threads
         
         # Init pars
         if pars is None and walkers is None:
@@ -108,7 +105,9 @@ class AffInv(Sampler):
             
             # Run burn in
             print("Running Burn-in MCMC Phase [" + str(n_burn_steps) + "]")
-            walkers = self.sampler.run_mcmc(walkers, n_burn_steps, progress=True)
+            with multiprocessing.Pool(n_cores) as pool:
+                self.sampler.pool = pool
+                walkers = self.sampler.run_mcmc(walkers, n_burn_steps, progress=True)
             
             print("Burn in complete ...")
             print("Current Parameters ...")
@@ -134,32 +133,34 @@ class AffInv(Sampler):
         converged = False
         print("Running Full MCMC Phase ...")
         _trange = tqdm.trange(n_steps, desc="Running Min Steps = " + str(n_min_steps), leave=True)
-        for _, sample in zip(_trange, self.sampler.sample(walkers, iterations=n_steps, progress=False)):
-            
-            # Only check convergence every 100 steps and run at least a minimum number of steps
-            if self.sampler.iteration % 200:
-                continue
+        with multiprocessing.Pool(n_cores) as pool:
+            self.sampler.pool = pool
+            for _, sample in zip(_trange, self.sampler.sample(walkers, iterations=n_steps, progress=False)):
+                
+                # Only check convergence every 100 steps and run at least a minimum number of steps
+                if self.sampler.iteration % 200:
+                    continue
 
-            # Compute the autocorrelation time so far
-            # Using tol=0 means that we'll always get an estimate even
-            # if it isn't trustworthy
-            taus = self.sampler.get_autocorr_time(tol=0)
-            med_tau = np.nanmedian(taus)
-            autocorrs.append(med_tau)
+                # Compute the autocorrelation time so far
+                # Using tol=0 means that we'll always get an estimate even
+                # if it isn't trustworthy
+                taus = self.sampler.get_autocorr_time(tol=0)
+                med_tau = np.nanmedian(taus)
+                autocorrs.append(med_tau)
 
-            # Check convergence:
-            # 1. Ensure we've run a sufficient number of autocorrelation time scales
-            # 2. Ensure the estimations of the autorr times themselves are settling.
-            converged = med_tau * n_taus_thresh < self.sampler.iteration
-            rel_tau = np.abs(old_tau - med_tau) / med_tau
-            converged &= rel_tau < rel_tau_thresh
-            converged &= self.sampler.iteration > n_min_steps
-            _trange.set_description("\u03C4 = " + str(round(med_tau, 5)) + " / x" + str(n_taus_thresh) + ", rel change = " + str(round(rel_tau, 5)) + " / " + str(round(rel_tau_thresh, 5)))
-            if converged:
-                print("Success!")
-                break
-            
-            old_tau = med_tau
+                # Check convergence:
+                # 1. Ensure we've run a sufficient number of autocorrelation time scales
+                # 2. Ensure the estimations of the autorr times themselves are settling.
+                converged = med_tau * n_taus_thresh < self.sampler.iteration
+                rel_tau = np.abs(old_tau - med_tau) / med_tau
+                converged &= rel_tau < rel_tau_thresh
+                converged &= self.sampler.iteration > n_min_steps
+                _trange.set_description("\u03C4 = " + str(round(med_tau, 5)) + " / x" + str(n_taus_thresh) + ", rel change = " + str(round(rel_tau, 5)) + " / " + str(round(rel_tau_thresh, 5)))
+                if converged:
+                    print("Success!")
+                    break
+                
+                old_tau = med_tau
             
         # Outputs
         sampler_result = {}
