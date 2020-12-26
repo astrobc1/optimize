@@ -34,9 +34,6 @@ class Model:
         self.has_gp = False
         if isinstance(self.kernel, optnoisekernels.GaussianProcess):
             self.has_gp = True
-        self.data_inds = {}
-        for data in self.data.values():
-            self.data_inds[data.label] = self.data.get_inds(data.label)
     
     def build(self, pars):
         """Builds the model.

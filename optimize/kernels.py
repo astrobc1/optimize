@@ -15,6 +15,8 @@ class NoiseKernel:
         To form one noise kernel for all data sets, construct as 
     """
     
+    is_diag = None
+    
     def __init__(self, data, par_names=None):
         """Constructs a generic GP. Should be called by any class that extends this class.
 
@@ -100,6 +102,8 @@ class WhiteNoise(NoiseKernel):
     """A noise kernel for white noise, where all diagonal terms in the covariance matrix are zero. The noise kernel is computed by adding a jitter term and the intrinsic error bars in quadrature.
     """
     
+    is_diag = True
+    
     def compute_cov_matrix(self, pars, apply_errors=True):
         """Computes the covariance matrix for white noise by filling the diagonal with provided errors.
 
@@ -118,6 +122,8 @@ class WhiteNoise(NoiseKernel):
 class GaussianProcess(NoiseKernel):
     """A generic Gaussian process kernel.
     """
+    
+    is_diag = False
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
