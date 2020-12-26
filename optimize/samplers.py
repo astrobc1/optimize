@@ -4,7 +4,7 @@ import copy
 import optimize.knowledge
 from optimize.optimizers import Sampler
 import tqdm
-import multiprocessing
+from joblib import Parallel, delayed
 import emcee
 import time
 import corner
@@ -69,7 +69,7 @@ class AffInv(Sampler):
         """
         n_pars_vary = self.scorer.p0.num_varied()
         n_walkers = 2 * n_pars_vary
-        self.sampler = emcee.EnsembleSampler(n_walkers, n_pars_vary, self.compute_score)
+        self.sampler = emcee.EnsembleSampler(n_walkers, n_pars_vary, self.compute_score, vectorize=True)
         
     def sample(self, pars=None, walkers=None, n_burn_steps=None, n_steps=None, rel_tau_thresh=0.01, n_min_steps=1000, n_cores=1, n_taus_thresh=50):
         """Wrapper to perform a burn-in + full MCMC exploration.
@@ -86,6 +86,8 @@ class AffInv(Sampler):
         Returns:
             dict: The sampler result, with keys: flat_chains, autocorrs, steps, pbest, errors, lnL.
         """
+        
+        self.n_cores = n_cores
         
         # Init pars
         if pars is None and walkers is None:
@@ -105,9 +107,7 @@ class AffInv(Sampler):
             
             # Run burn in
             print("Running Burn-in MCMC Phase [" + str(n_burn_steps) + "]")
-            with multiprocessing.Pool(n_cores) as pool:
-                self.sampler.pool = pool
-                walkers = self.sampler.run_mcmc(walkers, n_burn_steps, progress=True)
+            walkers = self.sampler.run_mcmc(walkers, n_burn_steps, progress=True)
             
             print("Burn in complete ...")
             print("Current Parameters ...")
@@ -133,34 +133,32 @@ class AffInv(Sampler):
         converged = False
         print("Running Full MCMC Phase ...")
         _trange = tqdm.trange(n_steps, desc="Running Min Steps = " + str(n_min_steps), leave=True)
-        with multiprocessing.Pool(n_cores) as pool:
-            self.sampler.pool = pool
-            for _, sample in zip(_trange, self.sampler.sample(walkers, iterations=n_steps, progress=False)):
-                
-                # Only check convergence every 100 steps and run at least a minimum number of steps
-                if self.sampler.iteration % 200:
-                    continue
+        for _, sample in zip(_trange, self.sampler.sample(walkers, iterations=n_steps, progress=False)):
+            
+            # Only check convergence every 100 steps and run at least a minimum number of steps
+            if self.sampler.iteration % 200:
+                continue
 
-                # Compute the autocorrelation time so far
-                # Using tol=0 means that we'll always get an estimate even
-                # if it isn't trustworthy
-                taus = self.sampler.get_autocorr_time(tol=0)
-                med_tau = np.nanmedian(taus)
-                autocorrs.append(med_tau)
+            # Compute the autocorrelation time so far
+            # Using tol=0 means that we'll always get an estimate even
+            # if it isn't trustworthy
+            taus = self.sampler.get_autocorr_time(tol=0)
+            med_tau = np.nanmedian(taus)
+            autocorrs.append(med_tau)
 
-                # Check convergence:
-                # 1. Ensure we've run a sufficient number of autocorrelation time scales
-                # 2. Ensure the estimations of the autorr times themselves are settling.
-                converged = med_tau * n_taus_thresh < self.sampler.iteration
-                rel_tau = np.abs(old_tau - med_tau) / med_tau
-                converged &= rel_tau < rel_tau_thresh
-                converged &= self.sampler.iteration > n_min_steps
-                _trange.set_description("\u03C4 = " + str(round(med_tau, 5)) + " / x" + str(n_taus_thresh) + ", rel change = " + str(round(rel_tau, 5)) + " / " + str(round(rel_tau_thresh, 5)))
-                if converged:
-                    print("Success!")
-                    break
-                
-                old_tau = med_tau
+            # Check convergence:
+            # 1. Ensure we've run a sufficient number of autocorrelation time scales
+            # 2. Ensure the estimations of the autorr times themselves are settling.
+            converged = med_tau * n_taus_thresh < self.sampler.iteration
+            rel_tau = np.abs(old_tau - med_tau) / med_tau
+            converged &= rel_tau < rel_tau_thresh
+            converged &= self.sampler.iteration > n_min_steps
+            _trange.set_description("\u03C4 = " + str(round(med_tau, 5)) + " / x" + str(n_taus_thresh) + ", rel change = " + str(round(rel_tau, 5)) + " / " + str(round(rel_tau_thresh, 5)))
+            if converged:
+                print("Success!")
+                break
+            
+            old_tau = med_tau
             
         # Outputs
         sampler_result = {}
@@ -242,7 +240,7 @@ class AffInv(Sampler):
         # Store the errors
         sampler_result["punc"] = punc
         
-    def compute_score(self, pars):
+    def compute_score(self, walkers):
         """Wrapper to compute the score, only to be called by the emcee Ensemble Sampler.
 
         Args:
@@ -251,10 +249,20 @@ class AffInv(Sampler):
         Returns:
             float: The log(likelihood)
         """
-        self.test_pars_vec[self.p0_vary_inds] = pars
-        self.test_pars.setv(value=self.test_pars_vec)
-        lnL = self.scorer.compute_logL(self.test_pars)
+        args_pass = []
+        for i in range(walkers.shape[0]):
+            args_pass.append((self.scorer.compute_logL, self.p0_vary_inds, self.test_pars_vec, self.test_pars, walkers[i, :]))
+            
+        lnLs = Parallel(n_jobs=self.n_cores)(delayed(self._compute_score_single_walker)(*args_pass[i]) for i in range(walkers.shape[0]))
+        return lnLs
+    
+    @staticmethod
+    def _compute_score_single_walker(func, p0_vary_inds, test_pars_vec, test_pars, pars):
+        test_pars_vec[p0_vary_inds] = pars
+        test_pars.setv(value=test_pars_vec)
+        lnL = func(test_pars)
         return lnL
+        
     
     
 class MultiNest(Sampler):
