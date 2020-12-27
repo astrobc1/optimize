@@ -9,37 +9,22 @@ import numba
 from numba import jit, njit, prange
 
 import optimize.knowledge as optknow
-import optimize.score as optscore
+import optimize.scores as optscores
 import optimize.optimizers as optimizers
-
+import matplotlib.pyplot as plt
 
 class NelderMead(optimizers.Minimizer):
     """A class to interact with the Nelder Mead optimizer.
     
     """
         
-    def __init__(self, scorer=None, p0=None, options=None):
+    def __init__(self, scorer=None, options=None):
         """Initiate a Nelder Mead solver.
         
         Args:
         """
         
-        super().__init__(scorer=scorer, p0=p0, options=options)
-        
-        # Init simplex
-        self.init_params()
-        
-        # test_pars is constantly updated and passed to the target function wrapper
-        self.test_pars = copy.deepcopy(self.p0)
-        
-        # Copy the original parameters to the current best
-        self.pmin = copy.deepcopy(self.p0)
-        
-        # f calls
-        self.fcalls = 0
-        
-        # The current fmin = inf
-        self.fmin = np.inf
+        super().__init__(scorer=scorer, options=options)
             
     def init_params(self):
         """Initialize the parameters
@@ -48,22 +33,22 @@ class NelderMead(optimizers.Minimizer):
         """
         
         # The number of parameters
-        self.n_pars = len(self.p0)
-        self.n_pars_vary = self.p0.num_varied()
+        self.n_pars = len(self.scorer.p0)
+        self.n_pars_vary = self.scorer.p0.num_varied()
 
         # Remap pointers
-        self.p0_numpy = self.p0.unpack()
-        self.p0_numpy_vary = self.p0.unpack(vary_only=True)
-        self.p0_vary_inds = np.where(self.p0_numpy['vary'])[0]
+        self.scorer.p0_numpy = self.scorer.p0.unpack()
+        self.scorer.p0_numpy_vary = self.scorer.p0.unpack(vary_only=True)
+        self.scorer.p0_vary_inds = np.where(self.scorer.p0_numpy['vary'])[0]
         
         # Initialize a simplex
         self.current_full_simplex = np.zeros(shape=(self.n_pars_vary, self.n_pars_vary + 1), dtype=float)
         
         # Fill each column with the initial parameters
-        self.current_full_simplex[:, :] = np.tile(self.p0_numpy_vary['value'].reshape(self.n_pars_vary, 1), (1, self.n_pars_vary + 1))
+        self.current_full_simplex[:, :] = np.tile(self.scorer.p0_numpy_vary['value'].reshape(self.n_pars_vary, 1), (1, self.n_pars_vary + 1))
         
         # For each column, offset a uniqe parameter according to p=1.5*p
-        self.current_full_simplex[:, :-1] += np.diag(0.5 * self.p0_numpy_vary['value'])
+        self.current_full_simplex[:, :-1] += np.diag(0.5 * self.scorer.p0_numpy_vary['value'])
 
 
     def resolve_options(self):
@@ -79,22 +64,25 @@ class NelderMead(optimizers.Minimizer):
         self.resolve_option('delta', 0.5)
             
         # Resolve the number of fevals
-        self.resolve_option('max_f_evals', int(self.p0.num_varied() * 500))
+        self.resolve_option('max_f_evals', int(self.scorer.p0.num_varied() * 500))
         
         # Resolve number of times solver has effecively converged to declare true convergence
         self.resolve_option('no_improve_break', 3)
         
         # Number of ameoba iterations
-        self.resolve_option('n_iterations', self.p0.num_varied())
+        self.resolve_option('n_iterations', self.scorer.p0.num_varied())
         
         # Resolve xtol and ftol
         self.resolve_option('xtol', 1E-6)
         self.resolve_option('ftol', 1E-6)
         
+        # Resolve penalty
+        self.resolve_option('penalty', 1E6)
+        
         # Subspaces
         if 'subspaces' not in self.options:
             self.subspaces = []
-            pars_varied = self.p0.get_varied()
+            pars_varied = self.scorer.p0.get_varied()
             for i in range(len(pars_varied) - 1):
                 self.subspaces.append([pars_varied[i].name, pars_varied[i + 1].name])
             self.subspaces.append([pars_varied[-1].name, pars_varied[0].name])
@@ -108,18 +96,17 @@ class NelderMead(optimizers.Minimizer):
             self.subspace_inds.append([])
             self.subspace_inds_vary.append([])
             for pname in s:
-                self.subspace_inds[-1].append(self.p0.index_from_par(pname))
-                self.subspace_inds_vary[-1].append(self.p0.index_from_par(pname, vary=True))
-
+                self.subspace_inds[-1].append(self.scorer.p0.index_from_par(pname))
+                self.subspace_inds_vary[-1].append(self.scorer.p0.index_from_par(pname, rel_vary=True))
 
     def init_space(self, subspace_index=None):
         
         if subspace_index is not None:
             n = len(self.subspaces[subspace_index])
-            inds = [self.p0.index_from_par(pname) for pname in self.subspaces[subspace_index]]
+            inds = [self.scorer.p0.index_from_par(pname) for pname in self.subspaces[subspace_index]]
             self.current_simplex = np.zeros((n, n+1))
             pbest = self.pmin.unpack(keys='value')['value'][inds]
-            pinit = self.p0_numpy['value'][inds]
+            pinit = self.scorer.p0_numpy['value'][inds]
             self.current_simplex[:, 0] = np.copy(pbest)
             self.current_simplex[:, 1] = np.copy(pinit)
             for i in range(2, n + 1):
@@ -260,7 +247,7 @@ class NelderMead(optimizers.Minimizer):
         
         if subspace_index is None:
             self.current_full_simplex = np.copy(simplex)
-            for i, p in enumerate(self.p0_numpy_vary['name']):
+            for i, p in enumerate(self.scorer.p0_numpy_vary['name']):
                 self.pmin[p].setv(value=pmin[i])
         else:
             for i, p in enumerate(self.subspaces[subspace_index]):
@@ -271,6 +258,21 @@ class NelderMead(optimizers.Minimizer):
         
         
     def optimize(self):
+        
+        # Init simplex
+        self.init_params()
+        
+        # test_pars is constantly updated and passed to the target function wrapper
+        self.test_pars = copy.deepcopy(self.scorer.p0)
+        
+        # Copy the original parameters to the current best
+        self.pmin = copy.deepcopy(self.scorer.p0)
+        
+        # f calls
+        self.fcalls = 0
+        
+        # The current fmin = inf
+        self.fmin = np.inf
         
         for iteration in range(self.options["n_iterations"]):
             
@@ -372,7 +374,7 @@ class NelderMead(optimizers.Minimizer):
     def compute_score(self, x, subspace_index=None):
         
         if subspace_index is None:
-            for i, p in enumerate(self.p0_numpy_vary['name']):
+            for i, p in enumerate(self.scorer.p0_numpy_vary['name']):
                 self.test_pars[p].setv(value=x[i])
         else:
             for i, p in enumerate(self.subspaces[subspace_index]):
@@ -383,6 +385,13 @@ class NelderMead(optimizers.Minimizer):
         
         # Update fcalls
         self.fcalls += 1
+            
+        # Return -lnl or MSE
+        if isinstance(self.scorer, optscores.Likelihood) or isinstance(self.scorer, optscores.MixedLikelihood):
+            f *= -1
         
-        # Return the score
+        # If f is not finite, don't return -inf, return a large number
+        if not np.isfinite(f):
+            f = self.options["penalty"]
+            
         return f

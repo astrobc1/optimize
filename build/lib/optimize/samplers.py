@@ -71,7 +71,7 @@ class AffInv(Sampler):
         n_walkers = 2 * n_pars_vary
         self.sampler = emcee.EnsembleSampler(n_walkers, n_pars_vary, self.compute_score)
         
-    def sample(self, pars=None, walkers=None, n_burn_steps=500, n_steps=75_000, rel_tau_thresh=0.01, n_min_steps=1000, n_cores=1, n_taus_thresh=40):
+    def sample(self, pars=None, walkers=None, n_burn_steps=None, n_steps=None, rel_tau_thresh=0.01, n_min_steps=1000, n_cores=1, n_taus_thresh=50):
         """Wrapper to perform a burn-in + full MCMC exploration.
 
         Args:
@@ -95,6 +95,12 @@ class AffInv(Sampler):
             pars = self.scorer.p0
         elif pars is not None:
             walkers = self.init_walkers(pars)
+        
+        # Number of steps
+        if n_burn_steps is None:
+            n_burn_steps = 100 * pars.num_varied()
+        if n_steps is None:
+            n_steps = 10_000 * pars.num_varied()
         
         # Burn in
         if n_burn_steps > 0:
@@ -249,11 +255,8 @@ class AffInv(Sampler):
         return lnL
     
     
-# NOT IMPLEMENTED YET
 class MultiNest(Sampler):
     pass
 
-# NOT IMPLEMENTED YET
-# (Hamiltonian No U-Turn)
 class HNUT(Sampler):
     pass

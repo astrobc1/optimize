@@ -1,1 +1,3 @@
 recursive-include optimize *
+recursive-exclude docs *
+recursive-exclude examples *

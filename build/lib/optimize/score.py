@@ -93,25 +93,25 @@ class MSEScore(ScoreFunction):
         _chi2 = np.nansum((res / errorbars)**2)
         return _chi2 / ndeg
 
-class MLEScore(ScoreFunction):
+class Likelihood(ScoreFunction):
     
     def __init__(self, model, data):
         super().__init__(model, data)
     
     def compute_score(self, pars):
-        """Computes the negative likelihood score.
+        """Computes the negative log-likelihood score.
 
-        Args_data 
+        Args:
             _data (np.ndarray): The data.
             _model (np.ndarray): The model.
 
         Returns:
-            float: -ln(Likelihood).
+            float: -ln(L).
         """
         neglnL = self.compute_negloglikelihood(pars)
         return neglnL
     
-    def compute_loglikelihood(self, pars):
+    def compute_loglikelihood(self, pars, priors=True):
         _model = self.model.build(pars)
         _data = self.data.y
         good = np.where(np.isfinite(_data) & np.isfinite(_model))[0]
@@ -123,8 +123,21 @@ class MLEScore(ScoreFunction):
         else:
             _redchi2 = self.compute_redchi2(_res, self.data.compute_errorbars(pars))
             _lnL = -1 * _redchi2 / 2
+        # Apply priors
+        if priors:
+            _lnL += self.compute_loglikelihood_priors(pars)
         return _lnL
-    
     
     def compute_negloglikelihood(self, pars):
          return -1 * self.compute_loglikelihood(pars)
+     
+    def compute_loglikelihood_priors(self, pars):
+        _lnL = 0
+        for par in pars:
+            _par = pars[par]
+            for prior in _par.priors:
+                _lnL += prior.logprob(_par)
+        return _lnL
+                 
+         
+         

@@ -1,28 +1,41 @@
 import numpy as np
 import optimize.kernels as optnoisekernels
+import matplotlib.pyplot as plt
 
 class Model:
-    
-    def __init__(self):
-        pass
+    """Constructs a Bayesian base model for optimization. This class is useful to instantiate for simple Bayesian optimization problems.
 
-class SimpleModel(Model):
-    """A base class for a model to optimize.
+        Attributes:
+            p0 (Parameters, optional): The initial parameters to use. Defaults to None.
+            data (MixedData, optional): The dataset.
+            builder (callable): Defines the model to use. Any methods that construct the model will start at the build method, which 1. must be called as build(pars) and 2. by default calls builder(*args_to_pass, **kwargs_to_pass). A second option is to extend the Model class and implement one's own build method.
+            args_to_pass (tuple, optional): The arguments to pass to the build method. Defaults to ().
+            kwargs_to_pass (dict, optional): The keyword arguments to pass to the build method. Defaults to {}.
+            kernel (NoiseKernel): The noise kernel to use.
     """
     
-    def __init__(self, builder, args_to_pass=None, kwargs_to_pass=None):
+    def __init__(self, p0=None, data=None, builder=None, args_to_pass=None, kwargs_to_pass=None, kernel=None):
         """Constructs a base model for optimization.
 
         Args:
-            builder (callable): Defines the model to use, must be callable via self.builder(*self.args_to_pass, **kwargs_to_pass)
+            p0 (Parameters, optional): The initial parameters to use. Defaults to None.
+            data (MixedData, optional): The dataset, must be identical to kernel.data.
+            builder (callable): Defines the model to use. Any methods that construct the model will start at the build method, which 1. must be called as build(pars) and 2. by default calls builder(*args_to_pass, **kwargs_to_pass). A second option is to extend the Model class and implement one's own build method.
             args_to_pass (tuple, optional): The arguments to pass to the build method. Defaults to ().
             kwargs_to_pass (dict, optional): The keyword arguments to pass to the build method. Defaults to {}.
+            kernel (NoiseKernel): The noise kernel to use.
         """
+        self.p0 = p0
+        self.data = data
         self.builder = builder
         self.args_to_pass = () if args_to_pass is None else args_to_pass
         self.kwargs_to_pass = {} if kwargs_to_pass is None else kwargs_to_pass
-        
-    def build(self, pars, *args, **kwargs):
+        self.kernel = kernel
+        self.has_gp = False
+        if isinstance(self.kernel, optnoisekernels.GaussianProcess):
+            self.has_gp = True
+    
+    def build(self, pars):
         """Builds the model.
 
         Args:
@@ -34,29 +47,13 @@ class SimpleModel(Model):
         _model = self.builder(pars, *self.args_to_pass, **self.kwargs_to_pass)
         return _model
     
-    def __repr__(self):
-        return 'A Simple Model'
-    
-class BayesianModel(Model):
-    """A general class for a Bayesian model to optimize.
-    
-    Attributes:
-        kernel (NoiseKernel): The noise kernel to use.
-    """
-    
-    def __init__(self, builder, kernel=None, args_to_pass=None, kwargs_to_pass=None):
-        """Constructs a Bayesian model for optimization.
+    def set_pars(self, pars):
+        """Simple setter method for the parameters that may be extended.
 
         Args:
-            builder (callable): Defines the model to use, must be callable via self.builder(*self.args_to_pass, **kwargs_to_pass)
-            args_to_pass (tuple, optional): The arguments to pass to the build method. Defaults to an empty tuple ().
-            kwargs_to_pass (dict, optional): The keyword arguments to pass to the build method. Defaults to an empty dict {}.
-            kernel (NoiseKernel, optional): The noise kernel to use. Defaults to WhiteNoiseKernel.
+            pars (Parameters): The new starting parameters to use.
         """
-        super().__init__(builder, args_to_pass=args_to_pass, kwargs_to_pass=kwargs_to_pass)
-        if kernel is None:
-            self.kernel = optnoisekernels.WhiteNoiseKernel()
-        else:
-            self.kernel = kernel
-    
-    
+        self.p0 = pars
+
+class MixedModel(dict):
+    pass
