@@ -1,6 +1,8 @@
 import numpy as np
 import optimize.kernels as optnoisekernels
 import matplotlib.pyplot as plt
+import pymc3 as pm
+import theano.tensor as tt
 
 class Model:
     """Constructs a Bayesian base model for optimization. This class is useful to instantiate for simple Bayesian optimization problems.
@@ -54,6 +56,16 @@ class Model:
             pars (Parameters): The new starting parameters to use.
         """
         self.p0 = pars
+
+
+
+class PyMC3Model(Model, pm.model.Model):
+    
+    def __init__(self, p0=None, data=None, kernel=None):
+        super().__init__(p0=p0, data=data, kernel=kernel)
+        self.pars_to_pmd()
+            
+
 
 class MixedModel(dict):
     pass

@@ -151,7 +151,6 @@ class AffInv(Sampler):
             if converged:
                 print("Success!")
                 break
-            
             old_tau = med_tau
             
         # Outputs
@@ -250,10 +249,11 @@ class AffInv(Sampler):
     
     
 # NOT IMPLEMENTED YET
+# Pymultinest
 class MultiNest(Sampler):
     pass
 
 # NOT IMPLEMENTED YET
 # (Hamiltonian No U-Turn)
-class HNUT(Sampler):
+class NUTS(Sampler):
     pass

@@ -109,6 +109,8 @@ class Parameter:
     def add_prior(self, prior):
         self.priors.append(prior)
         
+    #def to_pmd(self):
+        
         
 
 class Parameters(dict):
@@ -409,6 +411,9 @@ class Gaussian(AbstractPrior):
     
     def __repr__(self):
         return "Gaussian: [" + str(self.mu) + ", " + str(self.sigma) + "]"
+    
+    def to_pmd(self, par):
+        return pm.Normal(par.name, self.mu, sigma=self.sigma)
     
 class Uniform(AbstractPrior):
     """A prior defined by hard bounds.
