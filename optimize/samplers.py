@@ -177,8 +177,8 @@ class AffInv(Sampler):
         pbest_vary_dict = sampler_result["pmed"].unpack(vary_only=True)
         truths = pbest_vary_dict["value"]
         labels = [par.latex_str for par in sampler_result["pbest"].values() if par.vary]
-        fig = corner.corner(sampler_result["flat_chains"], labels=labels, truths=truths, show_titles=True)
-        return fig
+        corner_plot = corner.corner(sampler_result["flat_chains"], labels=labels, truths=truths, show_titles=True)
+        return corner_plot
         
     
     def parameter_chain_results(self, sampler_result, percentiles=None):
