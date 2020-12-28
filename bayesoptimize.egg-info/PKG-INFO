@@ -1,0 +1,14 @@
+Metadata-Version: 2.1
+Name: bayesoptimize
+Version: 1.0.1
+Summary: A framework to solve optimization problems
+Home-page: https://github.com/astrobc1/optimize
+Author: Bryson Cale
+Author-email: bryson.cale1@gmail.com
+License: UNKNOWN
+Description: UNKNOWN
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: Unix
+Requires-Python: >=3.6
+Description-Content-Type: text/x-rst

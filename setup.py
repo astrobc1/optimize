@@ -13,8 +13,8 @@ with open("README.rst", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="optimize",
-    version="1.0",
+    name="bayesoptimize",
+    version="1.0.1",
     author="Bryson Cale",
     author_email="bryson.cale1@gmail.com",
     description="A framework to solve optimization problems",
