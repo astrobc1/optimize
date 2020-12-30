@@ -366,7 +366,7 @@ class MixedLikelihood(dict):
           
     @property
     def p0(self):
-        return self.like0.p0
+        return self.like0.model.p0
     
     @property
     def like0(self):

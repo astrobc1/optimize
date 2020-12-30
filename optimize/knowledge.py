@@ -454,17 +454,17 @@ class Jeffreys(AbstractPrior):
             maxval (float): The upper bound.
         """
     
-    __slots__ = ['minval', 'maxval']
+    __slots__ = ['minval', 'maxval', 'lognorm']
     
     def __init__(self, minval, maxval):
         assert minval <= maxval
         self.minval = minval
         self.maxval = maxval
+        self.lognorm = np.log(1.0 / np.log(self.maxval / self.minval))
         
     def logprob(self, x):
-        norm = 1.0 / np.log(self.maxval / self.minval)
         if self.minval < x < self.maxval:
-            return np.log(norm) - np.log(x)
+            return self.lognorm - np.log(x)
         else:
             return -np.inf
         

@@ -37,18 +37,18 @@ class NelderMead(optimizers.Minimizer):
         self.n_pars_vary = self.scorer.p0.num_varied()
 
         # Remap pointers
-        self.scorer.p0_numpy = self.scorer.p0.unpack()
-        self.scorer.p0_numpy_vary = self.scorer.p0.unpack(vary_only=True)
-        self.scorer.p0_vary_inds = np.where(self.scorer.p0_numpy['vary'])[0]
+        self.p0_numpy = self.scorer.p0.unpack()
+        self.p0_numpy_vary = self.scorer.p0.unpack(vary_only=True)
+        self.p0_vary_inds = np.where(self.p0_numpy['vary'])[0]
         
         # Initialize a simplex
         self.current_full_simplex = np.zeros(shape=(self.n_pars_vary, self.n_pars_vary + 1), dtype=float)
         
         # Fill each column with the initial parameters
-        self.current_full_simplex[:, :] = np.tile(self.scorer.p0_numpy_vary['value'].reshape(self.n_pars_vary, 1), (1, self.n_pars_vary + 1))
+        self.current_full_simplex[:, :] = np.tile(self.p0_numpy_vary['value'].reshape(self.n_pars_vary, 1), (1, self.n_pars_vary + 1))
         
         # For each column, offset a uniqe parameter according to p=1.5*p
-        self.current_full_simplex[:, :-1] += np.diag(0.5 * self.scorer.p0_numpy_vary['value'])
+        self.current_full_simplex[:, :-1] += np.diag(0.5 * self.p0_numpy_vary['value'])
 
 
     def resolve_options(self):
@@ -79,6 +79,8 @@ class NelderMead(optimizers.Minimizer):
         # Resolve penalty
         self.resolve_option('penalty', 1E6)
         
+    def init_subspaces(self):
+        
         # Subspaces
         if 'subspaces' not in self.options:
             self.subspaces = []
@@ -106,7 +108,7 @@ class NelderMead(optimizers.Minimizer):
             inds = [self.scorer.p0.index_from_par(pname) for pname in self.subspaces[subspace_index]]
             self.current_simplex = np.zeros((n, n+1))
             pbest = self.pmin.unpack(keys='value')['value'][inds]
-            pinit = self.scorer.p0_numpy['value'][inds]
+            pinit = self.p0_numpy['value'][inds]
             self.current_simplex[:, 0] = np.copy(pbest)
             self.current_simplex[:, 1] = np.copy(pinit)
             for i in range(2, n + 1):
@@ -247,7 +249,7 @@ class NelderMead(optimizers.Minimizer):
         
         if subspace_index is None:
             self.current_full_simplex = np.copy(simplex)
-            for i, p in enumerate(self.scorer.p0_numpy_vary['name']):
+            for i, p in enumerate(self.p0_numpy_vary['name']):
                 self.pmin[p].setv(value=pmin[i])
         else:
             for i, p in enumerate(self.subspaces[subspace_index]):
@@ -259,8 +261,11 @@ class NelderMead(optimizers.Minimizer):
         
     def optimize(self):
         
-        # Init simplex
+        # Init params
         self.init_params()
+        
+        # Init subspaces
+        self.init_subspaces()
         
         # test_pars is constantly updated and passed to the target function wrapper
         self.test_pars = copy.deepcopy(self.scorer.p0)
@@ -374,7 +379,7 @@ class NelderMead(optimizers.Minimizer):
     def compute_score(self, x, subspace_index=None):
         
         if subspace_index is None:
-            for i, p in enumerate(self.scorer.p0_numpy_vary['name']):
+            for i, p in enumerate(self.p0_numpy_vary['name']):
                 self.test_pars[p].setv(value=x[i])
         else:
             for i, p in enumerate(self.subspaces[subspace_index]):
