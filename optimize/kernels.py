@@ -54,7 +54,7 @@ class NoiseKernel:
             pars (Parameters): The parameters to use.
 
         Returns:
-            np.ndarray: The errors
+            np.ndarray: The final data errors.
         """
         errors = self.get_data_errors()
         errors **= 2
@@ -127,7 +127,10 @@ class GaussianProcess(NoiseKernel):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.compute_dist_matrix()
+        try:
+            self.compute_dist_matrix()
+        except:
+            pass
 
     def realize(self, pars, residuals, xpred=None, xres=None, return_unc=False, **kwargs):
         """Realize the GP (sample at arbitrary points). Meant to be the same as the predict method offered by other codes.

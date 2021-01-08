@@ -158,8 +158,8 @@ class Likelihood(ScoreFunction):
         # Compute the residuals
         residuals = data_arr - model_arr
             
-        # Compute the cov matrix
-        K = kernel.compute_cov_matrix(pars, apply_errors=True)
+        # Compute the cov matrix (by default, the cov tensor is assumed to be a matrix) with the following decomposition as an effective linear solver.
+        K = kernel.compute_cov_tensor(pars, apply_errors=True)
 
         # Compute the determiniant and inverse of K
         try:
