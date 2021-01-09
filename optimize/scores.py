@@ -220,10 +220,11 @@ class Likelihood(ScoreFunction):
         lnL = 0
         for par in pars:
             _par = pars[par]
-            for prior in _par.priors:
-                lnL += prior.logprob(_par.value)
-                if not np.isfinite(lnL):
-                    return lnL
+            if _par.vary:
+                for prior in _par.priors:
+                    lnL += prior.logprob(_par.value)
+                    if not np.isfinite(lnL):
+                        return lnL
         return lnL
     
     def compute_bic(self, pars):
@@ -303,10 +304,11 @@ class MixedLikelihood(dict):
         lnL = 0
         for par in pars:
             _par = pars[par]
-            for prior in _par.priors:
-                lnL += prior.logprob(_par.value)
-                if not np.isfinite(lnL):
-                    return lnL
+            if _par.vary:
+                for prior in _par.priors:
+                    lnL += prior.logprob(_par.value)
+                    if not np.isfinite(lnL):
+                        return lnL
         return lnL
     
     def compute_logL(self, pars, apply_priors=True):

@@ -445,6 +445,36 @@ class Uniform(AbstractPrior):
     def __repr__(self):
         return "Uniform: [" + str(self.minval) + ", " + str(self.maxval) + "]"
 
+class Positive(AbstractPrior):
+    """A prior to force x > 0.
+    """
+    
+    __slots__ = []
+    
+    def __init__(self):
+        pass
+        
+    def logprob(self, x):
+        return 0 if x > 0 else -np.inf
+        
+    def __repr__(self):
+        return "Positive"
+    
+class Negative(AbstractPrior):
+    """A prior to force x < 0.
+    """
+    
+    __slots__ = []
+    
+    def __init__(self):
+        pass
+        
+    def logprob(self, x):
+        return 0 if x < 0 else -np.inf
+        
+    def __repr__(self):
+        return "Negative"
+    
     
 class Jeffreys(AbstractPrior):
     """A prior defined such that its density function is proportional to the square root of the determinant of the Fisher information matrix.

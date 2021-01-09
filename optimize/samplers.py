@@ -71,7 +71,7 @@ class AffInv(Sampler):
         n_walkers = 2 * n_pars_vary
         self.sampler = emcee.EnsembleSampler(n_walkers, n_pars_vary, self.compute_score)
         
-    def sample(self, pars=None, walkers=None, n_burn_steps=500, n_steps=75_000, rel_tau_thresh=0.01, n_min_steps=1000, n_cores=1, n_taus_thresh=40):
+    def sample(self, pars=None, walkers=None, n_burn_steps=500, check_every=200, n_steps=75_000, rel_tau_thresh=0.01, n_min_steps=1000, n_cores=1, n_taus_thresh=40):
         """Wrapper to perform a burn-in + full MCMC exploration.
 
         Args:
@@ -129,8 +129,8 @@ class AffInv(Sampler):
         _trange = tqdm.trange(n_steps, desc="Running Min Steps = " + str(n_min_steps), leave=True)
         for _, sample in zip(_trange, self.sampler.sample(walkers, iterations=n_steps, progress=False)):
             
-            # Only check convergence every 100 steps and run at least a minimum number of steps
-            if self.sampler.iteration % 200:
+            # Only check convergence every 200 steps and run at least a minimum number of steps
+            if self.sampler.iteration % check_every:
                 continue
 
             # Compute the autocorrelation time so far
@@ -160,7 +160,6 @@ class AffInv(Sampler):
         sampler_result["steps"] = n_steps
         self.parameter_chain_results(sampler_result)
         sampler_result["lnL"] = self.scorer.compute_logL(sampler_result["pbest"])
-        #sampler_result["redchi2"] = self.scorer.compute_reduced_chi2(sampler_result["pbest"])
         return sampler_result
     
     def corner_plot(self, sampler_result):
