@@ -227,7 +227,7 @@ class Likelihood(ScoreFunction):
                         return lnL
         return lnL
     
-    def compute_bic(self, pars):
+    def compute_bic(self, pars, apply_priors=False):
         """Calculate the Bayesian information criterion (BIC).
 
         Args:
@@ -239,11 +239,11 @@ class Likelihood(ScoreFunction):
 
         n = len(self.data.rv)
         k = len(pars)
-        lnL = self.compute_logL_priors(pars)
+        lnL = self.compute_logL_priors(pars, apply_priors=apply_priors)
         _bic = np.log(n) * k - 2.0 * lnL
         return _bic
 
-    def compute_aicc(self, pars):
+    def compute_aicc(self, pars, apply_priors=False):
         """Calculate the small sample Akaike information criterion (AICc).
         
         Args:
@@ -256,7 +256,7 @@ class Likelihood(ScoreFunction):
         # Simple formula
         n = len(self.data.rv)
         k = pars.num_varied()
-        lnL = self.compute_logL_priors(pars)
+        lnL = self.compute_logL_priors(pars, apply_priors=apply_priors)
         aic = - 2.0 * lnL + 2.0 * k
         
         # Small sample correction
@@ -374,7 +374,7 @@ class MixedLikelihood(dict):
     def like0(self):
         return next(iter(self.values()))
     
-    def compute_bic(self, pars):
+    def compute_bic(self, pars, apply_priors=False):
         """Calculate the Bayesian information criterion (BIC).
 
         Args:
@@ -387,11 +387,11 @@ class MixedLikelihood(dict):
         for like in self.values():
             n += len(like.data_x)
         k = pars.num_varied()
-        lnL = self.compute_logL(pars, apply_priors=True)
-        bic = np.log(n) * k - 2.0 * lnL
+        lnL = self.compute_logL(pars, apply_priors=apply_priors)
+        bic = k * np.log(n) - 2.0 * lnL
         return bic
 
-    def compute_aicc(self, pars):
+    def compute_aicc(self, pars, apply_priors=False):
         """Calculate the small sample Akaike information criterion (AICc).
         
         Args:
@@ -410,18 +410,17 @@ class MixedLikelihood(dict):
         k = pars.num_varied()
         
         # lnL
-        lnL = self.compute_logL(pars, apply_priors=True)
+        lnL = self.compute_logL(pars, apply_priors=apply_priors)
         
         # AIC
-        aic = - 2.0 * lnL + 2.0 * k
+        aic = 2.0 * (k - lnL)
 
         # Small sample correction
         aicc = aic
-        denom = n - k - 1
-        if denom > 0:
-            aicc += (2.0 * k * (k + 1.0)) / denom
+        d = n - k - 1
+        if d > 0:
+            aicc += (2 * k**2 + 2 * k) / d
         else:
-            print("Warning: The number of free parameters is greater than or equal to")
-            print("         the number of data points (- 1). The AICc comparison has returned -inf.")
             aicc = np.inf
+
         return aicc

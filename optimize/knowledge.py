@@ -361,12 +361,6 @@ class Parameters(dict):
         elif t is int:
             return self[list(self.keys())[key]]
         
-    def __repr__(self):
-        s = ''
-        for par in self.values():
-            s += repr(par) + '\n'
-        return s
-
 
 class AbstractPrior(ABC):
     """An interface for a general prior.
@@ -383,6 +377,7 @@ class AbstractPrior(ABC):
     @abstractmethod
     def __repr__(self):
         pass
+
 
         
 class Gaussian(AbstractPrior):
