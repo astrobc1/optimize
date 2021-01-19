@@ -204,9 +204,8 @@ class AffInv(Sampler):
         
         # Extract good chains
         n_chains, n_steps, n_pars_vary = self.sampler.chain.shape # (n_chains, n_steps, n_pars_vary)
-        good = np.where((np.abs((acc - acc_med) / acc_mad) < acc_sigma) & (acc > acc_thresh) & (np.nansum(self.sampler.lnprobability, axis=1) != -np.inf))[0]
+        good = np.where((np.abs((acc - acc_med) / acc_mad) < acc_sigma) & (acc > acc_thresh))[0]
         n_good = len(good)
-        acc
         chains_good = self.sampler.chain[good, :, :] # (n_good_chains, n_steps, n_pars_vary)
         lnL_good = self.sampler.lnprobability[good, :] # (n_good_chains, n_steps)
         chains_good_flat = chains_good.reshape((n_steps * n_good, n_pars_vary))
