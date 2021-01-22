@@ -15,9 +15,9 @@ class Parameter:
         latex_str (str): A string for plot formatting, most likely using latex formatting.
     """
     
-    __slots__ = ['name', 'value', 'vary', 'priors', 'scale', 'latex_str']
+    __slots__ = ['name', 'value', 'vary', 'priors', 'scale', 'latex_str', 'unc']
 
-    def __init__(self, name=None, value=None, vary=True, priors=None, scale=None, latex_str=None):
+    def __init__(self, name=None, value=None, vary=True, priors=None, scale=None, latex_str=None, unc=None):
         """Creates a Parameter object.
 
         Args:
@@ -39,11 +39,14 @@ class Parameter:
             self.priors = []
         self.scale = scale
         self.latex_str = self.name if latex_str is None else latex_str
+        self.unc = None
 
     def __repr__(self):
         s = '(Parameter)  Name: ' + self.name + ' | Value: ' + self.value_str
         if not self.vary:
             s +=  ' (Locked)'
+        if self.unc is not None:
+            s += ' | Unc: -' + str(self.unc[0]) + ', +' + str(self.unc[1])
         if len(self.priors) > 0:
             s += '\n  Priors:\n'
             for prior in self.priors:
@@ -108,8 +111,6 @@ class Parameter:
     
     def add_prior(self, prior):
         self.priors.append(prior)
-        
-    #def to_pmd(self):
         
         
 
@@ -203,12 +204,10 @@ class Parameters(dict):
             for i, pname in enumerate(self):
                 setattr(self[pname], key, vals[i])
 
-                
     def __setitem__(self, key, par):
         if par.name is None:
             par.setv(name=key)
         super().__setitem__(key, par)
-                
                 
     def sanity_check(self):
         """Checks for parameters which vary and are out of Uniform bounds.

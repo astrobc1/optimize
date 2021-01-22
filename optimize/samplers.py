@@ -71,7 +71,7 @@ class AffInv(Sampler):
         n_walkers = 2 * n_pars_vary
         self.sampler = emcee.EnsembleSampler(n_walkers, n_pars_vary, self.compute_score)
         
-    def sample(self, optprob, pars=None, walkers=None, n_burn_steps=500, check_every=200, n_steps=75_000, rel_tau_thresh=0.01, n_min_steps=1000, n_cores=1, n_taus_thresh=40):
+    def sample(self, pars=None, walkers=None, n_burn_steps=500, check_every=200, n_steps=75_000, rel_tau_thresh=0.01, n_min_steps=1000, n_cores=1, n_taus_thresh=40):
         """Wrapper to perform a burn-in + full MCMC exploration.
 
         Args:
@@ -153,13 +153,49 @@ class AffInv(Sampler):
                 break
             old_tau = med_tau
             
-        # Outputs
+        # Output
         sampler_result = {}
-        sampler_result["steps"] = n_steps
-        self.parameter_chain_results(optprob, sampler_result)
+        
+        # Add steps and autocorrs
+        sampler_result["n_steps"] = self.sampler.iteration
         sampler_result["autocorrs"] = autocorrs
+        
+        # Get the flat chains and lnLs
+        chains_good_flat, lnL_good_flat = self.get_flat_chains(filter=True, acc_thresh=0.3, acc_sigma=3)
+        sampler_result["chains"] = chains_good_flat
+        sampler_result["lnLs"] = lnL_good_flat
+        
+        # Best parameters from best sampled like (sampling must be dense enough, probably is)
+        pars_best = self.sampler.chain[1, np.argmax(self.sampler.lnprobability[1, :]), :]
+        pbest = copy.deepcopy(self.scorer.p0)
+        par_vec = np.copy(self.test_pars_vec)
+        par_vec[self.p0_vary_inds] = pars_best
+        pbest.setv(value=par_vec)
+        sampler_result["pbest"] = pbest
         sampler_result["lnL"] = self.scorer.compute_logL(sampler_result["pbest"])
+        
+        # Parameter uncertainties
+        pnames_vary = sampler_result["pbest"].unpack(keys='name', vary_only=True)['name']
+        pmed = copy.deepcopy(self.scorer.p0)
+        percentiles = [15.9, 50, 84.1]
+        for i, pname in enumerate(pnames_vary):
+            _pmed, unc_lower, unc_upper = self.chain_uncertainty(chains_good_flat[:, i])
+            pmed[pname].value = _pmed
+            pmed[pname].unc = (unc_lower, unc_upper)
+        
+        # Add pmed
+        sampler_result["pmed"] = pmed
+        
         return sampler_result
+    
+    @staticmethod
+    def chain_uncertainty(chain):
+        percentiles = [15.9, 50, 84.1]
+        par_quantiles = np.percentile(chain, percentiles)
+        pmed = par_quantiles[1]
+        unc = np.diff(par_quantiles)
+        out = (pmed, unc[0], unc[1])
+        return out
     
     def corner_plot(self, sampler_result):
         """Constructs a corner plot.
@@ -174,25 +210,17 @@ class AffInv(Sampler):
         pbest_vary_dict = sampler_result["pmed"].unpack(vary_only=True)
         truths = pbest_vary_dict["value"]
         labels = [par.latex_str for par in sampler_result["pbest"].values() if par.vary]
-        corner_plot = corner.corner(sampler_result["flat_chains"], labels=labels, truths=truths, show_titles=True)
+        corner_plot = corner.corner(sampler_result["chains"], labels=labels, truths=truths, show_titles=True)
         return corner_plot
         
-    
-    def parameter_chain_results(self, optprob, sampler_result, percentiles=None, acc_thresh=0.3, acc_sigma=3):
-        """Computes the error bars after sampling.
+    def get_flat_chains(self, filter=True, acc_thresh=0.3, acc_sigma=3):
+        """Generates the flat chains and filters unwanted chains.
 
         Args:
-            sampler_result (dict): The sampler result
-            percentiles (np.ndarray or list, optional): The percentiles to use for the min, "best" and max. Defaults to [15.9, 50, 84.1].
-
-        Returns:
-            dict: A dicionary of with parameter names as keys, and a list of min val, "best val" and the max val.
+            filter (bool, optional): Whether or not to filter the chain results. Defaults to True.
+            acc_thresh (float, optional): The minimum acceptance rate to accept for the chain to be used. Defualts to 0.3.
+            acc_sigma (float, optional): A second metric to ignore chains using the relative sigma. A chain must fail both tests to not be used. Defaults to 3.
         """
-        
-        # Default percentiles
-        if percentiles is None:
-            percentiles = [15.9, 50, 84.1]
-        
         # All acceptance rates
         acc = self.sampler.acceptance_fraction
         
@@ -204,44 +232,14 @@ class AffInv(Sampler):
         
         # Extract good chains
         n_chains, n_steps, n_pars_vary = self.sampler.chain.shape # (n_chains, n_steps, n_pars_vary)
-        good = np.where((np.abs((acc - acc_med) / acc_mad) < acc_sigma) & (acc > acc_thresh))[0]
+        good = np.where((np.abs((acc - acc_med) / acc_mad) < acc_sigma) | (acc > acc_thresh))[0]
         n_good = len(good)
         chains_good = self.sampler.chain[good, :, :] # (n_good_chains, n_steps, n_pars_vary)
         lnL_good = self.sampler.lnprobability[good, :] # (n_good_chains, n_steps)
         chains_good_flat = chains_good.reshape((n_steps * n_good, n_pars_vary))
         lnL_good_flat = lnL_good.reshape((n_steps * n_good))
         
-        # Best parameters from best sampled like (sampling must be dense enough, probably is)
-        pars_best = self.sampler.chain[1, np.argmax(self.sampler.lnprobability[1, :]), :]
-        pbest = copy.deepcopy(self.scorer.p0)
-        par_vec = np.copy(self.test_pars_vec)
-        par_vec[self.p0_vary_inds] = pars_best
-        pbest.setv(value=par_vec)
-        
-        # Set these parameters and recompute a max like fit.
-        optprob.set_pars(pbest)
-        maxlike_result = optprob.optimize()
-        sampler_result["pbest"] = maxlike_result["pbest"]
-        
-        # Add flat chains and autocorrs
-        sampler_result["flat_chains"] = chains_good_flat
-        
-        pmed = copy.deepcopy(self.scorer.p0)
-        par_vec = np.copy(self.test_pars_vec)
-        par_vec[self.p0_vary_inds] = pars_best
-        pmed.setv(value=par_vec)
-        
-        # Now Errors
-        pnames_vary = sampler_result["pbest"].unpack(keys='name', vary_only=True)['name']
-        punc = {}
-        for i in range(len(pnames_vary)):
-            par_quantiles = np.percentile(chains_good_flat[:, i], percentiles)
-            punc[pnames_vary[i]] = np.diff(par_quantiles)
-            pmed[pnames_vary[i]].value = par_quantiles[1]
-        
-        # Store the errors
-        sampler_result["punc"] = punc
-        sampler_result["pmed"] = pmed
+        return chains_good_flat, lnL_good_flat
         
     def compute_score(self, pars):
         """Wrapper to compute the score, only to be called by the emcee Ensemble Sampler.
