@@ -35,6 +35,11 @@ class ScoreFunction:
         raise NotImplementedError("Must implement a compute_score method.")
     
     def set_pars(self, pars):
+        """Propogates calls to set_pars for the initial parameters, p0.
+
+        Args:
+            pars (p0): The parameters to set.
+        """
         self.model.set_pars(pars)
         
 class MSE(ScoreFunction):
@@ -73,8 +78,8 @@ class MSE(ScoreFunction):
         """Computes the (non-reduced) chi2 statistic (weighted MSE).
 
         Args:
-            residuals (np.ndarray): The residuals = data - model
-            errors (np.ndarray): The effective errorbars (intrinsic and any white noise).
+            residuals (np.ndarray): The residuals = data - model.
+            errors (np.ndarray): The effective errorbars.
 
         Returns:
             float: The chi-squared statistic.
@@ -82,21 +87,21 @@ class MSE(ScoreFunction):
         return np.nansum((residuals / errors)**2)
     
     @staticmethod
-    def compute_redchi2(residuals, errors, n_deg=None):
+    def compute_redchi2(residuals, errors, n_dof=None):
         """Computes the reduced chi2 statistic (weighted MSE).
 
         Args:
             residuals (np.ndarray): The residuals = data - model
             errors (np.ndarray): The effective errorbars (intrinsic and any white noise).
-            n_deg (int): The degrees of freedom, defaults to len(res) - 1.
+            n_dof (int): The degrees of freedom, defaults to len(res) - 1.
 
         Returns:
             float: The reduced chi-squared statistic.
         """
-        if n_deg is None:
-            n_deg = len(residuals) - 1
+        if n_dof is None:
+            n_dof = len(residuals) - 1
         chi2 = np.nansum((residuals / errors)**2)
-        redchi2 = chi2 / n_deg
+        redchi2 = chi2 / n_dof
         return redchi2
 
 class Likelihood(ScoreFunction):
@@ -106,9 +111,9 @@ class Likelihood(ScoreFunction):
     def __init__(self, label=None, data=None, model=None):
         super().__init__(data=data, model=model)
         self.label = label
-        self.data_x = self.data.get_vec('t')
-        self.data_y = self.data.get_vec('rv')
-        self.data_yerr = self.data.get_vec('rverr')
+        self.data_x = self.data.get_vec('x')
+        self.data_y = self.data.get_vec('y')
+        self.data_yerr = self.data.get_vec('yerr')
             
     def compute_score(self, pars):
         """Computes the negative of the log-likelihood score.
@@ -153,7 +158,7 @@ class Likelihood(ScoreFunction):
         model_arr = self.model.build(pars)
         
         # Copy the full data set
-        data_arr = np.copy(self.data.y)
+        data_arr = self.data.get_vec('y')
 
         # Compute the residuals
         residuals = data_arr - model_arr
@@ -180,6 +185,20 @@ class Likelihood(ScoreFunction):
         
         # Return the final ln(L)
         return lnL
+    
+    def residuals_before_kernel(self, pars):
+        """Computes the residuals without subtracting off any mean noise kernel.
+
+        Args:
+            pars (Parameters): The parameters to use.
+
+        Returns:
+            np.ndarray: The residuals.
+        """
+        model_arr = self.model.build(pars)
+        data_arr = np.copy(self.data_y)
+        residuals = data_arr - model_arr
+        return residuals
     
     def residuals_after_kernel(self, pars):
         """Computes the residuals after subtracting off the best fit noise kernel.
@@ -365,15 +384,7 @@ class MixedLikelihood(dict):
         ndeg -= pars.num_varied()
         redchi2 = chi2 / ndeg
         return redchi2
-          
-    @property
-    def p0(self):
-        return self.like0.model.p0
-    
-    @property
-    def like0(self):
-        return next(iter(self.values()))
-    
+      
     def compute_bic(self, pars, apply_priors=False):
         """Calculate the Bayesian information criterion (BIC).
 
@@ -424,3 +435,11 @@ class MixedLikelihood(dict):
             aicc = np.inf
 
         return aicc
+      
+    @property
+    def p0(self):
+        return self.like0.model.p0
+    
+    @property
+    def like0(self):
+        return next(iter(self.values()))

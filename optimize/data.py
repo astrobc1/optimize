@@ -54,33 +54,6 @@ class MixedData(dict):
     
     def __init__(self):
         super().__init__()
-
-    def get_vec(self, key, labels=None, sort=True):
-        """Combines a certain vector from all labels into one array, and sorts it according to x.
-
-        Args:
-            key (str): The key to get (x, y, yerr, etc)
-            labels (list): A list of labels (dict keys).
-
-        Returns:
-            np.ndarray: The vector, sorted according to x.
-        """
-        if labels is None:
-            labels = list(self.keys())
-        out = np.array([], dtype=float)
-        if sort:
-            x = np.array([], dtype=float)
-        for label in labels:
-            out = np.concatenate((out, getattr(self[label], key)))
-            if sort:
-                x = np.concatenate((x, self[label].x))
-            
-        # Sort
-        if sort:
-            ss = np.argsort(x)
-            out = out[ss]
-
-        return out
     
     def __setitem__(self, label, data):
         if data.label is None:

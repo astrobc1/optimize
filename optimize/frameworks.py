@@ -13,23 +13,20 @@ class OptProblem:
     """A class for most Bayesian optimization problems.
     
     Attributes:
-        data (MixedData): A dataset inheriting from optimize.data.MixedData.
-        p0 (Parameters): The initial parameters to use. Defaults to None.
+        p0 (Parameters): The initial parameters to use.
         scores (MixedScores): The score functions.
-        optimizer (Optimizer, optional): The optimizer to use. Defaults to NelderMead (not SciPy).
-        sampler (Sampler, optional): The sampler to use to MCMC analysis.
+        optimizer (Optimizer, optional): The optimizer to use.
+        sampler (Sampler, optional): The sampler to use for an MCMC analysis.
     """
 
     def __init__(self, data=None, p0=None, optimizer=None, sampler=None, scorer=None):
         """A base class for optimization problems.
     
         Args:
-            data (Data, optional): A dataset inheriting from optimize.data.Data.
-            model (Model, optional): A model inheriting from optimize.models.Model.
-            p0 (Parameters, optional): The initial parameters to use. Defaults to None.
-            optimizer (Optimizer, optional): The optimizer to use.
-            sampler (Sampler, optional): The sampler to use to MCMC analysis.
-            scorer (Scorer, optional): The score function to use.
+            p0 (Parameters, optional): The initial parameters to use. Can be set later.
+            optimizer (Optimizer, optional): The optimizer to use. Can be set later.
+            sampler (Sampler, optional): The sampler to use for an MCMC analysis. Can be set later.
+            scorer (Scorer, optional): The score function to use. Can be set later.
         """
         
         # Store the data, model, and starting parameters
@@ -41,6 +38,10 @@ class OptProblem:
         
     def optimize(self, *args, **kwargs):
         """Generic optimize method, calls self.optimizer.optimize().
+        
+        Args:
+            args: Any arguments to pass to optimize()
+            kwargs: Any keyword arguments to pass to optimize()
 
         Returns:
             dict: The optimization result.
@@ -49,6 +50,10 @@ class OptProblem:
     
     def sample(self, *args, **kwargs):
         """Generic sample method, calls self.sampler.sample().
+        
+        Args:
+            args: Any arguments to pass to sample()
+            kwargs: Any keyword arguments to pass to sample()
 
         Returns:
             dict: The sampler result.
@@ -56,7 +61,7 @@ class OptProblem:
         return self.sampler.sample(*args, **kwargs)
     
     def print_summary(self, opt_result):
-        """A nice generic print method for the Bayesian framework.
+        """A nice generic print method for the problem.
 
         Args:
             opt_result (dict, optional): The optimization result to print. Defaults to None, and thus prints the initial parameters.
@@ -80,18 +85,46 @@ class OptProblem:
             self.p0.pretty_print()
             
     def set_pars(self, pars):
-        """Simple setter method for the parameters that may be extended.
+        """Setter method for the parameters.
 
         Args:
-            pars (Parameters): The new starting parameters to use.
+            pars (Parameters): The parameters to set.
         """
+        
+        # Set self
         self.p0 = pars
+        
+        # Set in remaining components
         if self.optimizer is not None:
             self.optimizer.set_pars(pars)
         if self.scorer is not None:
            self.scorer.set_pars(pars)
         if self.sampler is not None:
             self.sampler.set_pars(pars)
+            
+    def set_optimizer(self, optimizer):
+        """Setter method for the optimizer.
+
+        Args:
+            optimizer (Optimizer): The optimizer to set.
+        """
+        self.optimizer = optimizer
         
-    def corner_plot(self, *args, opt_result=None, **kwargs):
-        return self.sampler.corner_plot(*args, sampler_result=opt_result, **kwargs)
+    def set_sampler(self, sampler):
+        """Setter method for the sampler.
+
+        Args:
+            sampler (Sampler): The sampler to set.
+        """
+        self.sampler = sampler
+        
+    def corner_plot(self, sampler_result=None, **kwargs):
+        """Calls the corner plot method in the sampler class.
+
+        Args:
+            sampler_result (dict, optional): The sampler result.
+
+        Returns:
+            Matplotlib.Figure: A matplotlib figure containing the corner plot.
+        """
+        return self.sampler.corner_plot(*args, sampler_result=sampler_result, **kwargs)
