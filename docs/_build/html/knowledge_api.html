@@ -4,15 +4,14 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>optimize API reference &#8212; optimize  documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="shortcut icon" href="_static/optimize_logo.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -113,8 +112,15 @@
 </dd></dl>
 
 <dl class="py class">
+<dt id="optimize.knowledge.Negative">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.knowledge.</code><code class="sig-name descname">Negative</code><a class="headerlink" href="#optimize.knowledge.Negative" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#optimize.knowledge.AbstractPrior" title="optimize.knowledge.AbstractPrior"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.knowledge.AbstractPrior</span></code></a></p>
+<p>A prior to force x &lt; 0.</p>
+</dd></dl>
+
+<dl class="py class">
 <dt id="optimize.knowledge.Parameter">
-<em class="property">class </em><code class="sig-prename descclassname">optimize.knowledge.</code><code class="sig-name descname">Parameter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">value</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">vary</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">priors</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">scale</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">latex_str</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.knowledge.Parameter" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">optimize.knowledge.</code><code class="sig-name descname">Parameter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">value</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">vary</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">priors</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">scale</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">latex_str</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">unc</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.knowledge.Parameter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A class for a model parameter.</p>
 <dl class="py attribute">
@@ -213,7 +219,11 @@ np.ndarray: The upper bounds.</p>
 <dt id="optimize.knowledge.Parameter.setv">
 <code class="sig-name descname">setv</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.knowledge.Parameter.setv" title="Permalink to this definition">¶</a></dt>
 <dd><p>Setter method for the attributes.</p>
-<p>kwargs: Any available atrributes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>kwargs</strong> – Any available atrributes.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -449,6 +459,13 @@ Throws:</p>
 </dd></dl>
 
 <dl class="py class">
+<dt id="optimize.knowledge.Positive">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.knowledge.</code><code class="sig-name descname">Positive</code><a class="headerlink" href="#optimize.knowledge.Positive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#optimize.knowledge.AbstractPrior" title="optimize.knowledge.AbstractPrior"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.knowledge.AbstractPrior</span></code></a></p>
+<p>A prior to force x &gt; 0.</p>
+</dd></dl>
+
+<dl class="py class">
 <dt id="optimize.knowledge.Uniform">
 <em class="property">class </em><code class="sig-prename descclassname">optimize.knowledge.</code><code class="sig-name descname">Uniform</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">minval</span></em>, <em class="sig-param"><span class="n">maxval</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.knowledge.Uniform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#optimize.knowledge.AbstractPrior" title="optimize.knowledge.AbstractPrior"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.knowledge.AbstractPrior</span></code></a></p>
@@ -563,7 +580,7 @@ Throws:</p>
       &copy;2020, Bryson Cale.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

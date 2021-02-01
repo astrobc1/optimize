@@ -4,15 +4,14 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>optimize API reference &#8212; optimize  documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="shortcut icon" href="_static/optimize_logo.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -158,6 +157,25 @@
 
 </dd></dl>
 
+<dl class="py class">
+<dt id="optimize.models.PyMC3Model">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.models.</code><code class="sig-name descname">PyMC3Model</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.models.PyMC3Model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#optimize.models.Model" title="optimize.models.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.models.Model</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">pymc3.model.Model</span></code></p>
+<p>Constructs a base model for optimization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p0</strong> (<a class="reference internal" href="knowledge_api.html#optimize.knowledge.Parameters" title="optimize.knowledge.Parameters"><em>Parameters</em></a><em>, </em><em>optional</em>) – The initial parameters to use. Defaults to None.</p></li>
+<li><p><strong>data</strong> (<a class="reference internal" href="data_api.html#optimize.data.MixedData" title="optimize.data.MixedData"><em>MixedData</em></a><em>, </em><em>optional</em>) – The dataset, must be identical to kernel.data.</p></li>
+<li><p><strong>builder</strong> (<em>callable</em>) – Defines the model to use. Any methods that construct the model will start at the build method, which 1. must be called as build(pars) and 2. by default calls builder(<a href="#id9"><span class="problematic" id="id10">*</span></a>args_to_pass, <a href="#id11"><span class="problematic" id="id12">**</span></a>kwargs_to_pass). A second option is to extend the Model class and implement one’s own build method.</p></li>
+<li><p><strong>args_to_pass</strong> (<em>tuple</em><em>, </em><em>optional</em>) – The arguments to pass to the build method. Defaults to ().</p></li>
+<li><p><strong>kwargs_to_pass</strong> (<em>dict</em><em>, </em><em>optional</em>) – The keyword arguments to pass to the build method. Defaults to {}.</p></li>
+<li><p><strong>kernel</strong> (<a class="reference internal" href="kernels_api.html#optimize.kernels.NoiseKernel" title="optimize.kernels.NoiseKernel"><em>NoiseKernel</em></a>) – The noise kernel to use.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 </div>
 
@@ -235,7 +253,7 @@
       &copy;2020, Bryson Cale.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

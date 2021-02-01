@@ -96,8 +96,9 @@ class Parameter:
     
     def setv(self, **kwargs):
         """Setter method for the attributes.
-
-        kwargs: Any available atrributes.
+        
+        Args:
+            kwargs: Any available atrributes.
         """
         for key in kwargs:
             if key == 'name':

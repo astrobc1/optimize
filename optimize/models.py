@@ -7,13 +7,13 @@ import theano.tensor as tt
 class Model:
     """Constructs a Bayesian base model for optimization. This class is useful to instantiate for simple Bayesian optimization problems.
 
-        Attributes:
-            p0 (Parameters, optional): The initial parameters to use. Defaults to None.
-            data (MixedData, optional): The dataset.
-            builder (callable): Defines the model to use. Any methods that construct the model will start at the build method, which 1. must be called as build(pars) and 2. by default calls builder(*args_to_pass, **kwargs_to_pass). A second option is to extend the Model class and implement one's own build method.
-            args_to_pass (tuple, optional): The arguments to pass to the build method. Defaults to ().
-            kwargs_to_pass (dict, optional): The keyword arguments to pass to the build method. Defaults to {}.
-            kernel (NoiseKernel): The noise kernel to use.
+    Attributes:
+        p0 (Parameters, optional): The initial parameters to use. Defaults to None.
+        data (MixedData, optional): The dataset.
+        builder (callable): Defines the model to use. Any methods that construct the model will start at the build method, which 1. must be called as build(pars) and 2. by default calls builder(*args_to_pass, **kwargs_to_pass). A second option is to extend the Model class and implement one's own build method.
+        args_to_pass (tuple, optional): The arguments to pass to the build method. Defaults to ().
+        kwargs_to_pass (dict, optional): The keyword arguments to pass to the build method. Defaults to {}.
+        kernel (NoiseKernel): The noise kernel to use.
     """
     
     def __init__(self, p0=None, data=None, builder=None, args_to_pass=None, kwargs_to_pass=None, kernel=None):
@@ -58,13 +58,11 @@ class Model:
         self.p0 = pars
 
 
-
 class PyMC3Model(Model, pm.model.Model):
     
     def __init__(self, p0=None, data=None, kernel=None):
         super().__init__(p0=p0, data=data, kernel=kernel)
         self.pars_to_pmd()
-            
 
 
 class MixedModel(dict):

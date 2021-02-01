@@ -4,15 +4,14 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>optimize API reference &#8212; optimize  documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="shortcut icon" href="_static/optimize_logo.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -43,20 +42,9 @@
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A class for most Bayesian optimization problems.</p>
 <dl class="py attribute">
-<dt id="optimize.frameworks.OptProblem.data">
-<code class="sig-name descname">data</code><a class="headerlink" href="#optimize.frameworks.OptProblem.data" title="Permalink to this definition">¶</a></dt>
-<dd><p>A dataset inheriting from optimize.data.MixedData.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="data_api.html#optimize.data.MixedData" title="optimize.data.MixedData">MixedData</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
 <dt id="optimize.frameworks.OptProblem.p0">
 <code class="sig-name descname">p0</code><a class="headerlink" href="#optimize.frameworks.OptProblem.p0" title="Permalink to this definition">¶</a></dt>
-<dd><p>The initial parameters to use. Defaults to None.</p>
+<dd><p>The initial parameters to use.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="knowledge_api.html#optimize.knowledge.Parameters" title="optimize.knowledge.Parameters">Parameters</a></p>
@@ -78,7 +66,7 @@
 <dl class="py attribute">
 <dt id="optimize.frameworks.OptProblem.optimizer">
 <code class="sig-name descname">optimizer</code><a class="headerlink" href="#optimize.frameworks.OptProblem.optimizer" title="Permalink to this definition">¶</a></dt>
-<dd><p>The optimizer to use. Defaults to NelderMead (not SciPy).</p>
+<dd><p>The optimizer to use.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="optimizers_api.html#optimize.optimizers.Optimizer" title="optimize.optimizers.Optimizer">Optimizer</a>, optional</p>
@@ -89,7 +77,7 @@
 <dl class="py attribute">
 <dt id="optimize.frameworks.OptProblem.sampler">
 <code class="sig-name descname">sampler</code><a class="headerlink" href="#optimize.frameworks.OptProblem.sampler" title="Permalink to this definition">¶</a></dt>
-<dd><p>The sampler to use to MCMC analysis.</p>
+<dd><p>The sampler to use for an MCMC analysis.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="optimizers_api.html#optimize.optimizers.Sampler" title="optimize.optimizers.Sampler">Sampler</a>, optional</p>
@@ -101,25 +89,46 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<a class="reference internal" href="data_api.html#optimize.data.Data" title="optimize.data.Data"><em>Data</em></a><em>, </em><em>optional</em>) – A dataset inheriting from optimize.data.Data.</p></li>
-<li><p><strong>model</strong> (<a class="reference internal" href="models_api.html#optimize.models.Model" title="optimize.models.Model"><em>Model</em></a><em>, </em><em>optional</em>) – A model inheriting from optimize.models.Model.</p></li>
-<li><p><strong>p0</strong> (<a class="reference internal" href="knowledge_api.html#optimize.knowledge.Parameters" title="optimize.knowledge.Parameters"><em>Parameters</em></a><em>, </em><em>optional</em>) – The initial parameters to use. Defaults to None.</p></li>
-<li><p><strong>optimizer</strong> (<a class="reference internal" href="optimizers_api.html#optimize.optimizers.Optimizer" title="optimize.optimizers.Optimizer"><em>Optimizer</em></a><em>, </em><em>optional</em>) – The optimizer to use.</p></li>
-<li><p><strong>sampler</strong> (<a class="reference internal" href="optimizers_api.html#optimize.optimizers.Sampler" title="optimize.optimizers.Sampler"><em>Sampler</em></a><em>, </em><em>optional</em>) – The sampler to use to MCMC analysis.</p></li>
-<li><p><strong>scorer</strong> (<em>Scorer</em><em>, </em><em>optional</em>) – The score function to use.</p></li>
+<li><p><strong>p0</strong> (<a class="reference internal" href="knowledge_api.html#optimize.knowledge.Parameters" title="optimize.knowledge.Parameters"><em>Parameters</em></a><em>, </em><em>optional</em>) – The initial parameters to use. Can be set later.</p></li>
+<li><p><strong>optimizer</strong> (<a class="reference internal" href="optimizers_api.html#optimize.optimizers.Optimizer" title="optimize.optimizers.Optimizer"><em>Optimizer</em></a><em>, </em><em>optional</em>) – The optimizer to use. Can be set later.</p></li>
+<li><p><strong>sampler</strong> (<a class="reference internal" href="optimizers_api.html#optimize.optimizers.Sampler" title="optimize.optimizers.Sampler"><em>Sampler</em></a><em>, </em><em>optional</em>) – The sampler to use for an MCMC analysis. Can be set later.</p></li>
+<li><p><strong>scorer</strong> (<em>Scorer</em><em>, </em><em>optional</em>) – The score function to use. Can be set later.</p></li>
 </ul>
 </dd>
 </dl>
+<dl class="py method">
+<dt id="optimize.frameworks.OptProblem.corner_plot">
+<code class="sig-name descname">corner_plot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sampler_result</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.frameworks.OptProblem.corner_plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calls the corner plot method in the sampler class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>sampler_result</strong> (<em>dict</em><em>, </em><em>optional</em>) – The sampler result.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A matplotlib figure containing the corner plot.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Matplotlib.Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt id="optimize.frameworks.OptProblem.optimize">
 <code class="sig-name descname">optimize</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.frameworks.OptProblem.optimize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generic optimize method, calls self.optimizer.optimize().</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The optimization result.</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> – Any arguments to pass to optimize()</p></li>
+<li><p><strong>kwargs</strong> – Any keyword arguments to pass to optimize()</p></li>
+</ul>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>dict</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The optimization result.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
 </dd>
 </dl>
 </dd></dl>
@@ -127,7 +136,7 @@
 <dl class="py method">
 <dt id="optimize.frameworks.OptProblem.print_summary">
 <code class="sig-name descname">print_summary</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">opt_result</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.frameworks.OptProblem.print_summary" title="Permalink to this definition">¶</a></dt>
-<dd><p>A nice generic print method for the Bayesian framework.</p>
+<dd><p>A nice generic print method for the problem.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>opt_result</strong> (<em>dict</em><em>, </em><em>optional</em>) – The optimization result to print. Defaults to None, and thus prints the initial parameters.</p>
@@ -140,11 +149,28 @@
 <code class="sig-name descname">sample</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.frameworks.OptProblem.sample" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generic sample method, calls self.sampler.sample().</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The sampler result.</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> – Any arguments to pass to sample()</p></li>
+<li><p><strong>kwargs</strong> – Any keyword arguments to pass to sample()</p></li>
+</ul>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>dict</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The sampler result.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.frameworks.OptProblem.set_optimizer">
+<code class="sig-name descname">set_optimizer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">optimizer</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.frameworks.OptProblem.set_optimizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setter method for the optimizer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>optimizer</strong> (<a class="reference internal" href="optimizers_api.html#optimize.optimizers.Optimizer" title="optimize.optimizers.Optimizer"><em>Optimizer</em></a>) – The optimizer to set.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -152,10 +178,21 @@
 <dl class="py method">
 <dt id="optimize.frameworks.OptProblem.set_pars">
 <code class="sig-name descname">set_pars</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.frameworks.OptProblem.set_pars" title="Permalink to this definition">¶</a></dt>
-<dd><p>Simple setter method for the parameters that may be extended.</p>
+<dd><p>Setter method for the parameters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>pars</strong> (<a class="reference internal" href="knowledge_api.html#optimize.knowledge.Parameters" title="optimize.knowledge.Parameters"><em>Parameters</em></a>) – The new starting parameters to use.</p>
+<dd class="field-odd"><p><strong>pars</strong> (<a class="reference internal" href="knowledge_api.html#optimize.knowledge.Parameters" title="optimize.knowledge.Parameters"><em>Parameters</em></a>) – The parameters to set.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.frameworks.OptProblem.set_sampler">
+<code class="sig-name descname">set_sampler</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sampler</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.frameworks.OptProblem.set_sampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setter method for the sampler.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>sampler</strong> (<a class="reference internal" href="optimizers_api.html#optimize.optimizers.Sampler" title="optimize.optimizers.Sampler"><em>Sampler</em></a>) – The sampler to set.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -238,7 +275,7 @@
       &copy;2020, Bryson Cale.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

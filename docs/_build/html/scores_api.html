@@ -4,15 +4,14 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>optimize API reference &#8212; optimize  documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="shortcut icon" href="_static/optimize_logo.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -54,7 +53,7 @@
 </dl>
 <dl class="py method">
 <dt id="optimize.scores.Likelihood.compute_aicc">
-<code class="sig-name descname">compute_aicc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.scores.Likelihood.compute_aicc" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">compute_aicc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em>, <em class="sig-param"><span class="n">apply_priors</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.scores.Likelihood.compute_aicc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the small sample Akaike information criterion (AICc).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -71,7 +70,7 @@
 
 <dl class="py method">
 <dt id="optimize.scores.Likelihood.compute_bic">
-<code class="sig-name descname">compute_bic</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.scores.Likelihood.compute_bic" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">compute_bic</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em>, <em class="sig-param"><span class="n">apply_priors</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.scores.Likelihood.compute_bic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the Bayesian information criterion (BIC).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -178,6 +177,23 @@ N &amp;= \mathrm{Number\ of\ Data\ Points} \\
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt id="optimize.scores.Likelihood.residuals_before_kernel">
+<code class="sig-name descname">residuals_before_kernel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.scores.Likelihood.residuals_before_kernel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the residuals without subtracting off any mean noise kernel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pars</strong> (<a class="reference internal" href="knowledge_api.html#optimize.knowledge.Parameters" title="optimize.knowledge.Parameters"><em>Parameters</em></a>) – The parameters to use.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The residuals.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -201,8 +217,8 @@ N &amp;= \mathrm{Number\ of\ Data\ Points} \\
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>residuals</strong> (<em>np.ndarray</em>) – The residuals = data - model</p></li>
-<li><p><strong>errors</strong> (<em>np.ndarray</em>) – The effective errorbars (intrinsic and any white noise).</p></li>
+<li><p><strong>residuals</strong> (<em>np.ndarray</em>) – The residuals = data - model.</p></li>
+<li><p><strong>errors</strong> (<em>np.ndarray</em>) – The effective errorbars.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -216,14 +232,14 @@ N &amp;= \mathrm{Number\ of\ Data\ Points} \\
 
 <dl class="py method">
 <dt id="optimize.scores.MSE.compute_redchi2">
-<em class="property">static </em><code class="sig-name descname">compute_redchi2</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">residuals</span></em>, <em class="sig-param"><span class="n">errors</span></em>, <em class="sig-param"><span class="n">n_deg</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.scores.MSE.compute_redchi2" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">compute_redchi2</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">residuals</span></em>, <em class="sig-param"><span class="n">errors</span></em>, <em class="sig-param"><span class="n">n_dof</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.scores.MSE.compute_redchi2" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the reduced chi2 statistic (weighted MSE).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>residuals</strong> (<em>np.ndarray</em>) – The residuals = data - model</p></li>
 <li><p><strong>errors</strong> (<em>np.ndarray</em>) – The effective errorbars (intrinsic and any white noise).</p></li>
-<li><p><strong>n_deg</strong> (<em>int</em>) – The degrees of freedom, defaults to len(res) - 1.</p></li>
+<li><p><strong>n_dof</strong> (<em>int</em>) – The degrees of freedom, defaults to len(res) - 1.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -280,7 +296,7 @@ model_arr (np.ndarray): The model array.</p>
 <p>A class for joint likelihood functions. This should map 1-1 with the kernels map.</p>
 <dl class="py method">
 <dt id="optimize.scores.MixedLikelihood.compute_aicc">
-<code class="sig-name descname">compute_aicc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.scores.MixedLikelihood.compute_aicc" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">compute_aicc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em>, <em class="sig-param"><span class="n">apply_priors</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.scores.MixedLikelihood.compute_aicc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the small sample Akaike information criterion (AICc).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -297,7 +313,7 @@ model_arr (np.ndarray): The model array.</p>
 
 <dl class="py method">
 <dt id="optimize.scores.MixedLikelihood.compute_bic">
-<code class="sig-name descname">compute_bic</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.scores.MixedLikelihood.compute_bic" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">compute_bic</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em>, <em class="sig-param"><span class="n">apply_priors</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.scores.MixedLikelihood.compute_bic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the Bayesian information criterion (BIC).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -435,6 +451,17 @@ model_arr (np.ndarray): The model array.</p>
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt id="optimize.scores.ScoreFunction.set_pars">
+<code class="sig-name descname">set_pars</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.scores.ScoreFunction.set_pars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Propogates calls to set_pars for the initial parameters, p0.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pars</strong> (<em>p0</em>) – The parameters to set.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </div>
@@ -514,7 +541,7 @@ model_arr (np.ndarray): The model array.</p>
       &copy;2020, Bryson Cale.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

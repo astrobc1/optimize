@@ -4,15 +4,14 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Index &#8212; optimize  documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="shortcut icon" href="_static/optimize_logo.ico"/>
     <link rel="index" title="Index" href="#" />
     <link rel="search" title="Search" href="search.html" />
@@ -150,6 +149,8 @@
         <li><a href="scores_api.html#optimize.scores.ScoreFunction.compute_score">(optimize.scores.ScoreFunction method)</a>
 </li>
       </ul></li>
+      <li><a href="frameworks_api.html#optimize.frameworks.OptProblem.corner_plot">corner_plot() (optimize.frameworks.OptProblem method)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -158,11 +159,9 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="data_api.html#optimize.data.Data">Data (class in optimize.data)</a>
 </li>
-      <li><a href="frameworks_api.html#optimize.frameworks.OptProblem.data">data (optimize.frameworks.OptProblem attribute)</a>
+      <li><a href="models_api.html#optimize.models.Model.data">data (optimize.models.Model attribute)</a>
 
       <ul>
-        <li><a href="models_api.html#optimize.models.Model.data">(optimize.models.Model attribute)</a>
-</li>
         <li><a href="optimizers_api.html#optimize.optimizers.Optimizer.data">(optimize.optimizers.Optimizer attribute)</a>
 </li>
         <li><a href="scores_api.html#optimize.scores.ScoreFunction.data">(optimize.scores.ScoreFunction attribute)</a>
@@ -201,8 +200,6 @@
       <li><a href="knowledge_api.html#optimize.knowledge.Parameters.get_subspace">get_subspace() (optimize.knowledge.Parameters method)</a>
 </li>
       <li><a href="knowledge_api.html#optimize.knowledge.Parameters.get_varied">get_varied() (optimize.knowledge.Parameters method)</a>
-</li>
-      <li><a href="data_api.html#optimize.data.MixedData.get_vec">get_vec() (optimize.data.MixedData method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -319,6 +316,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="knowledge_api.html#optimize.knowledge.Parameter.name">name (optimize.knowledge.Parameter attribute)</a>
 </li>
+      <li><a href="knowledge_api.html#optimize.knowledge.Negative">Negative (class in optimize.knowledge)</a>
+</li>
       <li><a href="optimizers_api.html#optimize.neldermead.NelderMead">NelderMead (class in optimize.neldermead)</a>
 </li>
   </ul></td>
@@ -432,17 +431,21 @@
 </li>
       <li><a href="kernels_api.html#optimize.kernels.NoiseKernel.par_names">par_names (optimize.kernels.NoiseKernel attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="knowledge_api.html#optimize.knowledge.Parameter">Parameter (class in optimize.knowledge)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="knowledge_api.html#optimize.knowledge.Parameters">Parameters (class in optimize.knowledge)</a>
+</li>
+      <li><a href="knowledge_api.html#optimize.knowledge.Positive">Positive (class in optimize.knowledge)</a>
 </li>
       <li><a href="knowledge_api.html#optimize.knowledge.Parameters.pretty_print">pretty_print() (optimize.knowledge.Parameters method)</a>
 </li>
       <li><a href="frameworks_api.html#optimize.frameworks.OptProblem.print_summary">print_summary() (optimize.frameworks.OptProblem method)</a>
 </li>
       <li><a href="knowledge_api.html#optimize.knowledge.Parameter.priors">priors (optimize.knowledge.Parameter attribute)</a>
+</li>
+      <li><a href="models_api.html#optimize.models.PyMC3Model">PyMC3Model (class in optimize.models)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -460,9 +463,11 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="kernels_api.html#optimize.kernels.GaussianProcess.realize">realize() (optimize.kernels.GaussianProcess method)</a>
 </li>
+      <li><a href="scores_api.html#optimize.scores.Likelihood.residuals_after_kernel">residuals_after_kernel() (optimize.scores.Likelihood method)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="scores_api.html#optimize.scores.Likelihood.residuals_after_kernel">residuals_after_kernel() (optimize.scores.Likelihood method)</a>
+      <li><a href="scores_api.html#optimize.scores.Likelihood.residuals_before_kernel">residuals_before_kernel() (optimize.scores.Likelihood method)</a>
 </li>
       <li><a href="optimizers_api.html#optimize.optimizers.Optimizer.resolve_option">resolve_option() (optimize.optimizers.Optimizer method)</a>
 </li>
@@ -486,18 +491,24 @@
 </li>
       <li><a href="scores_api.html#optimize.scores.ScoreFunction">ScoreFunction (class in optimize.scores)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="optimizers_api.html#optimize.optimizers.Optimizer.scorer">scorer (optimize.optimizers.Optimizer attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="frameworks_api.html#optimize.frameworks.OptProblem.scores">scores (optimize.frameworks.OptProblem attribute)</a>
+</li>
+      <li><a href="frameworks_api.html#optimize.frameworks.OptProblem.set_optimizer">set_optimizer() (optimize.frameworks.OptProblem method)</a>
 </li>
       <li><a href="frameworks_api.html#optimize.frameworks.OptProblem.set_pars">set_pars() (optimize.frameworks.OptProblem method)</a>
 
       <ul>
         <li><a href="models_api.html#optimize.models.Model.set_pars">(optimize.models.Model method)</a>
 </li>
+        <li><a href="scores_api.html#optimize.scores.ScoreFunction.set_pars">(optimize.scores.ScoreFunction method)</a>
+</li>
       </ul></li>
+      <li><a href="frameworks_api.html#optimize.frameworks.OptProblem.set_sampler">set_sampler() (optimize.frameworks.OptProblem method)</a>
+</li>
       <li><a href="knowledge_api.html#optimize.knowledge.Parameter.setv">setv() (optimize.knowledge.Parameter method)</a>
 
       <ul>
@@ -625,7 +636,7 @@
       &copy;2020, Bryson Cale.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>
