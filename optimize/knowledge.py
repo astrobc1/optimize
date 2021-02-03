@@ -113,8 +113,6 @@ class Parameter:
     def add_prior(self, prior):
         self.priors.append(prior)
         
-        
-
 class Parameters(dict):
     """A container for a set of model parameters which extends the Python 3 dictionary, which is ordered by default.
     """
@@ -361,7 +359,7 @@ class Parameters(dict):
         elif t is int:
             return self[list(self.keys())[key]]
         
-
+        
 class AbstractPrior(ABC):
     """An interface for a general prior.
     """
@@ -378,8 +376,6 @@ class AbstractPrior(ABC):
     def __repr__(self):
         pass
 
-
-        
 class Gaussian(AbstractPrior):
     """A prior defined by a normal distribution.
 
@@ -469,8 +465,7 @@ class Negative(AbstractPrior):
         
     def __repr__(self):
         return "Negative"
-    
-    
+        
 class Jeffreys(AbstractPrior):
     """A prior defined such that its density function is proportional to the square root of the determinant of the Fisher information matrix.
 

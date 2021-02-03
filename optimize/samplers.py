@@ -154,16 +154,16 @@ class AffInv(Sampler):
             old_tau = med_tau
             
         # Output
-        sampler_result = {}
+        mcmc_result = {}
         
         # Add steps and autocorrs
-        sampler_result["n_steps"] = self.sampler.iteration
-        sampler_result["autocorrs"] = autocorrs
+        mcmc_result["n_steps"] = self.sampler.iteration
+        mcmc_result["autocorrs"] = autocorrs
         
         # Get the flat chains and lnLs
         chains_good_flat, lnL_good_flat = self.get_flat_chains(filter=True, acc_thresh=0.3, acc_sigma=3)
-        sampler_result["chains"] = chains_good_flat
-        sampler_result["lnLs"] = lnL_good_flat
+        mcmc_result["chains"] = chains_good_flat
+        mcmc_result["lnLs"] = lnL_good_flat
         
         # Best parameters from best sampled like (sampling must be dense enough, probably is)
         pars_best = self.sampler.chain[1, np.argmax(self.sampler.lnprobability[1, :]), :]
@@ -171,11 +171,11 @@ class AffInv(Sampler):
         par_vec = np.copy(self.test_pars_vec)
         par_vec[self.p0_vary_inds] = pars_best
         pbest.setv(value=par_vec)
-        sampler_result["pbest"] = pbest
-        sampler_result["lnL"] = self.scorer.compute_logL(sampler_result["pbest"])
+        mcmc_result["pbest"] = pbest
+        mcmc_result["lnL"] = self.scorer.compute_logL(mcmc_result["pbest"])
         
         # Parameter uncertainties
-        pnames_vary = sampler_result["pbest"].unpack(keys='name', vary_only=True)['name']
+        pnames_vary = mcmc_result["pbest"].unpack(keys='name', vary_only=True)['name']
         pmed = copy.deepcopy(self.scorer.p0)
         percentiles = [15.9, 50, 84.1]
         for i, pname in enumerate(pnames_vary):
@@ -184,9 +184,9 @@ class AffInv(Sampler):
             pmed[pname].unc = (unc_lower, unc_upper)
         
         # Add pmed
-        sampler_result["pmed"] = pmed
+        mcmc_result["pmed"] = pmed
         
-        return sampler_result
+        return mcmc_result
     
     @staticmethod
     def chain_uncertainty(chain):
@@ -197,11 +197,11 @@ class AffInv(Sampler):
         out = (pmed, unc[0], unc[1])
         return out
     
-    def corner_plot(self, sampler_result):
+    def corner_plot(self, mcmc_result):
         """Constructs a corner plot.
 
         Args:
-            sampler_result (dict): The sampler result
+            mcmc_result (dict): The mcmc result
             show (bool, optional): Whether or not to show the plot. Defaults to True.
 
         Returns:
@@ -209,8 +209,8 @@ class AffInv(Sampler):
         """
         pbest_vary_dict = sampler_result["pmed"].unpack(vary_only=True)
         truths = pbest_vary_dict["value"]
-        labels = [par.latex_str for par in sampler_result["pbest"].values() if par.vary]
-        corner_plot = corner.corner(sampler_result["chains"], labels=labels, truths=truths, show_titles=True)
+        labels = [par.latex_str for par in mcmc_result["pbest"].values() if par.vary]
+        corner_plot = corner.corner(mcmc_result["chains"], labels=labels, truths=truths, show_titles=True)
         return corner_plot
         
     def get_flat_chains(self, filter=True, acc_thresh=0.3, acc_sigma=3):
