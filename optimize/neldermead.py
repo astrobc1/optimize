@@ -15,7 +15,6 @@ import matplotlib.pyplot as plt
 
 class NelderMead(optimizers.Minimizer):
     """A class to interact with the Nelder Mead optimizer.
-    
     """
         
     def __init__(self, scorer=None, options=None):
@@ -49,7 +48,6 @@ class NelderMead(optimizers.Minimizer):
         
         # For each column, offset a uniqe parameter according to p=1.5*p
         self.current_full_simplex[:, :-1] += np.diag(0.5 * self.p0_numpy_vary['value'])
-
 
     def resolve_options(self):
         
@@ -257,8 +255,7 @@ class NelderMead(optimizers.Minimizer):
         
         # Update the current function minimum
         self.fmin = fmin
-        
-        
+               
     def optimize(self):
         
         # Init params
@@ -357,7 +354,6 @@ class NelderMead(optimizers.Minimizer):
         errors = np.sqrt(np.diag(varco))
         
         return errors
-    
         
     @staticmethod
     def compute_xtol(simplex):
