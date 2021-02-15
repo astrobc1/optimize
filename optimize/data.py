@@ -33,7 +33,7 @@ class Data:
     def __repr__(self):
         return 'Data: ' + self.label
         
-class MixedData(dict):
+class CompositeData(dict):
     """A useful class to extend for composite data sets. Data sets of the same physical measurement, or different measurements of the same object may be utilized here. The labels of each dataset correspond the the keys of the dictionary.
     """
     
@@ -52,7 +52,7 @@ class MixedData(dict):
             labels (list): A list of labels (str).
 
         Returns:
-            MixedData: A view into the original data object.
+            CompositeData: A view into the original data object.
         """
         data_view = self.__class__()
         for label in labels:

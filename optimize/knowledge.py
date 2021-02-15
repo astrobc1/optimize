@@ -158,7 +158,7 @@ class Parameters(dict):
         self[par.name] = par
         
     def compute_crude_scales(self):
-        scales = np.array([self[pname].compute_crude_scale() for pname in self])
+        scales = np.array([self[pname].compute_crude_scale() for pname in self], dtype=float)
         return scales
             
     def unpack(self, keys=None, vary_only=False):
@@ -179,10 +179,12 @@ class Parameters(dict):
         out = {}
         if vary_only:
             for key in keys:
-                out[key] = np.array([getattr(self[pname], key) for pname in self if self[pname].vary])
+                t = type(getattr(self[0], key))
+                out[key] = np.array([getattr(self[pname], key) for pname in self if self[pname].vary], dtype=t)
         else:
             for key in keys:
-                out[key] = np.array([getattr(self[pname], key) for pname in self])
+                t = type(getattr(self[0], key))
+                out[key] = np.array([getattr(self[pname], key) for pname in self], dtype=t)
         return out
             
     def pretty_print(self):
@@ -358,6 +360,12 @@ class Parameters(dict):
             return super().__getitem__(key)
         elif t is int:
             return self[list(self.keys())[key]]
+        
+    def __getattr__(self, attr):
+        if attr in self:
+            return self[attr]
+        else:
+            return super().__getattr__(attr)
         
         
 class AbstractPrior(ABC):
