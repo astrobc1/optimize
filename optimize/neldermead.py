@@ -388,7 +388,7 @@ class NelderMead(optimizers.Minimizer):
         self.fcalls += 1
             
         # Return -lnl or MSE
-        if isinstance(self.scorer, optscores.Likelihood) or isinstance(self.scorer, optscores.MixedLikelihood):
+        if isinstance(self.scorer, optscores.Likelihood) or isinstance(self.scorer, optscores.CompositeLikelihood):
             f *= -1
         
         # If f is not finite, don't return -inf, return a large number

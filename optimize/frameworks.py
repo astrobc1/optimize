@@ -14,7 +14,7 @@ class OptProblem:
     
     Attributes:
         p0 (Parameters): The initial parameters to use.
-        scores (MixedScores): The score functions.
+        scores (Scorer): The score functions.
         optimizer (Optimizer, optional): The optimizer to use.
         sampler (Sampler, optional): The sampler to use for an MCMC analysis.
     """

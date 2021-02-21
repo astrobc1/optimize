@@ -21,7 +21,7 @@ class NoiseKernel:
         """Constructs a generic GP. Should be called by any class that extends this class.
 
         Args:
-            data (MixedData): The mixed data objects which utilize this noise kernel. The combined and sorted x variables will form the axes for the covariance matrix.
+            data (CompositeData): The composite data objects which utilize this noise kernel. The combined and sorted x variables will form the axes for the covariance matrix.
             par_names (list): A list of parameter names. They must be provided in the order specified by the appropriate kernel.
         """
         self.data = data

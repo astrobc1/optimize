@@ -18,7 +18,7 @@ class AffInv(Sampler):
         """Construct the Affine Invariant sampler.
 
         Args:
-            scorer (Likelihood): The Mixed likelihood object.
+            scorer (Likelihood or CompositeLikelihood): The likelihood object.
             options (dict): A dictionary containing any emcee.EnsembleSampler kwargs. Defaults to None.
         """
         super().__init__(scorer=scorer, options=options)
@@ -263,5 +263,5 @@ class MultiNest(Sampler):
 
 # NOT IMPLEMENTED YET
 # (Hamiltonian No U-Turn)
-class NUTS(Sampler):
+class HNUT(Sampler):
     pass

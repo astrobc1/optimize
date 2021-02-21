@@ -9,7 +9,7 @@ class ScoreFunction:
     """An base class for a general score function. Not useful to instantiate on its own.
     
     Attributes:
-        data (MixedData): A combined dataset.
+        data (CompositeData): A combined dataset.
         model (Model): A model inheriting from optimize.models.Model. All datasets must use this model.
     """
     
@@ -17,7 +17,7 @@ class ScoreFunction:
         """Stores the basic requirements for a score function.
 
         Args:
-            data (MixedData): A mixed dataset inheriting from optimize.data.MixedData.
+            data (CompositeData): A composite dataset inheriting from optimize.data.CompositeData.
             model (Model): A model inheriting from optimize.models.Model.
         """
         self.data = data
@@ -289,7 +289,7 @@ class Likelihood(ScoreFunction):
             _aicc = np.inf
         return _aicc
         
-class MixedLikelihood(dict):
+class CompositeLikelihood(dict):
     """A class for joint likelihood functions. This should map 1-1 with the kernels map.
     """
     

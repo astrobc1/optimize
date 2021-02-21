@@ -25,7 +25,7 @@ class SciPyMinimizer(Minimizer):
         """
         self.test_pars_vec[self.p0_vary_inds] = pars
         self.test_pars.setv(value=self.test_pars_vec)
-        if isinstance(self.scorer, optscores.Likelihood) or isinstance(self.scorer, optscores.MixedLikelihood):
+        if isinstance(self.scorer, optscores.Likelihood) or isinstance(self.scorer, optscores.CompositeLikelihood):
             return -1 * self.scorer.compute_score(self.test_pars)
         else:
             return self.scorer.compute_score(self.test_pars)

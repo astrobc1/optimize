@@ -9,7 +9,7 @@ class Model:
 
     Attributes:
         p0 (Parameters, optional): The initial parameters to use. Defaults to None.
-        data (MixedData, optional): The dataset.
+        data (CompositeData, optional): The dataset.
         builder (callable): Defines the model to use. Any methods that construct the model will start at the build method, which 1. must be called as build(pars) and 2. by default calls builder(*args_to_pass, **kwargs_to_pass). A second option is to extend the Model class and implement one's own build method.
         args_to_pass (tuple, optional): The arguments to pass to the build method. Defaults to ().
         kwargs_to_pass (dict, optional): The keyword arguments to pass to the build method. Defaults to {}.
@@ -21,7 +21,7 @@ class Model:
 
         Args:
             p0 (Parameters, optional): The initial parameters to use. Defaults to None.
-            data (MixedData, optional): The dataset, must be identical to kernel.data.
+            data (CompositeData, optional): The dataset, must be identical to kernel.data.
             builder (callable): Defines the model to use. Any methods that construct the model will start at the build method, which 1. must be called as build(pars) and 2. by default calls builder(*args_to_pass, **kwargs_to_pass). A second option is to extend the Model class and implement one's own build method.
             args_to_pass (tuple, optional): The arguments to pass to the build method. Defaults to ().
             kwargs_to_pass (dict, optional): The keyword arguments to pass to the build method. Defaults to {}.
@@ -65,5 +65,5 @@ class PyMC3Model(Model, pm.model.Model):
         self.pars_to_pmd()
 
 
-class MixedModel(dict):
-    pass
+#class CompositeModel(dict):
+#    pass
