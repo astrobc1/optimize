@@ -42,7 +42,7 @@ class Parameter:
         self.unc = None
 
     def __repr__(self):
-        s = '(Parameter)  Name: ' + self.name + ' | Value: ' + self.value_str
+        s = 'Name: ' + self.name + ' | Value: ' + self.value_str
         if not self.vary:
             s +=  ' (Locked)'
         if self.unc is not None:
