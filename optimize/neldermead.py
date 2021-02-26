@@ -382,14 +382,10 @@ class NelderMead(optimizers.Minimizer):
                 self.test_pars[p].setv(value=x[i])
         
         # Call the target function
-        f = self.scorer.compute_score(self.test_pars)
+        f = self.scorer.compute_score(self.test_pars, *self.scorer.args_to_pass, **self.scorer.kwargs_to_pass)
         
         # Update fcalls
         self.fcalls += 1
-            
-        # Return -lnl or MSE
-        if isinstance(self.scorer, optscores.Likelihood) or isinstance(self.scorer, optscores.CompositeLikelihood):
-            f *= -1
         
         # If f is not finite, don't return -inf, return a large number
         if not np.isfinite(f):

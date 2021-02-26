@@ -7,8 +7,8 @@ class Optimizer:
     
     Attributes:
         scorer (ScoreFunction, optional): . Defaults to MSEScore.
-        data (Data, optional)
-        options 
+        data (Data, optional): The data.
+        options (dict): The options dictionary, with keys specific to each optimizer.
     """
     
     def __init__(self, scorer=None, options=None):
@@ -30,7 +30,7 @@ class Optimizer:
     def compute_score(self, pars):
         """A wrapper to computes the score from self.scorer. 
         """
-        return self.scorer.compute_score()
+        return self.scorer.compute_score(pars, *self.scorer.args_to_pass, **self.scorer.kwargs_to_pass)
     
     def resolve_options(self):
         pass

@@ -33,9 +33,6 @@ class Model:
         self.args_to_pass = () if args_to_pass is None else args_to_pass
         self.kwargs_to_pass = {} if kwargs_to_pass is None else kwargs_to_pass
         self.kernel = kernel
-        self.has_gp = False
-        if isinstance(self.kernel, optnoisekernels.GaussianProcess):
-            self.has_gp = True
     
     def build(self, pars):
         """Builds the model.
@@ -63,6 +60,7 @@ class PyMC3Model(Model, pm.model.Model):
     def __init__(self, p0=None, data=None, kernel=None):
         super().__init__(p0=p0, data=data, kernel=kernel)
         self.pars_to_pmd()
+        
 
 
 #class CompositeModel(dict):

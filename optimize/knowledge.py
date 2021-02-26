@@ -44,7 +44,7 @@ class Parameter:
     def __repr__(self):
         s = 'Name: ' + self.name + ' | Value: ' + self.value_str
         if not self.vary:
-            s +=  ' (Locked)'
+            s += ' (Locked)'
         if self.unc is not None:
             s += ' | Unc: -' + str(self.unc[0]) + ', +' + str(self.unc[1])
         if len(self.priors) > 0:
@@ -83,6 +83,8 @@ class Parameter:
         for prior in self.priors:
             if isinstance(prior, Gaussian):
                 return prior.sigma * 2
+            if isinstance(prior, Uniform):
+                return (prior.maxval - prior.minval) / 10
         return np.abs(self.value) / 100
             
     @property
