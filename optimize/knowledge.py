@@ -477,20 +477,21 @@ class Negative(AbstractPrior):
         return "Negative"
         
 class Jeffreys(AbstractPrior):
-    """A prior defined such that its density function is proportional to the square root of the determinant of the Fisher information matrix.
+    """A prior defined such that its density function is proportional to the square root of the determinant of the Fisher information matrix. Specifically, the 
 
         Attributes:
             minval (float): The lower bound.
             maxval (float): The upper bound.
         """
     
-    __slots__ = ['minval', 'maxval', 'lognorm']
+    __slots__ = ['minval', 'maxval', 'lognorm', 'knee']
     
-    def __init__(self, minval, maxval):
+    def __init__(self, minval, maxval, kneeval=None):
         assert minval <= maxval
         self.minval = minval
         self.maxval = maxval
-        self.lognorm = np.log(1.0 / np.log(self.maxval / self.minval))
+        self.kneeval = 0 if kneeval is None else kneeval
+        self.lognorm = np.log(1.0 / np.log((self.maxval - self.kneeval) / (self.minval - self.kneeval)))
         
     def logprob(self, x):
         if self.minval < x < self.maxval:
@@ -499,5 +500,5 @@ class Jeffreys(AbstractPrior):
             return -np.inf
         
     def __repr__(self):
-        return "Jeffreys Prior: [" + str(self.minval) + ", " + str(self.maxval) + "]"
+        return "Jeffreys Prior: [" + str(self.minval) + ", " str(self.kneeval) + ", " + str(self.maxval) + "]"
         
