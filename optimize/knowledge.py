@@ -484,13 +484,13 @@ class Jeffreys(AbstractPrior):
             maxval (float): The upper bound.
         """
     
-    __slots__ = ['minval', 'maxval', 'lognorm', 'knee']
+    __slots__ = ['minval', 'maxval', 'lognorm', 'kneeval']
     
-    def __init__(self, minval, maxval, kneeval=None):
+    def __init__(self, minval, maxval, kneeval=0):
         assert minval <= maxval
         self.minval = minval
         self.maxval = maxval
-        self.kneeval = 0 if kneeval is None else kneeval
+        self.kneeval = kneeval
         self.lognorm = np.log(1.0 / np.log((self.maxval - self.kneeval) / (self.minval - self.kneeval)))
         
     def logprob(self, x):
@@ -500,5 +500,5 @@ class Jeffreys(AbstractPrior):
             return -np.inf
         
     def __repr__(self):
-        return "Jeffreys Prior: [" + str(self.minval) + ", " str(self.kneeval) + ", " + str(self.maxval) + "]"
+        return "Jeffreys Prior: [" + str(self.minval) + ", " + str(self.kneeval) + ", " + str(self.maxval) + "]"
         

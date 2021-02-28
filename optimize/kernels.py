@@ -111,9 +111,6 @@ class WhiteNoise(NoiseKernel):
     
 class CorrelatedNoiseKernel(NoiseKernel):
     
-    def realize(self, pars, **kwargs):
-        raise NotImplementedError("Must implement a realize method for a correlated noise kernel")
-    
     def compute_cov_matrix(self, pars, include_white_error=True, **kwargs):
         raise NotImplementedError("Must implement the method compute_cov_matrix")
     
@@ -154,51 +151,6 @@ class CorrelatedNoiseKernel(NoiseKernel):
         errors = errors**0.5
 
         return errors
-    
-    def realize(self, pars, residuals_with_noise, xpred=None, xres=None, return_kernel_error=False, **kwargs):
-        """Realize the GP (sample at arbitrary points). Meant to be the same as the predict method offered by other codes.
-
-        Args:
-            pars (Parameters): The parameters to use.
-            residuals (np.ndarray): The residuals before the GP is subtracted.
-            xpred (np.ndarray): The vector to realize the GP on.
-            xres (np.ndarray): The vector the data is on.
-            errors (np.ndarray): The errorbars, added in quadrature.
-            return_kernel_error (bool, optional): Whether or not to compute the uncertainty in the GP. If True, both the mean and stddev are returned in a tuple. Defaults to False.
-
-        Returns:
-            np.ndarray OR tuple: If stddev is False, only the mean GP is returned. If stddev is True, the uncertainty in the GP is computed and returned as well. The mean GP is computed through a linear optimization (i.e, minimiation surface is purely concave or convex).
-        """
-        
-        # Resolve the grids to use.
-        if xres is None:
-            xres = self.x
-        if xpred is None:
-            xpred = xres
-        
-        # Get K
-        self.compute_dist_matrix(xres, xres)
-        K = self.compute_cov_matrix(pars, include_white_error=True, include_kernel_error=False)
-        
-        # Compute version of K without errorbars
-        self.compute_dist_matrix(xpred, xres)
-        Ks = self.compute_cov_matrix(pars, include_white_error=False, include_kernel_error=False)
-
-        # Avoid overflow errors in det(K) by reducing the matrix.
-        L = cho_factor(K)
-        alpha = cho_solve(L, residuals_with_noise)
-        mu = np.dot(Ks, alpha).flatten()
-
-        # Compute the uncertainty in the GP fitting.
-        if return_kernel_error:
-            self.compute_dist_matrix(xpred, xpred)
-            Kss = self.compute_cov_matrix(pars, include_white_error=False, include_kernel_error=False)
-            B = cho_solve(L, Ks.T)
-            var = np.array(np.diag(Kss - np.dot(Ks, B))).flatten()
-            unc = np.sqrt(var)
-            return mu, unc
-        else:
-            return mu
     
     def compute_dist_matrix(self, x1=None, x2=None):
         """Default wrapper to compute the cov matrix.
@@ -245,6 +197,53 @@ class GaussianProcess(CorrelatedNoiseKernel):
             self.compute_dist_matrix()
         except:
             pass
+        
+    def realize(self, pars, residuals_with_noise, xpred=None, xres=None, return_kernel_error=False, **kwargs):
+        """Realize the GP (sample at arbitrary points). Meant to be the same as the predict method offered by other codes.
+
+        Args:
+            pars (Parameters): The parameters to use.
+            residuals (np.ndarray): The residuals before the GP is subtracted.
+            xpred (np.ndarray): The vector to realize the GP on.
+            xres (np.ndarray): The vector the data is on.
+            errors (np.ndarray): The errorbars, added in quadrature.
+            return_kernel_error (bool, optional): Whether or not to compute the uncertainty in the GP. If True, both the mean and stddev are returned in a tuple. Defaults to False.
+
+        Returns:
+            np.ndarray OR tuple: If stddev is False, only the mean GP is returned. If stddev is True, the uncertainty in the GP is computed and returned as well. The mean GP is computed through a linear optimization (i.e, minimiation surface is purely concave or convex).
+        """
+        
+        # Resolve the grids to use.
+        if xres is None:
+            xres = self.x
+        if xpred is None:
+            xpred = xres
+        
+        # Get K
+        self.compute_dist_matrix(xres, xres)
+        K = self.compute_cov_matrix(pars, include_white_error=True, include_kernel_error=False)
+        
+        # Compute version of K without errorbars
+        self.compute_dist_matrix(xpred, xres)
+        Ks = self.compute_cov_matrix(pars, include_white_error=False, include_kernel_error=False)
+
+        # Avoid overflow errors in det(K) by reducing the matrix.
+        L = cho_factor(K)
+        alpha = cho_solve(L, residuals_with_noise)
+        mu = np.dot(Ks, alpha).flatten()
+
+        # Compute the uncertainty in the GP fitting.
+        if return_kernel_error:
+            self.compute_dist_matrix(xpred, xpred)
+            Kss = self.compute_cov_matrix(pars, include_white_error=False, include_kernel_error=False)
+            B = cho_solve(L, Ks.T)
+            var = np.array(np.diag(Kss - np.dot(Ks, B))).flatten()
+            unc = np.sqrt(var)
+            self.compute_dist_matrix()
+            return mu, unc
+        else:
+            self.compute_dist_matrix()
+            return mu
 
 
 class QuasiPeriodic(GaussianProcess):
