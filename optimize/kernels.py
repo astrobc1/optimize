@@ -80,7 +80,7 @@ class WhiteNoise(NoiseKernel):
         # Return covariance matrix
         return cov_matrix
     
-    def compute_data_errors(self, pars, include_white_error=True):
+    def compute_data_errors(self, pars, *args, include_white_error=True, **kwargs):
         """Computes the errors added in quadrature for all datasets corresponding to this kernel.
 
         Args:
