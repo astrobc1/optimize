@@ -53,13 +53,23 @@ class Model:
             pars (Parameters): The new starting parameters to use.
         """
         self.p0 = pars
-
-
-class PyMC3Model(Model, pm.model.Model):
+        
+        
+class PureGP(Model):
     
-    def __init__(self, p0=None, data=None, kernel=None):
-        super().__init__(p0=p0, data=data, kernel=kernel)
-        self.pars_to_pmd()
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.data_x = self.data.get_vec("x")
+        self.data_zeros = np.zeros_like(self.data_x)
+
+    def build(self, pars):
+        return self.data_zeros
+
+# class PyMC3Model(Model, pm.model.Model):
+    
+#     def __init__(self, p0=None, data=None, kernel=None):
+#         super().__init__(p0=p0, data=data, kernel=kernel)
+#         self.pars_to_pmd()
         
 
 

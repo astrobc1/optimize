@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.linalg import cho_solve, cho_factor
 import scipy.sparse
-from numba import jit, njit
+import numba
 import matplotlib.pyplot as plt
 
 class NoiseKernel:
@@ -10,9 +10,7 @@ class NoiseKernel:
     Attributes:
         data_list (list): A list containing the data objects which utilize this noise kernel.
         par_names (list): A list of parameters for this kernel, must be in order of their .
-        
-    Examples:
-        To form one noise kernel for all data sets, construct as 
+
     """
     
     def __init__(self, data, par_names=None):
@@ -25,9 +23,7 @@ class NoiseKernel:
         self.data = data
         self.par_names = [] if par_names is None else par_names
         self.x = self.data.get_vec('x')
-        self.data_inds = {}
-        for instname in self.data:
-            self.data_inds[instname] = self.data.get_inds(instname)
+        self.data_inds = {data.label: self.data.get_inds(data.label) for data in self.data.values()}
         
     def compute_cov_matrix(self, x1, x2, **kwargs):
         raise NotImplementedError("Must implement a compute_cov_matrix method.")
@@ -108,7 +104,7 @@ class WhiteNoise(NoiseKernel):
 
         return errors
     
-    
+
 class CorrelatedNoiseKernel(NoiseKernel):
     
     def compute_cov_matrix(self, pars, include_white_error=True, **kwargs):
@@ -165,9 +161,8 @@ class CorrelatedNoiseKernel(NoiseKernel):
             x2 = self.x
         self.dist_matrix = self._compute_dist_matrix(x1, x2)
     
-    
     @staticmethod
-    #@njit
+    @numba.njit
     def _compute_dist_matrix(x1, x2):
         """Computes the distance matrix, D_ij = |x_i - x_j|
 
@@ -180,7 +175,7 @@ class CorrelatedNoiseKernel(NoiseKernel):
         """
         n1 = len(x1)
         n2 = len(x2)
-        out = np.zeros(shape=(n1, n2), dtype=float)
+        out = np.zeros(shape=(n1, n2), dtype=numba.float64)
         for i in range(n1):
             for j in range(n2):
                 out[i, j] = np.abs(x1[i] - x2[j])

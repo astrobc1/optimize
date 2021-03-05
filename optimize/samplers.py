@@ -161,7 +161,7 @@ class AffInv(Sampler):
         mcmc_result["autocorrs"] = autocorrs
         
         # Get the flat chains and lnLs
-        chains_good_flat, lnL_good_flat = self.get_flat_chains(filter=True, acc_thresh=0.3, acc_sigma=3)
+        chains_good_flat, lnL_good_flat = self.get_flat_chains(acc_thresh=0.3, acc_sigma=3)
         mcmc_result["chains"] = chains_good_flat
         mcmc_result["lnLs"] = lnL_good_flat
         
@@ -207,13 +207,13 @@ class AffInv(Sampler):
         Returns:
             fig: A matplotlib figure.
         """
-        pbest_vary_dict = sampler_result["pmed"].unpack(vary_only=True)
+        pbest_vary_dict = mcmc_result["pmed"].unpack(vary_only=True)
         truths = pbest_vary_dict["value"]
         labels = [par.latex_str for par in mcmc_result["pbest"].values() if par.vary]
         corner_plot = corner.corner(mcmc_result["chains"], labels=labels, truths=truths, show_titles=True)
         return corner_plot
         
-    def get_flat_chains(self, filter=True, acc_thresh=0.3, acc_sigma=3):
+    def get_flat_chains(self, acc_thresh=0.3, acc_sigma=3):
         """Generates the flat chains and filters unwanted chains.
 
         Args:

@@ -12,9 +12,8 @@ class Likelihood(optscore.ScoreFunction):
     def __init__(self, label=None, data=None, model=None, args_to_pass=None, kwargs_to_pass=None):
         super().__init__(data=data, model=model, args_to_pass=args_to_pass, kwargs_to_pass=kwargs_to_pass)
         self.label = label
-        self.data_x = self.data.get_vec('x')
-        self.data_y = self.data.get_vec('y')
-        self.data_yerr = self.data.get_vec('yerr')
+        self.data_x = self.data.get_vec("x")
+        self.data_y = self.data.get_vec("y")
             
     def compute_score(self, pars, negative=False):
         """Computes the negative of the log-likelihood score.
@@ -58,15 +57,9 @@ class Likelihood(optscore.ScoreFunction):
                 return -np.inf
         else:
             lnL = 0
-        
-        # Compute the model (consistent across all data sets for this likelihood).
-        model_arr = self.model.build(pars)
-        
-        # Copy the full data set
-        data_arr = self.data.get_vec('y')
 
         # Compute the residuals
-        residuals_with_noise = data_arr - model_arr
+        residuals_with_noise = self.residuals_with_noise(pars)
             
         # Compute the cov matrix
         K = self.model.kernel.compute_cov_matrix(pars, include_white_error=True)
@@ -101,8 +94,7 @@ class Likelihood(optscore.ScoreFunction):
             np.ndarray: The residuals.
         """
         model_arr = self.model.build(pars)
-        data_arr = np.copy(self.data_y)
-        residuals = data_arr - model_arr
+        residuals = self.data_y - model_arr
         return residuals
     
     def residuals_no_noise(self, pars):
@@ -182,6 +174,9 @@ class Likelihood(optscore.ScoreFunction):
             print("         the number of data points (- 1). The AICc comparison has returned -inf.")
             _aicc = np.inf
         return _aicc
+    
+    def __repr__(self):
+        return repr(self.data) + "\n" + repr(self.model)
         
 class Posterior(dict):
     """A class for joint likelihood functions. This should map 1-1 with the kernels map.
@@ -237,7 +232,7 @@ class Posterior(dict):
                         return lnL
         return lnL
     
-    def compute_logL(self, pars, apply_priors=False):
+    def compute_logL(self, pars, apply_priors=True):
         """Computes the log of the likelihood.
     
         Args:
@@ -334,6 +329,7 @@ class Posterior(dict):
 
         return aicc
       
+
     @property
     def p0(self):
         return self.like0.model.p0

@@ -79,12 +79,15 @@ class Parameter:
         if self.scale is not None:
             return self.scale
         if len(self.priors) == 0:
-            return np.abs(self.value) / 10
+            return np.abs(self.value) / 100
         for prior in self.priors:
             if isinstance(prior, Gaussian):
-                return prior.sigma * 2
+                return prior.sigma
             if isinstance(prior, Uniform):
-                return (prior.maxval - prior.minval) / 10
+                dx1 = np.abs(prior.maxval - self.value)
+                dx2 = np.abs(self.value - prior.minval)
+                scale = np.min([dx1, dx2]) / 100
+                return scale
         return np.abs(self.value) / 100
             
     @property

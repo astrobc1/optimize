@@ -60,16 +60,18 @@ class OptProblem:
         """
         return self.sampler.sample(*args, **kwargs)
     
-    def print_summary(self, opt_result):
+    def print_summary(self, opt_result=None):
         """A nice generic print method for the problem.
 
         Args:
             opt_result (dict, optional): The optimization result to print. Defaults to None, and thus prints the initial parameters.
         """
         
-        # Print the data and model
-        print(self.data, flush=True)
-        print(self.model, flush=True)
+        # 
+        print("Optimization Problem", flush=True)
+        
+        # Print the scorer
+        print(self.scorer, flush=True)
         
         # Print the optimizer and sampler
         if hasattr(self, 'optimizer'):
@@ -118,13 +120,16 @@ class OptProblem:
         """
         self.sampler = sampler
         
-    def corner_plot(self, sampler_result=None, **kwargs):
+    def corner_plot(self, mcmc_result=None, **kwargs):
         """Calls the corner plot method in the sampler class.
 
         Args:
-            sampler_result (dict, optional): The sampler result.
+            mcmc_result (dict, optional): The sampler result.
 
         Returns:
             Matplotlib.Figure: A matplotlib figure containing the corner plot.
         """
-        return self.sampler.corner_plot(*args, sampler_result=sampler_result, **kwargs)
+        return self.sampler.corner_plot(mcmc_result=mcmc_result, **kwargs)
+    
+    def __repr__(self):
+        self.print_summary(opt_result=None)
