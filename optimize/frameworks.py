@@ -97,12 +97,7 @@ class OptProblem:
         self.p0 = pars
         
         # Set in remaining components
-        if self.optimizer is not None:
-            self.optimizer.set_pars(pars)
-        if self.scorer is not None:
-           self.scorer.set_pars(pars)
-        if self.sampler is not None:
-            self.sampler.set_pars(pars)
+        self.scorer.set_pars(self.p0)
             
     def set_optimizer(self, optimizer):
         """Setter method for the optimizer.

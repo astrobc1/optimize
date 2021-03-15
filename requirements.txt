@@ -2,3 +2,5 @@ numba>=0.48
 numpy>=1.18
 scipy>=1.5.4
 matplotlib>=3.3.3
+pymc3>=3.11.1
+corner>=2.2.1

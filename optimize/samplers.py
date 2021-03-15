@@ -47,14 +47,6 @@ class AffInv(Sampler):
         walkers = pars_vary_dict['value'] + search_scales * np.random.randn(self.n_walkers, n_pars_vary)
         return walkers
     
-    def set_pars(self, pars):
-        """Sets the parameters.
-
-        Args:
-            pars (Parameters): The parameters to set.
-        """
-        self.p0 = pars
-    
     @property
     def n_walkers(self):
         """Alias for the number of walkers.

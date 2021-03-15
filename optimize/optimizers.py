@@ -56,6 +56,11 @@ class Minimizer(Optimizer):
     """
     pass
 
+class Maximizer(Optimizer):
+    """Right now, just a node in the type tree that offers no additional functionality.
+    """
+    pass
+
 
 class Sampler(Optimizer):
     """Right now, just a node in the type tree that offers no additional functionality.

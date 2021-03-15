@@ -14,6 +14,7 @@ class Likelihood(optscore.ScoreFunction):
         self.label = label
         self.data_x = self.data.get_vec("x")
         self.data_y = self.data.get_vec("y")
+        self.data_yerr = self.data.get_vec("yerr")
             
     def compute_score(self, pars, negative=False):
         """Computes the negative of the log-likelihood score.
@@ -31,7 +32,7 @@ class Likelihood(optscore.ScoreFunction):
         else:
             return score
     
-    def compute_logL(self, pars, apply_priors=True):
+    def compute_logL(self, pars, apply_priors=False):
         """Computes the log of the likelihood.
         
         .. math::
@@ -132,7 +133,7 @@ class Likelihood(optscore.ScoreFunction):
                         return lnL
         return lnL
     
-    def compute_bic(self, pars, apply_priors=False):
+    def compute_bic(self, pars):
         """Calculate the Bayesian information criterion (BIC).
 
         Args:
@@ -144,7 +145,7 @@ class Likelihood(optscore.ScoreFunction):
 
         n = len(self.data.rv)
         k = len(pars)
-        lnL = self.compute_logL_priors(pars, apply_priors=apply_priors)
+        lnL = self.compute_logL_priors(pars)
         _bic = np.log(n) * k - 2.0 * lnL
         return _bic
 
@@ -161,7 +162,7 @@ class Likelihood(optscore.ScoreFunction):
         # Simple formula
         n = len(self.data.rv)
         k = pars.num_varied()
-        lnL = self.compute_logL_priors(pars, apply_priors=apply_priors)
+        lnL = self.compute_logL_priors(pars)
         aic = - 2.0 * lnL + 2.0 * k
         
         # Small sample correction
@@ -177,7 +178,14 @@ class Likelihood(optscore.ScoreFunction):
     
     def __repr__(self):
         return repr(self.data) + "\n" + repr(self.model)
-        
+    
+    def set_pars(self, pars):
+        self.model.p0 = pars
+    
+    @property
+    def p0(self):
+        return self.model.p0
+    
 class Posterior(dict):
     """A class for joint likelihood functions. This should map 1-1 with the kernels map.
     """
@@ -215,7 +223,7 @@ class Posterior(dict):
         Returns:
             float: ln(L).
         """
-        lnL = self.compute_logL(pars, apply_priors=True)
+        lnL = self.compute_logL(pars)
         if negative:
             return -1 * lnL
         else:
@@ -291,7 +299,7 @@ class Posterior(dict):
         for like in self.values():
             n += len(like.data_x)
         k = pars.num_varied()
-        lnL = self.compute_logL(pars)
+        lnL = self.compute_logL(pars, apply_priors=False)
         bic = k * np.log(n) - 2.0 * lnL
         return bic
 
@@ -314,7 +322,7 @@ class Posterior(dict):
         k = pars.num_varied()
         
         # lnL
-        lnL = self.compute_logL(pars)
+        lnL = self.compute_logL(pars, apply_priors=False)
         
         # AIC
         aic = 2.0 * (k - lnL)
@@ -329,10 +337,9 @@ class Posterior(dict):
 
         return aicc
       
-
     @property
     def p0(self):
-        return self.like0.model.p0
+        return self.like0.p0
     
     @property
     def like0(self):

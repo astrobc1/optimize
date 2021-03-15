@@ -62,12 +62,11 @@ class Data1d:
         self.mask = mask
         self.label = label
         
-        
     def __repr__(self):
         return 'Data 1d: ' + self.label
         
 class CompositeData(dict):
-    """A useful class to extend for composite data sets. Data sets of the same physical measurement, or different measurements of the same object may be utilized here. The labels of each dataset correspond the the keys of the dictionary.
+    """A useful class to extend for composite 1d data sets. Data sets of the same physical measurement, or different measurements of the same object may be utilized here. The labels of each dataset correspond the the keys of the dictionary.
     """
     
     def __init__(self):
@@ -98,6 +97,20 @@ class CompositeData(dict):
         inds = np.where(self.label_vec == label)[0]
         return inds
     
+    def make_label_vec(self):
+        label_vec = np.array([], dtype='<U50')
+        x = self.get_vec('x', sort=False)
+        for label in self:
+            label_vec = np.concatenate((label_vec, np.full(len(self[label].x), fill_value=label, dtype='<U50')))
+        ss = np.argsort(x)
+        label_vec = label_vec[ss]
+        return label_vec
+        
+        
+class CompositeData1d(CompositeData):
+    """A useful class to extend for composite 1d data sets. Data sets of the same physical measurement, or different measurements of the same object may be utilized here. The labels of each dataset correspond the the keys of the dictionary.
+    """
+    
     def get_vec(self, key, labels=None, sort=True):
         """Combines a certain vector from all labels into one array, and can then sort it according to x.
 
@@ -124,14 +137,3 @@ class CompositeData(dict):
             out = out[ss]
 
         return out
-        
-    def make_label_vec(self):
-        label_vec = np.array([], dtype='<U50')
-        x = self.get_vec('x', sort=False)
-        for label in self:
-            label_vec = np.concatenate((label_vec, np.full(len(self[label].x), fill_value=label, dtype='<U50')))
-        ss = np.argsort(x)
-        label_vec = label_vec[ss]
-        return label_vec
-        
-        
