@@ -382,13 +382,17 @@ class NelderMead(optimizers.Minimizer):
                 self.test_pars[p].setv(value=x[i])
         
         # Call the target function
-        f = self.scorer.compute_score(self.test_pars, *self.scorer.args_to_pass, **self.scorer.kwargs_to_pass)
+        f = self.scorer.compute_score(self.test_pars)
         
         # Update fcalls
         self.fcalls += 1
-        
+            
+        # Return max or min of score
+        if isinstance(self.scorer, optscores.MaxScoreFunction):
+            f *= -1
+            
         # If f is not finite, don't return -inf, return a large number
         if not np.isfinite(f):
             f = self.options["penalty"]
-            
+        
         return f

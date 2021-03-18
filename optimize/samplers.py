@@ -244,7 +244,7 @@ class AffInv(Sampler):
         """
         self.test_pars_vec[self.p0_vary_inds] = pars
         self.test_pars.setv(value=self.test_pars_vec)
-        lnL = self.scorer.compute_logL(self.test_pars)
+        lnL = self.scorer.compute_logaprob(self.test_pars)
         return lnL
     
     

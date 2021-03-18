@@ -5,34 +5,29 @@ import numpy as np
 import optimize.scores as optscore
 import matplotlib.pyplot as plt
 
-class Likelihood(optscore.ScoreFunction):
+class Likelihood(optscore.MaxScoreFunction):
     """A Bayesian likelihood score function.
     """
     
-    def __init__(self, label=None, data=None, model=None, args_to_pass=None, kwargs_to_pass=None):
-        super().__init__(data=data, model=model, args_to_pass=args_to_pass, kwargs_to_pass=kwargs_to_pass)
+    def __init__(self, label=None, data=None, model=None):
+        super().__init__(data=data, model=model)
         self.label = label
         self.data_x = self.data.get_vec("x")
         self.data_y = self.data.get_vec("y")
         self.data_yerr = self.data.get_vec("yerr")
             
-    def compute_score(self, pars, negative=False):
-        """Computes the negative of the log-likelihood score.
+    def compute_score(self, pars):
+        """Computes the log-likelihood score.
         
         Args:
             pars (Parameters): The parameters.
-            negative (bool): If True, the negative log like is returned, which should be a positive number.
 
         Returns:
-            float: +/-ln(L).
+            float: ln(L).
         """
-        score = self.compute_logL(pars)
-        if negative:
-            return -1 * score
-        else:
-            return score
+        return self.compute_logL(pars)
     
-    def compute_logL(self, pars, apply_priors=False):
+    def compute_logL(self, pars):
         """Computes the log of the likelihood.
         
         .. math::
@@ -50,14 +45,6 @@ class Likelihood(optscore.ScoreFunction):
         Returns:
             float: The log likelihood, ln(L).
         """
-        
-        # Apply priors, see if we even need to compute the model
-        if apply_priors:
-            lnL = self.compute_logL_priors(pars)
-            if not np.isfinite(lnL):
-                return -np.inf
-        else:
-            lnL = 0
 
         # Compute the residuals
         residuals_with_noise = self.residuals_with_noise(pars)
@@ -76,11 +63,11 @@ class Likelihood(optscore.ScoreFunction):
 
             # Compute the likelihood
             N = len(residuals_with_noise)
-            lnL += -0.5 * (np.dot(residuals_with_noise, alpha) + lndetK + N * np.log(2 * np.pi))
+            lnL = -0.5 * (np.dot(residuals_with_noise, alpha) + lndetK + N * np.log(2 * np.pi))
     
         except:
             # If things fail (matrix decomp) return -inf
-            return -np.inf
+            lnL = -np.inf
         
         # Return the final ln(L)
         return lnL
@@ -122,60 +109,6 @@ class Likelihood(optscore.ScoreFunction):
         """
         return len(self.data.x) - pars.num_varied()
     
-    def compute_logL_priors(self, pars):
-        lnL = 0
-        for par in pars:
-            _par = pars[par]
-            if _par.vary:
-                for prior in _par.priors:
-                    lnL += prior.logprob(_par.value)
-                    if not np.isfinite(lnL):
-                        return lnL
-        return lnL
-    
-    def compute_bic(self, pars):
-        """Calculate the Bayesian information criterion (BIC).
-
-        Args:
-            pars (Parameters): The parameters to use.
-            
-        Returns:
-            float: The BIC
-        """
-
-        n = len(self.data.rv)
-        k = len(pars)
-        lnL = self.compute_logL_priors(pars)
-        _bic = np.log(n) * k - 2.0 * lnL
-        return _bic
-
-    def compute_aicc(self, pars, apply_priors=False):
-        """Calculate the small sample Akaike information criterion (AICc).
-        
-        Args:
-            pars (Parameters): The parameters to use.
-
-        Returns:
-            float: The AICc.
-        """
-        
-        # Simple formula
-        n = len(self.data.rv)
-        k = pars.num_varied()
-        lnL = self.compute_logL_priors(pars)
-        aic = - 2.0 * lnL + 2.0 * k
-        
-        # Small sample correction
-        _aicc = aic
-        denom = (n - k - 1.0)
-        if denom > 0:
-            _aicc += (2.0 * k * (k + 1.0)) / denom
-        else:
-            print("Warning: The number of free parameters is greater than or equal to")
-            print("         the number of data points (- 1). The AICc comparison has returned -inf.")
-            _aicc = np.inf
-        return _aicc
-    
     def __repr__(self):
         return repr(self.data) + "\n" + repr(self.model)
     
@@ -186,22 +119,14 @@ class Likelihood(optscore.ScoreFunction):
     def p0(self):
         return self.model.p0
     
-class Posterior(dict):
+class Posterior(dict, optscore.MaxScoreFunction):
     """A class for joint likelihood functions. This should map 1-1 with the kernels map.
     """
     
-    def __init__(self, args_to_pass=None, kwargs_to_pass=None):
+    def __init__(self):
         
         # Init the dictionary
         super().__init__()
-        
-        # Args and kwargs
-        self.args_to_pass = () if args_to_pass is None else args_to_pass
-        self.kwargs_to_pass = {} if kwargs_to_pass is None else kwargs_to_pass
-        
-        # Negative to score fun
-        if "negative" not in self.kwargs_to_pass:
-            self.kwargs_to_pass["negative"] = True
     
     def __setitem__(self, label, like):
         """Overrides the default Python dict setter.
@@ -214,7 +139,7 @@ class Posterior(dict):
             like.label = label
         super().__setitem__(label, like)
         
-    def compute_score(self, pars, negative=False):
+    def compute_score(self, pars):
         """Computes the log-likelihood score.
         
         Args:
@@ -223,24 +148,19 @@ class Posterior(dict):
         Returns:
             float: ln(L).
         """
-        lnL = self.compute_logL(pars)
-        if negative:
-            return -1 * lnL
-        else:
-            return lnL
+        return self.compute_logaprob(pars)
     
-    def compute_logL_priors(self, pars):
+    def compute_prior_logL(self, pars):
         lnL = 0
-        for par in pars:
-            _par = pars[par]
-            if _par.vary:
-                for prior in _par.priors:
-                    lnL += prior.logprob(_par.value)
+        for par in pars.values():
+            if par.vary:
+                for prior in par.priors:
+                    lnL += prior.logprob(par.value)
                     if not np.isfinite(lnL):
-                        return lnL
+                        return -np.inf
         return lnL
     
-    def compute_logL(self, pars, apply_priors=True):
+    def compute_logaprob(self, pars):
         """Computes the log of the likelihood.
     
         Args:
@@ -250,13 +170,18 @@ class Posterior(dict):
         Returns:
             float: The log likelihood, ln(L).
         """
+        lnL = self.compute_prior_logL(pars)
+        if not np.isfinite(lnL):
+            return -np.inf
+        lnL += self.compute_logL(pars)
+        if not np.isfinite(lnL):
+            return -np.inf
+        return lnL
+    
+    def compute_logL(self, pars):
         lnL = 0
-        if apply_priors:
-            lnL += self.compute_logL_priors(pars)
-            if not np.isfinite(lnL):
-                return -np.inf
         for like in self.values():
-            lnL += like.compute_logL(pars, apply_priors=False)
+            lnL += like.compute_logL(pars)
             if not np.isfinite(lnL):
                 return -np.inf
         return lnL
@@ -299,7 +224,7 @@ class Posterior(dict):
         for like in self.values():
             n += len(like.data_x)
         k = pars.num_varied()
-        lnL = self.compute_logL(pars, apply_priors=False)
+        lnL = self.compute_logL(pars)
         bic = k * np.log(n) - 2.0 * lnL
         return bic
 
@@ -322,7 +247,7 @@ class Posterior(dict):
         k = pars.num_varied()
         
         # lnL
-        lnL = self.compute_logL(pars, apply_priors=False)
+        lnL = self.compute_logL(pars)
         
         # AIC
         aic = 2.0 * (k - lnL)

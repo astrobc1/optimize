@@ -13,7 +13,7 @@ class ScoreFunction:
         model (Model): A model inheriting from optimize.models.Model. All datasets must use this model.
     """
     
-    def __init__(self, data=None, model=None, args_to_pass=None, kwargs_to_pass=None):
+    def __init__(self, data=None, model=None):
         """Stores the basic requirements for a score function.
 
         Args:
@@ -22,8 +22,6 @@ class ScoreFunction:
         """
         self.data = data
         self.model = model
-        self.args_to_pass = () if args_to_pass is None else args_to_pass
-        self.kwargs_to_pass = {} if kwargs_to_pass is None else kwargs_to_pass
 
     def compute_score(self, pars):
         """Computes the score from a given set of parameters. This method must be implemented for each score function.
@@ -44,7 +42,16 @@ class ScoreFunction:
         """
         self.model.set_pars(pars)
         
-class MSE(ScoreFunction):
+        
+class MinScoreFunction(ScoreFunction):
+    pass
+
+class MaxScoreFunction(ScoreFunction):
+    pass
+    
+    
+        
+class MSE(MinScoreFunction):
     """A class for the standard mean squared error (MSE) loss and a namespace for commonly used routines. The loss function used here is just the RMS.
     """
     
