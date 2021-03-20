@@ -1,8 +1,8 @@
 import numpy as np
 import optimize.kernels as optnoisekernels
 import matplotlib.pyplot as plt
-import pymc3 as pm
-import theano.tensor as tt
+#import pymc3 as pm
+#import theano.tensor as tt
 
 class Model:
     """Constructs a Bayesian base model for optimization. This class is useful to instantiate for simple Bayesian optimization problems.
