@@ -87,7 +87,7 @@ class AffInv(Sampler):
             pars = self.scorer.p0
         elif pars is not None:
             walkers = self.init_walkers(pars)
-        
+
         # Burn in
         if n_burn_steps > 0:
             
