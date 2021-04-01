@@ -153,9 +153,8 @@ class AffInv(Sampler):
         mcmc_result["autocorrs"] = autocorrs
         
         # Get the flat chains and lnLs
-        chains_good_flat, lnL_good_flat = self.get_flat_chains()
-        mcmc_result["chains"] = chains_good_flat
-        mcmc_result["lnLs"] = lnL_good_flat
+        mcmc_result["chains"] = self.sampler.flatchain
+        mcmc_result["lnLs"] = self.sampler.lnprobability
         mcmc_result["acc"] = self.sampler.acceptance_fraction
         
         # Best parameters from best sampled like (sampling must be dense enough, probably is)
@@ -170,9 +169,8 @@ class AffInv(Sampler):
         # Parameter uncertainties
         pnames_vary = mcmc_result["pbest"].unpack(keys='name', vary_only=True)['name']
         pmed = copy.deepcopy(self.scorer.p0)
-        percentiles = [15.9, 50, 84.1]
         for i, pname in enumerate(pnames_vary):
-            _pmed, unc_lower, unc_upper = self.chain_uncertainty(chains_good_flat[:, i], mcmc_result["acc"])
+            _pmed, unc_lower, unc_upper = self.chain_uncertainty(mcmc_result["chains"][:, i])
             pmed[pname].value = _pmed
             pmed[pname].unc = (unc_lower, unc_upper)
         
@@ -182,27 +180,16 @@ class AffInv(Sampler):
         return mcmc_result
     
     @staticmethod
-    def chain_uncertainty(chain, acc, acc_thresh=0.3, acc_sigma=3, percentiles=[15.9, 50, 84.1]):
-        
-        # Medin acceptance rate
-        acc_med = np.nanmedian(acc)
-        
-        # MAD acceptance rate (median absolute deviation)
-        acc_mad = np.nanmedian(np.abs(acc - acc_med))
-        
-        # Extract good chains
-        n_steps = len(chain)
-        good = np.where((np.abs((acc - acc_med) / acc_mad) < acc_sigma) | (acc > acc_thresh))[0]
-        n_good = len(good)
-        chain_good = chain[good]
+    def chain_uncertainty(flat_chain, percentiles=[15.9, 50, 84.1]):
         
         # Compute percentiles
-        par_quantiles = np.percentile(chain_good, percentiles)
+        par_quantiles = np.percentile(flat_chain, percentiles)
         pmed = par_quantiles[1]
         unc = np.diff(par_quantiles)
         out = (pmed, unc[0], unc[1])
         
         return out
+
     
     def corner_plot(self, mcmc_result):
         """Constructs a corner plot.
@@ -219,34 +206,6 @@ class AffInv(Sampler):
         labels = [par.latex_str for par in mcmc_result["pbest"].values() if par.vary]
         corner_plot = corner.corner(mcmc_result["chains"], labels=labels, truths=truths, show_titles=True)
         return corner_plot
-        
-    def get_flat_chains(self, acc_thresh=0.3, acc_sigma=3):
-        """Generates the flat chains and filters unwanted chains.
-
-        Args:
-            filter (bool, optional): Whether or not to filter the chain results. Defaults to True.
-            acc_thresh (float, optional): The minimum acceptance rate to accept for the chain to be used. Defualts to 0.3.
-            acc_sigma (float, optional): A second metric to ignore chains using the relative sigma. A chain must fail both tests to not be used. Defaults to 3.
-        """
-        # All acceptance rates
-        acc = self.sampler.acceptance_fraction
-        
-        # Median acceptance rate
-        acc_med = np.nanmedian(acc)
-        
-        # MAD acceptance rate (median absolute deviation)
-        acc_mad = np.nanmedian(np.abs(acc - acc_med))
-        
-        # Extract good chains
-        n_chains, n_steps, n_pars_vary = self.sampler.chain.shape # (n_chains, n_steps, n_pars_vary)
-        good = np.where((np.abs((acc - acc_med) / acc_mad) < acc_sigma) | (acc > acc_thresh))[0]
-        n_good = len(good)
-        chains_good = self.sampler.chain[good, :, :] # (n_good_chains, n_steps, n_pars_vary)
-        lnL_good = self.sampler.lnprobability[good, :] # (n_good_chains, n_steps)
-        chains_good_flat = chains_good.reshape((n_steps * n_good, n_pars_vary))
-        lnL_good_flat = lnL_good.reshape((n_steps * n_good))
-        
-        return chains_good_flat, lnL_good_flat
         
     def compute_score(self, pars):
         """Wrapper to compute the score, only to be called by the emcee Ensemble Sampler.
