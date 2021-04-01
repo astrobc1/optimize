@@ -153,9 +153,10 @@ class AffInv(Sampler):
         mcmc_result["autocorrs"] = autocorrs
         
         # Get the flat chains and lnLs
-        chains_good_flat, lnL_good_flat = self.get_flat_chains(acc_thresh=0.3, acc_sigma=3)
+        chains_good_flat, lnL_good_flat = self.get_flat_chains()
         mcmc_result["chains"] = chains_good_flat
         mcmc_result["lnLs"] = lnL_good_flat
+        mcmc_result["acc"] = self.sampler.acceptance_fraction
         
         # Best parameters from best sampled like (sampling must be dense enough, probably is)
         pars_best = self.sampler.chain[1, np.argmax(self.sampler.lnprobability[1, :]), :]
@@ -171,7 +172,7 @@ class AffInv(Sampler):
         pmed = copy.deepcopy(self.scorer.p0)
         percentiles = [15.9, 50, 84.1]
         for i, pname in enumerate(pnames_vary):
-            _pmed, unc_lower, unc_upper = self.chain_uncertainty(chains_good_flat[:, i])
+            _pmed, unc_lower, unc_upper = self.chain_uncertainty(chains_good_flat[:, i], mcmc_result["acc"])
             pmed[pname].value = _pmed
             pmed[pname].unc = (unc_lower, unc_upper)
         
@@ -181,12 +182,26 @@ class AffInv(Sampler):
         return mcmc_result
     
     @staticmethod
-    def chain_uncertainty(chain):
-        percentiles = [15.9, 50, 84.1]
-        par_quantiles = np.percentile(chain, percentiles)
+    def chain_uncertainty(chain, acc, acc_thresh=0.3, acc_sigma=3, percentiles=[15.9, 50, 84.1]):
+        
+        # Medin acceptance rate
+        acc_med = np.nanmedian(acc)
+        
+        # MAD acceptance rate (median absolute deviation)
+        acc_mad = np.nanmedian(np.abs(acc - acc_med))
+        
+        # Extract good chains
+        n_steps = len(chain)
+        good = np.where((np.abs((acc - acc_med) / acc_mad) < acc_sigma) | (acc > acc_thresh))[0]
+        n_good = len(good)
+        chain_good = chain[good]
+        
+        # Compute percentiles
+        par_quantiles = np.percentile(chain_good, percentiles)
         pmed = par_quantiles[1]
         unc = np.diff(par_quantiles)
         out = (pmed, unc[0], unc[1])
+        
         return out
     
     def corner_plot(self, mcmc_result):
