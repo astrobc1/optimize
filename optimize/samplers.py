@@ -63,7 +63,7 @@ class AffInv(Sampler):
         n_walkers = 2 * n_pars_vary
         self.sampler = emcee.EnsembleSampler(n_walkers, n_pars_vary, self.compute_score)
         
-    def sample(self, pars=None, walkers=None, n_burn_steps=500, check_every=200, n_steps=75_000, rel_tau_thresh=0.01, n_min_steps=1000, n_cores=1, n_taus_thresh=40):
+    def sample(self, pars=None, walkers=None, n_burn_steps=500, check_every=200, n_steps=75_000, rel_tau_thresh=0.01, n_min_steps=1000, n_cores=1, n_taus_thresh=40, progress=True):
         """Wrapper to perform a burn-in + full MCMC exploration.
 
         Args:
