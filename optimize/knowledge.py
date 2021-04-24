@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from abc import ABC, abstractmethod
+from abc import ABC, abstractmethod, abstractclassmethod
+import json
 
 class Parameter:
     
@@ -42,11 +43,11 @@ class Parameter:
         self.unc = None
 
     def __repr__(self):
-        s = 'Name: ' + self.name + ' | Value: ' + self.value_str
+        s = f"Name: {self.name} | Value: {self.value}"
         if not self.vary:
             s += ' (Locked)'
         if self.unc is not None:
-            s += ' | Unc: -' + str(self.unc[0]) + ', +' + str(self.unc[1])
+            s += f" | Unc: -{self.unc[0]}, +{self.unc[1]}"
         if len(self.priors) > 0:
             s += '\n  Priors:\n'
             for prior in self.priors:
@@ -74,22 +75,32 @@ class Parameter:
         return vlb, vub
     
     def compute_crude_scale(self):
-        if not self.vary:
-            return 0
         if self.scale is not None:
             return self.scale
         if len(self.priors) == 0:
-            return np.abs(self.value) / 100
+            scale = np.abs(self.value) / 100
+            if scale == 0:
+                return 1
+            else:
+                return scale
         for prior in self.priors:
             if isinstance(prior, Gaussian):
                 return prior.sigma
+        for prior in self.priors:
             if isinstance(prior, Uniform):
                 dx1 = np.abs(prior.maxval - self.value)
                 dx2 = np.abs(self.value - prior.minval)
                 scale = np.min([dx1, dx2]) / 100
-                return scale
-        return np.abs(self.value) / 100
-            
+                if scale == 0:
+                    return 1
+                else:
+                    return scale
+        scale = np.abs(self.value) / 100
+        if scale == 0:
+            return 1
+        else:
+            return scale
+
     @property
     def value_str(self):
         """The current value of the parameter as a string
@@ -115,8 +126,43 @@ class Parameter:
     def hard_bounds(self):
         return self.get_hard_bounds()
     
+    def has_prior(self, prior_type):
+        for _prior in self.priors:
+            tt = type(_prior)
+            if prior_type is tt:
+                return True
+        return False
+    
     def add_prior(self, prior):
         self.priors.append(prior)
+        
+    def get_serializable(self):
+        return {"name": self.name, "value": self.value, "vary": self.vary, "latex_str": self.latex_str, "priors": [prior.get_serializable() for prior in self.priors]}
+    
+    @classmethod
+    def from_serialized(cls, o):
+        try:
+            priors = cls.from_serialized_priors(o["priors"])
+            return cls(name=o["name"], value=o["value"], vary=o["vary"], latex_str=o["latex_str"], priors=priors)
+        except:
+            raise ValueError("Cannot parse one or more fields for Parameter object")
+        
+    @staticmethod
+    def from_serialized_priors(serialized_priors):
+        priors_list = []
+        for prior in serialized_priors:
+            name = prior["name"]
+            if name == "Gaussian":
+                priors_list.append(Gaussian.from_prior(prior))
+            elif name == "Uniform":
+                priors_list.append(Uniform.from_prior(prior))
+            elif name == "Jeffreys":
+                priors_list.append(Jeffreys.from_prior(prior))
+            elif name == "Positive":
+                priors_list.append(Positive.from_prior(prior))
+            elif name == "Negative":
+                priors_list.append(Negative.from_prior(prior))
+        return priors_list
         
 class Parameters(dict):
     """A container for a set of model parameters which extends the Python 3 dictionary, which is ordered by default.
@@ -139,6 +185,7 @@ class Parameters(dict):
         Args:
             pdict (dict): A dictionary of Parameter attributes (the result from unpack).
         """
+        
         pars = cls()
         n = len(pdict['value'])
         name = pdict['name']
@@ -372,7 +419,16 @@ class Parameters(dict):
         else:
             return super().__getattr__(attr)
         
-        
+    def get_serializable(self):
+        return [par.get_serializable() for par in self.values()]
+    
+    @classmethod
+    def from_serialized(cls, pars):
+        pars_out = cls()
+        for par in pars.values():
+            pars_out[par["name"]] = Parameter.from_serialized(par)
+        return pars_out
+ 
 class AbstractPrior(ABC):
     """An interface for a general prior.
     """
@@ -388,6 +444,10 @@ class AbstractPrior(ABC):
     @abstractmethod
     def __repr__(self):
         pass
+    
+    @abstractclassmethod
+    def from_par(self, par):
+        pass
 
 class Gaussian(AbstractPrior):
     """A prior defined by a normal distribution.
@@ -398,6 +458,7 @@ class Gaussian(AbstractPrior):
     """
     
     __slots__ = ['mu', 'sigma']
+    name = 'Gaussian'
     
     def __init__(self, mu, sigma):
         """Constructor for a Gaussian prior.
@@ -414,11 +475,22 @@ class Gaussian(AbstractPrior):
         return -0.5 * ((x - self.mu) / self.sigma)**2 - 0.5 * np.log((self.sigma**2) * 2 * np.pi)
     
     def __repr__(self):
-        return "Gaussian: [" + str(self.mu) + ", " + str(self.sigma) + "]"
+        return f"{self.name}: [{self.mu}, {self.sigma}]"
     
-    def to_pmd(self, par):
-        return pm.Normal(par.name, self.mu, sigma=self.sigma)
+    def get_serializable(self):
+        return {"name": self.name, "mu": self.mu, "sigma": self.sigma}
     
+    @classmethod
+    def from_par(cls, par):
+        scale = par.compute_crude_scale()
+        if scale == 0:
+            scale = 1
+        return cls(par.value, sigma=scale)
+    
+    @classmethod
+    def from_serialized(cls, prior):
+        return cls(prior["mu"], prior["sigma"])
+
 class Uniform(AbstractPrior):
     """A prior defined by hard bounds.
 
@@ -428,6 +500,8 @@ class Uniform(AbstractPrior):
         """
     
     __slots__ = ['minval', 'maxval']
+    
+    name = "Uniform"
     
     def __init__(self, minval, maxval):
         """Constructor for a Uniform prior.
@@ -447,13 +521,27 @@ class Uniform(AbstractPrior):
            return -np.inf
         
     def __repr__(self):
-        return "Uniform: [" + str(self.minval) + ", " + str(self.maxval) + "]"
+        return f"{self.name}: [{self.minval}, {self.maxval}]"
+    
+    def get_serializable(self):
+        return {"name": self.name, "minval": self.minval, "maxval": self.maxval}
+    
+    @classmethod
+    def from_par(cls, par):
+        scale = par.compute_crude_scale()
+        return cls(par.value - scale, par.value + scale)
+    
+    @classmethod
+    def from_serialized(cls, prior):
+        return cls(prior["minval"], prior["maxval"])
 
 class Positive(AbstractPrior):
     """A prior to force x > 0.
     """
     
     __slots__ = []
+    
+    name = "Positive"
     
     def __init__(self):
         pass
@@ -462,13 +550,26 @@ class Positive(AbstractPrior):
         return 0 if x > 0 else -np.inf
         
     def __repr__(self):
-        return "Positive"
+        return self.name
+    
+    @classmethod
+    def from_par(cls, par):
+        return cls()
+    
+    def get_serializable(self):
+        return {"name": self.name}
+    
+    @classmethod
+    def from_serialized(cls, prior):
+        return cls()
     
 class Negative(AbstractPrior):
     """A prior to force x < 0.
     """
     
     __slots__ = []
+    
+    name = "Negative"
     
     def __init__(self):
         pass
@@ -477,7 +578,18 @@ class Negative(AbstractPrior):
         return 0 if x < 0 else -np.inf
         
     def __repr__(self):
-        return "Negative"
+        return self.name
+    
+    @classmethod
+    def from_par(cls, par):
+        return cls()
+    
+    def get_serializable(self):
+        return {"name": self.name}
+    
+    @classmethod
+    def from_serialized(cls, prior):
+        return cls()
         
 class Jeffreys(AbstractPrior):
     """A prior defined such that its density function is proportional to the square root of the determinant of the Fisher information matrix. Specifically, the 
@@ -488,6 +600,7 @@ class Jeffreys(AbstractPrior):
         """
     
     __slots__ = ['minval', 'maxval', 'lognorm', 'kneeval']
+    name = "Jeffreys"
     
     def __init__(self, minval, maxval, kneeval=0):
         assert minval <= maxval
@@ -503,5 +616,16 @@ class Jeffreys(AbstractPrior):
             return -np.inf
         
     def __repr__(self):
-        return "Jeffreys Prior: [" + str(self.minval) + ", " + str(self.kneeval) + ", " + str(self.maxval) + "]"
-        
+        return f"{self.name}: [{self.minval}, {self.kneeval}, {self.maxval}]"
+    
+    def get_serializable(self):
+        return {"name": self.name, "minval": self.minval, "maxval": self.maxval, "kneeval": self.kneeval}
+    
+    @classmethod
+    def from_serialized(cls, prior):
+        return cls(prior["minval"], prior["maxval"], prior["kneeval"])
+    
+    @classmethod
+    def from_par(cls, par):
+        return cls(1, 10)
+

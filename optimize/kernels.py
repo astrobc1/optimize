@@ -161,6 +161,7 @@ class CorrelatedNoiseKernel(NoiseKernel):
             x2 = self.x
         self.dist_matrix = self._compute_dist_matrix(x1, x2)
     
+    
     @staticmethod
     @numba.njit
     def _compute_dist_matrix(x1, x2):
@@ -180,7 +181,7 @@ class CorrelatedNoiseKernel(NoiseKernel):
             for j in range(n2):
                 out[i, j] = np.abs(x1[i] - x2[j])
         return out
-    
+
 
 class GaussianProcess(CorrelatedNoiseKernel):
     """A generic Gaussian process kernel.

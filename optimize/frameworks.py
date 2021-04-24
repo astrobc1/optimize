@@ -86,7 +86,7 @@ class OptProblem:
         else:
             self.p0.pretty_print()
             
-    def set_pars(self, pars):
+    def set_pars(self, pars=None):
         """Setter method for the parameters.
 
         Args:
@@ -94,7 +94,8 @@ class OptProblem:
         """
         
         # Set self
-        self.p0 = pars
+        if pars is not None:
+            self.p0 = pars
         
         # Set in remaining components
         self.scorer.set_pars(self.p0)
