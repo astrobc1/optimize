@@ -9,9 +9,10 @@ class Likelihood(optscore.MaxScoreFunction):
     """A Bayesian likelihood score function.
     """
     
-    def __init__(self, label=None, data=None, model=None):
+    def __init__(self, label=None, data=None, model=None, kernel=None):
         super().__init__(data=data, model=model)
         self.label = label
+        self.kernel = kernel
         self.data_x = self.data.get_vec("x")
         self.data_y = self.data.get_vec("y")
         self.data_yerr = self.data.get_vec("yerr")
@@ -50,7 +51,7 @@ class Likelihood(optscore.MaxScoreFunction):
         residuals_with_noise = self.residuals_with_noise(pars)
             
         # Compute the cov matrix
-        K = self.model.kernel.compute_cov_matrix(pars, include_white_error=True)
+        K = self.kernel.compute_cov_matrix(pars, include_white_error=True)
 
         # Compute the determiniant and inverse of K
         try:
@@ -96,8 +97,8 @@ class Likelihood(optscore.MaxScoreFunction):
         """
         residuals_with_noise = self.residuals_with_noise(pars)
         residuals_no_noise = np.copy(residuals_with_noise)
-        if isinstance(self.model.kernel, optnoisekernels.CorrelatedNoiseKernel):
-            kernel_mean = self.model.kernel.realize(pars, residuals_with_noise)
+        if isinstance(self.kernel, optnoisekernels.CorrelatedNoiseKernel):
+            kernel_mean = self.kernel.realize(pars, residuals_with_noise)
             residuals_no_noise -= kernel_mean
         return residuals_no_noise
     

@@ -10,18 +10,21 @@ class ScoreFunction:
     
     Attributes:
         data (CompositeData): A combined dataset.
-        model (Model): A model inheriting from optimize.models.Model. All datasets must use this model.
+        model (Model): A model inheriting from optimize.models.Model.
+        kernel (NoiseKernel): A noise kernel inheriting from optimize.kernels.NoiseKernel.
     """
     
-    def __init__(self, data=None, model=None):
+    def __init__(self, data=None, model=None, kernel=None):
         """Stores the basic requirements for a score function.
 
         Args:
             data (CompositeData): A composite dataset inheriting from optimize.data.CompositeData.
             model (Model): A model inheriting from optimize.models.Model.
+            kernel (NoiseKernel): A noise kernel inheriting from optimize.kernels.NoiseKernel.
         """
         self.data = data
         self.model = model
+        self.kernel = kernel
 
     def compute_score(self, pars):
         """Computes the score from a given set of parameters. This method must be implemented for each score function.
@@ -41,15 +44,15 @@ class ScoreFunction:
             pars (p0): The parameters to set.
         """
         self.model.set_pars(pars)
-        
-        
+
+
 class MinScoreFunction(ScoreFunction):
     pass
 
+
 class MaxScoreFunction(ScoreFunction):
     pass
-    
-    
+
         
 class MSE(MinScoreFunction):
     """A class for the standard mean squared error (MSE) loss and a namespace for commonly used routines. The loss function used here is just the RMS.
