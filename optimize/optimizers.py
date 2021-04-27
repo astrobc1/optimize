@@ -1,36 +1,36 @@
 import optimize.knowledge as optknowledge
-import optimize.scores as optscores
+import optimize.objectives as optobj
 import matplotlib.pyplot as plt
 
 class Optimizer:
     """An base optimizer class.
     
     Attributes:
-        scorer (ScoreFunction, optional): . Defaults to MSEScore.
+        obj (ObjectiveFunction, optional): . Defaults to MSE.
         data (Data, optional): The data.
         options (dict): The options dictionary, with keys specific to each optimizer.
     """
     
-    def __init__(self, scorer=None, options=None):
+    def __init__(self, obj=None, options=None):
         """Construct for the base optimization class.
 
         Args:
-            scorer (ScoreFunction, optional): . Defaults to MSEScore.
+            obj (ObjectiveFunction, optional): . Defaults to MSE.
             p0 (Parameters, optional): [description]. Defaults to None.
             options (dict, optional): [description]. Defaults to None.
         """
         
-        # Store scorer
-        self.scorer = scorer
+        # Store the objective function
+        self.obj = obj
         
         # Store the current options dictionary and resolve
         self.options = options
         self.resolve_options()
     
-    def compute_score(self, pars):
-        """A wrapper to computes the score from self.scorer. 
+    def compute_obj(self, pars):
+        """A wrapper to computes the objective function.
         """
-        return self.scorer.compute_score(pars, *self.scorer.args_to_pass, **self.scorer.kwargs_to_pass)
+        return self.obj.compute_obj(pars, *self.obj.args_to_pass, **self.obj.kwargs_to_pass)
     
     def resolve_options(self):
         pass
@@ -49,7 +49,7 @@ class Optimizer:
             self.options[key] = default_value
             
     def set_pars(self, pars):
-        self.scorer.set_pars(pars)
+        self.obj.set_pars(pars)
         
 class Minimizer(Optimizer):
     """Right now, just a node in the type tree that offers no additional functionality.

@@ -14,16 +14,16 @@ class AffInv(Sampler):
     """An class to interface to the emcee affine invariant Ensemble Sampler. In short, affine invariance rescales parameters to be scale-independent, unlike other common samplers such as Metropolis Hastings or Gibbs.
     """
     
-    def __init__(self, scorer=None, options=None):
+    def __init__(self, obj=None, options=None):
         """Construct the Affine Invariant sampler.
 
         Args:
-            scorer (Likelihood or CompositeLikelihood): The likelihood object.
+            obj (Likelihood or CompositeLikelihood): The likelihood object.
             options (dict): A dictionary containing any emcee.EnsembleSampler kwargs. Defaults to None.
         """
-        super().__init__(scorer=scorer, options=options)
-        p0_dict = self.scorer.p0.unpack()
-        self.test_pars = copy.deepcopy(self.scorer.p0)
+        super().__init__(obj=obj, options=options)
+        p0_dict = self.obj.p0.unpack()
+        self.test_pars = copy.deepcopy(self.obj.p0)
         self.test_pars_vec = np.copy(p0_dict['value'])
         self.p0_vary_inds = np.where(p0_dict["vary"])[0]
         self.init_sampler()
@@ -39,7 +39,7 @@ class AffInv(Sampler):
         """
         
         if pars is None:
-            pars = self.scorer.p0
+            pars = self.obj.p0
         pars_vary_dict = pars.unpack(vary_only=True)
         n_pars = len(pars)
         n_pars_vary = pars.num_varied()
@@ -59,9 +59,9 @@ class AffInv(Sampler):
     def init_sampler(self):
         """Initializes the emcee.Ensemble sampler.
         """
-        n_pars_vary = self.scorer.p0.num_varied()
+        n_pars_vary = self.obj.p0.num_varied()
         n_walkers = 2 * n_pars_vary
-        self.sampler = emcee.EnsembleSampler(n_walkers, n_pars_vary, self.compute_score)
+        self.sampler = emcee.EnsembleSampler(n_walkers, n_pars_vary, self.compute_obj)
         
     def sample(self, pars=None, walkers=None, n_burn_steps=500, check_every=200, n_steps=75_000, rel_tau_thresh=0.01, n_min_steps=1000, n_cores=1, n_taus_thresh=40, progress=True):
         """Wrapper to perform a burn-in + full MCMC exploration.
@@ -84,7 +84,7 @@ class AffInv(Sampler):
         # Init pars
         if pars is None and walkers is None:
             walkers = self.init_walkers()
-            pars = self.scorer.p0
+            pars = self.obj.p0
         elif pars is not None:
             walkers = self.init_walkers(pars)
 
@@ -100,7 +100,7 @@ class AffInv(Sampler):
             
             flat_chains = self.sampler.flatchain
             pars_best = flat_chains[np.nanargmax(self.sampler.flatlnprobability)]
-            _pbest = copy.deepcopy(self.scorer.p0)
+            _pbest = copy.deepcopy(self.obj.p0)
             _par_vec = np.copy(self.test_pars_vec)
             _par_vec[self.p0_vary_inds] = pars_best
             _pbest.setv(value=_par_vec)
@@ -159,16 +159,16 @@ class AffInv(Sampler):
         
         # Best parameters from best sampled like (sampling must be dense enough, probably is)
         pars_best = self.sampler.chain[1, np.argmax(self.sampler.lnprobability[1, :]), :]
-        pbest = copy.deepcopy(self.scorer.p0)
+        pbest = copy.deepcopy(self.obj.p0)
         par_vec = np.copy(self.test_pars_vec)
         par_vec[self.p0_vary_inds] = pars_best
         pbest.setv(value=par_vec)
         mcmc_result["pbest"] = pbest
-        mcmc_result["lnL"] = self.scorer.compute_logL(mcmc_result["pbest"])
+        mcmc_result["lnL"] = self.obj.compute_logL(mcmc_result["pbest"])
         
         # Parameter uncertainties
         pnames_vary = mcmc_result["pbest"].unpack(keys='name', vary_only=True)['name']
-        pmed = copy.deepcopy(self.scorer.p0)
+        pmed = copy.deepcopy(self.obj.p0)
         for i, pname in enumerate(pnames_vary):
             _pmed, unc_lower, unc_upper = self.chain_uncertainty(mcmc_result["chains"][:, i])
             pmed[pname].value = _pmed
@@ -207,7 +207,7 @@ class AffInv(Sampler):
         corner_plot = corner.corner(mcmc_result["chains"], labels=labels, truths=truths, show_titles=True)
         return corner_plot
         
-    def compute_score(self, pars):
+    def compute_obj(self, pars):
         """Wrapper to compute the score, only to be called by the emcee Ensemble Sampler.
 
         Args:
@@ -218,7 +218,7 @@ class AffInv(Sampler):
         """
         self.test_pars_vec[self.p0_vary_inds] = pars
         self.test_pars.setv(value=self.test_pars_vec)
-        lnL = self.scorer.compute_logaprob(self.test_pars)
+        lnL = self.obj.compute_logaprob(self.test_pars)
         return lnL
     
     

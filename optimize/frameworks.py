@@ -1,43 +1,51 @@
+# Base Python
+import sys, os
+
+# Math
+import numpy as np
+
+# optimize deps
 import optimize.knowledge as optknow
 import optimize.models as optmodels
 import optimize.optimizers as optimizers
-import optimize.scores as optscores
+import optimize.objectives as optobj
 import optimize.data as optdatasets
 import optimize.frameworks as optframeworks
 
+# Plotting
 import matplotlib.pyplot as plt
-
-import numpy as np
 
 class OptProblem:
     """A class for most Bayesian optimization problems.
     
     Attributes:
         p0 (Parameters): The initial parameters to use.
-        scores (Scorer): The score functions.
-        optimizer (Optimizer, optional): The optimizer to use.
-        sampler (Sampler, optional): The sampler to use for an MCMC analysis.
+        obj (ObjectiveFunction): The score functions.
+        optimizer (Optimizer): The optimizer to use.
+        sampler (Sampler): The sampler to use for an MCMC analysis.
     """
 
-    def __init__(self, data=None, p0=None, optimizer=None, sampler=None, scorer=None):
+    def __init__(self, p0=None, optimizer=None, sampler=None, obj=None, output_path=None):
         """A base class for optimization problems.
     
         Args:
             p0 (Parameters, optional): The initial parameters to use. Can be set later.
             optimizer (Optimizer, optional): The optimizer to use. Can be set later.
             sampler (Sampler, optional): The sampler to use for an MCMC analysis. Can be set later.
-            scorer (Scorer, optional): The score function to use. Can be set later.
+            obj (ObjectiveFunction, optional): The score function to use. Can be set later.
         """
         
-        # Store the data, model, and starting parameters
-        self.data = data
+        # Store the initial parameters, objective, optimizer, and sampler.
         self.p0 = p0
         self.optimizer = optimizer
         self.sampler = sampler
-        self.scorer = scorer
+        self.obj = obj
+        
+        # Output path
+        self.output_path = os.getcwd() if output_path is None else output_path
         
     def optimize(self, *args, **kwargs):
-        """Generic optimize method, calls self.optimizer.optimize().
+        """Forward method for optimizing. Calls self.optimizer.optimize(*args, **kwargs)
         
         Args:
             args: Any arguments to pass to optimize()
@@ -49,7 +57,7 @@ class OptProblem:
         return self.optimizer.optimize(*args, **kwargs)
     
     def sample(self, *args, **kwargs):
-        """Generic sample method, calls self.sampler.sample().
+        """Forward method for MCMC sampling. Calls self.sampler.sample(*args, **kwargs)
         
         Args:
             args: Any arguments to pass to sample()
@@ -67,11 +75,11 @@ class OptProblem:
             opt_result (dict, optional): The optimization result to print. Defaults to None, and thus prints the initial parameters.
         """
         
-        # 
+        # Header
         print("Optimization Problem", flush=True)
         
-        # Print the scorer
-        print(self.scorer, flush=True)
+        # Print the objective function details
+        print(self.obj, flush=True)
         
         # Print the optimizer and sampler
         if hasattr(self, 'optimizer'):
@@ -87,7 +95,7 @@ class OptProblem:
             self.p0.pretty_print()
             
     def set_pars(self, pars=None):
-        """Setter method for the parameters.
+        """Setter method for the parameters, forwards parameters to dependent components.
 
         Args:
             pars (Parameters): The parameters to set.
@@ -98,7 +106,7 @@ class OptProblem:
             self.p0 = pars
         
         # Set in remaining components
-        self.scorer.set_pars(self.p0)
+        self.obj.set_pars(self.p0)
             
     def set_optimizer(self, optimizer):
         """Setter method for the optimizer.

@@ -2,10 +2,10 @@ import optimize.knowledge
 import optimize.kernels as optnoisekernels
 from scipy.linalg import cho_factor, cho_solve
 import numpy as np
-import optimize.scores as optscore
+import optimize.objectives as optobj
 import matplotlib.pyplot as plt
 
-class Likelihood(optscore.MaxScoreFunction):
+class Likelihood(optobj.MaxObjectiveFunction):
     """A Bayesian likelihood score function.
     """
     
@@ -17,7 +17,7 @@ class Likelihood(optscore.MaxScoreFunction):
         self.data_y = self.data.get_vec("y")
         self.data_yerr = self.data.get_vec("yerr")
             
-    def compute_score(self, pars):
+    def compute_obj(self, pars):
         """Computes the log-likelihood score.
         
         Args:
@@ -120,7 +120,7 @@ class Likelihood(optscore.MaxScoreFunction):
     def p0(self):
         return self.model.p0
     
-class Posterior(dict, optscore.MaxScoreFunction):
+class Posterior(dict, optobj.MaxObjectiveFunction):
     """A class for joint likelihood functions. This should map 1-1 with the kernels map.
     """
     
@@ -140,7 +140,7 @@ class Posterior(dict, optscore.MaxScoreFunction):
             like.label = label
         super().__setitem__(label, like)
         
-    def compute_score(self, pars):
+    def compute_obj(self, pars):
         """Computes the log-likelihood score.
         
         Args:

@@ -22,7 +22,6 @@ class NoiseKernel:
         """
         self.data = data
         self.par_names = [] if par_names is None else par_names
-        self.x = self.data.get_vec('x')
         self.data_inds = {data.label: self.data.get_inds(data.label) for data in self.data.values()}
         
     def compute_cov_matrix(self, x1, x2, **kwargs):
@@ -46,7 +45,7 @@ class NoiseKernel:
     @property
     def has_correlated_noise(self):
         return isinstance(self, CorrelatedNoiseKernel)
-        
+
 class WhiteNoise(NoiseKernel):
     """A noise kernel for white noise, where all diagonal terms in the covariance matrix are zero. The noise kernel is computed by adding a jitter term and the intrinsic error bars in quadrature.
     """
@@ -104,8 +103,11 @@ class WhiteNoise(NoiseKernel):
 
         return errors
     
-
 class CorrelatedNoiseKernel(NoiseKernel):
+    
+    def __init__(self, data, par_names):
+        super().__init__(data=data, par_names=par_names)
+        self.x = self.data.get_vec('x')
     
     def compute_cov_matrix(self, pars, include_white_error=True, **kwargs):
         raise NotImplementedError("Must implement the method compute_cov_matrix")
@@ -161,6 +163,17 @@ class CorrelatedNoiseKernel(NoiseKernel):
             x2 = self.x
         self.dist_matrix = self._compute_dist_matrix(x1, x2)
     
+    @staticmethod
+    def predict_smart(self, pars, residuals_with_noise, t, s, kernel_sampling, return_kernel_error, wavelength):
+        t_hr_gp = np.linspace(t - s, t + s, num=kernel_sampling)
+        if return_kernel_error:
+            gpmu_hr, gpstddev_hr = like.kernel.realize(pars, xpred=t_hr_gp, residuals_with_noise=residuals_with_noise, return_kernel_error=return_kernel_error, wavelength=wavelength)
+        else:
+            gpmu_hr = like.kernel.realize(pars, xpred=t_hr_gp, residuals_with_noise=residuals_with_noise, return_kernel_error=return_kernel_error, wavelength=wavelength)
+        if return_kernel_error:
+            return t_hr_gp, gpmu_hr, gpstddev_hr
+        else:
+            return t_hr_gp, gpmu_hr
     
     @staticmethod
     @numba.njit
@@ -181,7 +194,6 @@ class CorrelatedNoiseKernel(NoiseKernel):
             for j in range(n2):
                 out[i, j] = np.abs(x1[i] - x2[j])
         return out
-
 
 class GaussianProcess(CorrelatedNoiseKernel):
     """A generic Gaussian process kernel.
@@ -217,11 +229,11 @@ class GaussianProcess(CorrelatedNoiseKernel):
         
         # Get K
         self.compute_dist_matrix(xres, xres)
-        K = self.compute_cov_matrix(pars, include_white_error=True, include_kernel_error=False)
+        K = self.compute_cov_matrix(pars, include_white_error=True)
         
         # Compute version of K without errorbars
         self.compute_dist_matrix(xpred, xres)
-        Ks = self.compute_cov_matrix(pars, include_white_error=False, include_kernel_error=False)
+        Ks = self.compute_cov_matrix(pars, include_white_error=False)
 
         # Avoid overflow errors in det(K) by reducing the matrix.
         L = cho_factor(K)
@@ -231,7 +243,7 @@ class GaussianProcess(CorrelatedNoiseKernel):
         # Compute the uncertainty in the GP fitting.
         if return_kernel_error:
             self.compute_dist_matrix(xpred, xpred)
-            Kss = self.compute_cov_matrix(pars, include_white_error=False, include_kernel_error=False)
+            Kss = self.compute_cov_matrix(pars, include_white_error=False)
             B = cho_solve(L, Ks.T)
             var = np.array(np.diag(Kss - np.dot(Ks, B))).flatten()
             unc = np.sqrt(var)
@@ -241,12 +253,11 @@ class GaussianProcess(CorrelatedNoiseKernel):
             self.compute_dist_matrix()
             return mu
 
-
 class QuasiPeriodic(GaussianProcess):
     """A Quasiperiodic GP.
     """
     
-    def compute_cov_matrix(self, pars, include_white_error=True, include_kernel_error=False, kernel_error=None):
+    def compute_cov_matrix(self, pars, include_white_error=True):
         
         # Alias params
         amp = pars[self.par_names[0]].value
@@ -265,7 +276,7 @@ class QuasiPeriodic(GaussianProcess):
         
         # Include errors on the diagonal
         if include_white_error:
-            data_errors = self.compute_data_errors(pars, include_white_error=include_white_error, include_kernel_error=include_kernel_error, kernel_error=kernel_error)
+            data_errors = self.compute_data_errors(pars, include_white_error=include_white_error, include_kernel_error=False)
             np.fill_diagonal(cov_matrix, np.diag(cov_matrix) + data_errors**2)
         
         return cov_matrix

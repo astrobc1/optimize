@@ -5,7 +5,7 @@ import optimize.knowledge
 import inspect
 import scipy.optimize
 
-import optimize.scores as optscores
+import optimize.objectives as optobj
 from optimize.optimizers import Minimizer
 import matplotlib.pyplot as plt
 
@@ -14,7 +14,7 @@ class SciPyMinimizer(Minimizer):
     """A class that interfaces to scipy.optimize.minimize.
     """
 
-    def compute_score(self, pars):
+    def compute_obj(self, pars):
         """Computes the score.
 
         Args:
@@ -26,9 +26,9 @@ class SciPyMinimizer(Minimizer):
         self.test_pars_vec[self.p0_vary_inds] = pars
         self.test_pars.setv(value=self.test_pars_vec)
         if isinstance(self.scorer, optscores.Likelihood) or isinstance(self.scorer, optscores.CompositeLikelihood):
-            return -1 * self.scorer.compute_score(self.test_pars)
+            return -1 * self.scorer.compute_obj(self.test_pars)
         else:
-            return self.scorer.compute_score(self.test_pars)
+            return self.scorer.compute_obj(self.test_pars)
     
     def optimize(self, **kwargs):
         """Calls the scipy.optimize.minimize routine.
@@ -46,7 +46,7 @@ class SciPyMinimizer(Minimizer):
         p0_vals_vary = p0_dict["value"][self.p0_vary_inds]
         self.test_pars = copy.deepcopy(p0)
         self.test_pars_vec = self.test_pars.unpack(keys="value")["value"]
-        res = scipy.optimize.minimize(self.compute_score, p0_vals_vary, options=self.options, **kwargs)
+        res = scipy.optimize.minimize(self.compute_obj, p0_vals_vary, options=self.options, **kwargs)
         opt_result = {}
         opt_result["pbest"] = copy.deepcopy(p0)
         par_vec = np.copy(self.test_pars_vec)

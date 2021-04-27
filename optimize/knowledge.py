@@ -490,6 +490,56 @@ class Gaussian(AbstractPrior):
     @classmethod
     def from_serialized(cls, prior):
         return cls(prior["mu"], prior["sigma"])
+    
+# class DualGaussian(AbstractPrior):
+#     """A prior defined by the sum of two normal distributions. NOTE: This is not effectively identical to one normal distribution.
+
+#     Attributes:
+#         mu1 (float): The center of the first distribution.
+#         sigma1 (float): The stddev. of the first distribution.
+#         mu2 (float): The center of the second distribution.
+#         sigma2 (float): The stddev. of second distribution.
+#     """
+    
+#     __slots__ = ['mu1', 'sigma2', 'mu1', 'sigma2']
+#     name = 'Gaussian'
+    
+#     def __init__(self, mu1, sigma1, mu2, sigma2):
+#         """Constructor for a Gaussian prior.
+
+#         Args:
+#             mu1 (float): The center of the first distribution.
+#             sigma1 (float): The stddev. of the first distribution.
+#             mu2 (float): The center of the second distribution.
+#             sigma2 (float): The stddev. of second distribution.
+#         """
+#         assert sigma1 > 0
+#         assert sigma2 > 0
+#         self.mu1 = mu1
+#         self.sigma1 = sigma1
+#         self.mu2 = mu2
+#         self.sigma2 = sigma2
+        
+#     #def logprob(self, x):
+#         #p1 = -0.5 * ((x - self.mu) / self.sigma)**2 - 0.5 * np.log((self.sigma**2) * 2 * np.pi)
+#         #return p1
+    
+#     def __repr__(self):
+#         return f"{self.name}: [{self.mu}, {self.sigma}]"
+    
+#     def get_serializable(self):
+#         return {"name": self.name, "mu": self.mu, "sigma": self.sigma}
+    
+#     @classmethod
+#     def from_par(cls, par):
+#         scale = par.compute_crude_scale()
+#         if scale == 0:
+#             scale = 1
+#         return cls(par.value, sigma=scale)
+    
+#     @classmethod
+#     def from_serialized(cls, prior):
+#         return cls(prior["mu"], prior["sigma"])
 
 class Uniform(AbstractPrior):
     """A prior defined by hard bounds.
@@ -611,7 +661,7 @@ class Jeffreys(AbstractPrior):
         
     def logprob(self, x):
         if self.minval < x < self.maxval:
-            return self.lognorm - np.log(x)
+            return self.lognorm - np.log(x - self.kneeval)
         else:
             return -np.inf
         

@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-class ScoreFunction:
+class ObjectiveFunction:
     """An base class for a general score function. Not useful to instantiate on its own.
     
     Attributes:
@@ -26,7 +26,7 @@ class ScoreFunction:
         self.model = model
         self.kernel = kernel
 
-    def compute_score(self, pars):
+    def compute_obj(self, pars):
         """Computes the score from a given set of parameters. This method must be implemented for each score function.
 
         Args:
@@ -35,7 +35,7 @@ class ScoreFunction:
         Raises:
             NotImplementedError: Must implement this method.
         """
-        raise NotImplementedError("Must implement a compute_score method.")
+        raise NotImplementedError("Must implement a compute_obj method.")
     
     def set_pars(self, pars):
         """Propogates calls to set_pars for the initial parameters, p0.
@@ -46,19 +46,19 @@ class ScoreFunction:
         self.model.set_pars(pars)
 
 
-class MinScoreFunction(ScoreFunction):
+class MinObjectiveFunction(ObjectiveFunction):
     pass
 
 
-class MaxScoreFunction(ScoreFunction):
+class MaxObjectiveFunction(ObjectiveFunction):
     pass
 
         
-class MSE(MinScoreFunction):
+class MSE(MinObjectiveFunction):
     """A class for the standard mean squared error (MSE) loss and a namespace for commonly used routines. The loss function used here is just the RMS.
     """
     
-    def compute_score(self, pars):
+    def compute_obj(self, pars):
         """Computes the unweighted mean squared error loss.
 
         Args:
