@@ -1,5 +1,5 @@
 import optimize.knowledge
-import optimize.kernels as optnoisekernels
+import optimize.noise as optnoise
 from scipy.linalg import cho_factor, cho_solve
 import numpy as np
 import matplotlib.pyplot as plt
@@ -11,20 +11,20 @@ class ObjectiveFunction:
     Attributes:
         data (CompositeData): A combined dataset.
         model (Model): A model inheriting from optimize.models.Model.
-        kernel (NoiseKernel): A noise kernel inheriting from optimize.kernels.NoiseKernel.
+        noise (NoiseProcess): A noise process inheriting from optimize.noise.NoiseProcess.
     """
     
-    def __init__(self, data=None, model=None, kernel=None):
+    def __init__(self, data, model, p0):
         """Stores the basic requirements for a score function.
 
         Args:
             data (CompositeData): A composite dataset inheriting from optimize.data.CompositeData.
             model (Model): A model inheriting from optimize.models.Model.
-            kernel (NoiseKernel): A noise kernel inheriting from optimize.kernels.NoiseKernel.
+            p0 (Parameters): The initial parameters.
         """
         self.data = data
         self.model = model
-        self.kernel = kernel
+        self.p0 = p0
 
     def compute_obj(self, pars):
         """Computes the score from a given set of parameters. This method must be implemented for each score function.
@@ -41,9 +41,9 @@ class ObjectiveFunction:
         """Propogates calls to set_pars for the initial parameters, p0.
 
         Args:
-            pars (p0): The parameters to set.
+            pars (Parameters): The parameters to set.
         """
-        self.model.set_pars(pars)
+        self.p0 = pars
 
 
 class MinObjectiveFunction(ObjectiveFunction):

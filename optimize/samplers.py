@@ -164,7 +164,7 @@ class AffInv(Sampler):
         par_vec[self.p0_vary_inds] = pars_best
         pbest.setv(value=par_vec)
         mcmc_result["pbest"] = pbest
-        mcmc_result["lnL"] = self.obj.compute_logL(mcmc_result["pbest"])
+        mcmc_result["lnL"] = self.obj.compute_logaprob(mcmc_result["pbest"])
         
         # Parameter uncertainties
         pnames_vary = mcmc_result["pbest"].unpack(keys='name', vary_only=True)['name']

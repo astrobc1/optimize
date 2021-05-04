@@ -1,24 +1,27 @@
 import optimize.knowledge
-import optimize.kernels as optnoisekernels
+import optimize.noise as optnoise
 from scipy.linalg import cho_factor, cho_solve
 import numpy as np
 import optimize.objectives as optobj
 import matplotlib.pyplot as plt
 
 class Likelihood(optobj.MaxObjectiveFunction):
-    """A Bayesian likelihood score function.
+    """A Bayesian likelihood objective function.
     """
     
-    def __init__(self, label=None, data=None, model=None, kernel=None):
-        super().__init__(data=data, model=model)
+    def __init__(self, data, model, noise, p0, label=None):
+        
+        # Super
+        super().__init__(data=data, model=model, p0=p0)
+        
+        # Store the label for this likelihood.
         self.label = label
-        self.kernel = kernel
-        self.data_x = self.data.get_vec("x")
-        self.data_y = self.data.get_vec("y")
-        self.data_yerr = self.data.get_vec("yerr")
-            
+        
+        # Store the noise kernel for this likelihood.
+        self.noise = noise
+
     def compute_obj(self, pars):
-        """Computes the log-likelihood score.
+        """Computes the log-likelihood.
         
         Args:
             pars (Parameters): The parameters.
@@ -41,18 +44,17 @@ class Likelihood(optobj.MaxObjectiveFunction):
         
         Args:
             pars (Parameters): The parameters to use.
-            apply_priors (bool, optional): Whether or not to apply the priors. Defaults to True.
 
         Returns:
             float: The log likelihood, ln(L).
         """
 
         # Compute the residuals
-        residuals_with_noise = self.residuals_with_noise(pars)
-            
-        # Compute the cov matrix
-        K = self.kernel.compute_cov_matrix(pars, include_white_error=True)
+        data_with_noise = self.compute_data_only_noise(pars)
 
+        # Compute the cov matrix
+        K = self.noise.compute_cov_matrix(pars, include_uncorr_error=True)
+        
         # Compute the determiniant and inverse of K
         try:
         
@@ -73,20 +75,20 @@ class Likelihood(optobj.MaxObjectiveFunction):
         # Return the final ln(L)
         return lnL
     
-    def residuals_with_noise(self, pars):
-        """Computes the residuals without subtracting off any mean noise kernel.
+    def compute_data_pre_noise_process(self, pars):
+        """Computes the data containing a noise process by subtracting off the base model.
 
         Args:
             pars (Parameters): The parameters to use.
 
         Returns:
-            np.ndarray: The residuals.
+            np.ndarray: The data pre noise process.
         """
         model_arr = self.model.build(pars)
         residuals = self.data_y - model_arr
         return residuals
     
-    def residuals_no_noise(self, pars):
+    def compute_data_post_noise_process(self, pars):
         """Computes the residuals after subtracting off the best fit noise kernel.
 
         Args:
@@ -95,12 +97,19 @@ class Likelihood(optobj.MaxObjectiveFunction):
         Returns:
             np.ndarray: The residuals.
         """
-        residuals_with_noise = self.residuals_with_noise(pars)
-        residuals_no_noise = np.copy(residuals_with_noise)
-        if isinstance(self.kernel, optnoisekernels.CorrelatedNoiseKernel):
-            kernel_mean = self.kernel.realize(pars, residuals_with_noise)
-            residuals_no_noise -= kernel_mean
-        return residuals_no_noise
+        
+        # Get the data containing only noise
+        data_pre_noise_process = self.compute_data_pre_noise_process(pars)
+        
+        # Copy the data 
+        data_post_noise_process = np.copy(data_pre_noise_process)
+        
+        # If noise is correlated, the mean may not be zero, so realize the noise process and subtract.
+        if isinstance(self.noise, optnoise.CorrelatedNoise):
+            noise_process_mean = self.noise.realize(pars, data_pre_noise_process)
+            data_post_noise_process -= noise_process_mean
+            
+        return data_post_noise_process
     
     def compute_n_dof(self, pars):
         """Computes the number of degrees of freedom, n_data_points - n_vary_pars.
@@ -108,17 +117,18 @@ class Likelihood(optobj.MaxObjectiveFunction):
         Returns:
             int: The degrees of freedom.
         """
-        return len(self.data.x) - pars.num_varied()
+        return len(self.data.get_vec("x")) - pars.num_varied()
     
     def __repr__(self):
         return repr(self.data) + "\n" + repr(self.model)
     
     def set_pars(self, pars):
-        self.model.p0 = pars
-    
-    @property
-    def p0(self):
-        return self.model.p0
+        """Sets the current parameters attribute.
+
+        Args:
+            pars (Parameters): The parameters object
+        """
+        self.p0 = pars
     
 class Posterior(dict, optobj.MaxObjectiveFunction):
     """A class for joint likelihood functions. This should map 1-1 with the kernels map.
@@ -190,7 +200,7 @@ class Posterior(dict, optobj.MaxObjectiveFunction):
     def set_pars(self, pars):
         for like in self.values():
             like.set_pars(pars)
-            
+
     def compute_redchi2(self, pars):
         """Computes the reduced chi2 statistic (weighted MSE).
 
@@ -207,7 +217,7 @@ class Posterior(dict, optobj.MaxObjectiveFunction):
             residuals = like.residuals_no_noise(pars)
             errors = like.model.kernel.compute_data_errors(pars)
             chi2 += optscore.MSE.compute_chi2(residuals, errors)
-            n_dof += len(like.data.get_vec('x'))
+            n_dof += len(like.data.gen_vec("x"))
         n_dof -= pars.num_varied()
         redchi2 = chi2 / n_dof
         return redchi2
