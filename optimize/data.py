@@ -81,7 +81,7 @@ class CompositeData(dict):
 
 class CompositeDataS1d(CompositeData):
     """A useful class to extend for composite 1d data sets where there is a bijection between measurements AND each measurement is represented by a an independent value x (float), measurement y (float), and uncertainy yerr (float, identical upper and lower values).
-    """ 
+    """
     
     def gen_label_vec(self):
         """Generates a vector where each index corresponds to the label of measurement x, sorted by x as well. This implies x is ordered.
@@ -127,8 +127,7 @@ class CompositeDataS1d(CompositeData):
     
     def __setitem__(self, label, data):
         super().__setitem__(label, data)
-        self.gen_label_vec()
-        self.gen_inds_dict()
+        self.n = len(self.gen_label_vec())
 
     def gen_inds(self, label):
         """Generates the indices for a particular label. Indices are zero-based and relative to the full dataset for this likelihood when sorted according to the attribute, x.

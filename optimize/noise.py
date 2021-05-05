@@ -165,9 +165,10 @@ class GaussianProcess(CorrelatedNoiseProcess):
         Returns:
             np.ndarray: The intrinsic data error bars.
         """
-        errors = np.zeros(len(self.data.gen_vec("x")))
+        errors = np.zeros(self.data.n)
         for data in self.data.values():
-            errors[self.data_inds[data.label]] = data.yerr
+            inds = self.data_inds[data.label]
+            errors[inds] = data.yerr
         return errors
     
     def realize(self, pars, data_with_noise, xdata=None, xpred=None, return_gp_error=False):
