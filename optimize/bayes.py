@@ -280,3 +280,7 @@ class Posterior(dict, optobj.MaxObjectiveFunction):
     @property
     def like0(self):
         return next(iter(self.values()))
+    
+    @property
+    def likes(self):
+        return self.values()
