@@ -128,6 +128,10 @@ class CompositeDataS1d(CompositeData):
     def __setitem__(self, label, data):
         super().__setitem__(label, data)
         self.n = len(self.gen_label_vec())
+        
+    def __delitem__(self, key):
+        super().__delitem__(key)
+        self.n = len(self.gen_label_vec())
 
     def gen_inds(self, label):
         """Generates the indices for a particular label. Indices are zero-based and relative to the full dataset for this likelihood when sorted according to the attribute, x.
