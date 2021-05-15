@@ -116,4 +116,4 @@ class MSE(MinObjectiveFunction):
         redchi2 = chi2 / n_dof
         return redchi2
 
-from optimize.bayes import Likelihood, Posterior
+from optimize.bayes import Likelihood, PureGPLikelihood, Posterior

@@ -50,10 +50,10 @@ class Likelihood(optobj.MaxObjectiveFunction):
         """
 
         # Compute the residuals
-        data_with_noise = self.compute_data_only_noise(pars)
+        data_with_noise = self.compute_data_pre_noise_process(pars)
 
         # Compute the cov matrix
-        K = self.noise.compute_cov_matrix(pars, include_uncorr_error=True)
+        K = self.noise.compute_cov_matrix(pars)
         
         # Compute the determiniant and inverse of K
         try:
@@ -129,6 +129,122 @@ class Likelihood(optobj.MaxObjectiveFunction):
             pars (Parameters): The parameters object
         """
         self.p0 = pars
+    
+    
+class PureGPLikelihood(Likelihood):
+    """A Bayesian likelihood objective function.
+    """
+    
+    def __init__(self, data, model, noise, p0, label=None):
+        
+        # Super
+        super().__init__(data=data, model=model, p0=p0, noise=noise)
+        
+        self.data_x = data.gen_vec("x")
+        self.data_y = data.gen_vec("y")
+        self.data_yerr = data.gen_vec("yerr")
+    
+    def compute_logL(self, pars):
+        """Computes the log of the likelihood.
+        
+        .. math::
+            \centering
+            \ln \mathcal{L} &= - \\frac{1}{2} \\vec{r}^{T} \hat{K}^{-1} \\vec{r} -\\frac{1}{2} \ln | \hat{K} | -\\frac{1}{2} N \ln(2 \pi) + \sum_{i} \ln \pi(x_{i}) \\\\
+            N &= \mathrm{Number\ of\ Data\ Points} \\\\
+            \\vec{r} &= \mathrm{Vector\ of\ Residuals} \\\\
+            \hat{K} &= \mathrm{Covariance\ Matrix} \\\\
+            \pi(x_{i}) &= \mathrm{Prior\ Probability\ For\ Parameter} \ x_{i}
+        
+        Args:
+            pars (Parameters): The parameters to use.
+
+        Returns:
+            float: The log likelihood, ln(L).
+        """
+
+        # Compute the residuals
+        residuals_with_noise = self.compute_data_pre_noise_process(pars)
+
+        # Compute the cov matrix
+        K = self.noise.compute_cov_matrix(pars, include_uncorr_error=True)
+        
+        # Compute the determiniant and inverse of K
+        try:
+            
+            # Reduce the cov matrix and solve for KX = residuals
+            alpha = cho_solve(cho_factor(K), residuals_with_noise)
+
+            # Compute the log determinant of K
+            _, lndetK = np.linalg.slogdet(K)
+
+            # Compute the likelihood
+            N = len(residuals_with_noise)
+            lnL = -0.5 * (np.dot(residuals_with_noise, alpha) + lndetK + N * np.log(2 * np.pi))
+    
+        except:
+            # If things fail (matrix decomp) return -inf
+            lnL = -np.inf
+        
+        # Return the final ln(L)
+        return lnL
+    
+    def compute_data_pre_noise_process(self, pars):
+        """Computes the data containing a noise process by subtracting off the base model.
+
+        Args:
+            pars (Parameters): The parameters to use.
+
+        Returns:
+            np.ndarray: The data pre noise process.
+        """
+        model_arr = self.model.build(pars)
+        residuals = self.data_y - model_arr
+        return residuals
+    
+    def compute_data_post_noise_process(self, pars):
+        """Computes the residuals after subtracting off the best fit noise kernel.
+
+        Args:
+            pars (Parameters): The parameters to use.
+
+        Returns:
+            np.ndarray: The residuals.
+        """
+        
+        # Get the data containing only noise
+        data_pre_noise_process = self.compute_data_pre_noise_process(pars)
+        
+        # Copy the data 
+        data_post_noise_process = np.copy(data_pre_noise_process)
+        
+        # If noise is correlated, the mean may not be zero, so realize the noise process and subtract.
+        if isinstance(self.noise, optnoise.CorrelatedNoise):
+            noise_process_mean = self.noise.realize(pars, data_pre_noise_process)
+            data_post_noise_process -= noise_process_mean
+            
+        return data_post_noise_process
+    
+    def compute_n_dof(self, pars):
+        """Computes the number of degrees of freedom, n_data_points - n_vary_pars.
+
+        Returns:
+            int: The degrees of freedom.
+        """
+        return len(self.data.get_vec("x")) - pars.num_varied()
+    
+    def __repr__(self):
+        return repr(self.data) + "\n" + repr(self.model)
+    
+    def set_pars(self, pars):
+        """Sets the current parameters attribute.
+
+        Args:
+            pars (Parameters): The parameters object
+        """
+        self.p0 = pars
+    
+    
+    
     
 class Posterior(dict, optobj.MaxObjectiveFunction):
     """A class for joint likelihood functions. This should map 1-1 with the kernels map.
@@ -214,8 +330,8 @@ class Posterior(dict, optobj.MaxObjectiveFunction):
         chi2 = 0
         n_dof = 0
         for like in self.values():
-            residuals = like.residuals_no_noise(pars)
-            errors = like.model.kernel.compute_data_errors(pars)
+            residuals = like.noise.compute_data_post_noise_process(pars)
+            errors = like.noise.compute_data_errors(pars)
             chi2 += optscore.MSE.compute_chi2(residuals, errors)
             n_dof += len(like.data.gen_vec("x"))
         n_dof -= pars.num_varied()
@@ -233,7 +349,7 @@ class Posterior(dict, optobj.MaxObjectiveFunction):
         """
         n = 0
         for like in self.values():
-            n += len(like.data_x)
+            n += len(like.data.gen_vec("x"))
         k = pars.num_varied()
         lnL = self.compute_logL(pars)
         bic = k * np.log(n) - 2.0 * lnL
@@ -252,7 +368,7 @@ class Posterior(dict, optobj.MaxObjectiveFunction):
         # Number of data points
         n = 0
         for like in self.values():
-            n += len(like.data_x)
+            n += len(like.data.gen_vec("x"))
             
         # Number of estimated parameters
         k = pars.num_varied()

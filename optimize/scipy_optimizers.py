@@ -15,20 +15,20 @@ class SciPyMinimizer(Minimizer):
     """
 
     def compute_obj(self, pars):
-        """Computes the score.
+        """Computes the objective.
 
         Args:
             pars (np.ndarray): The parameters to use, as a numpy array to interface with scipy.
             
         Returns:
-            float: The score.
+            float: The objective.
         """
         self.test_pars_vec[self.p0_vary_inds] = pars
         self.test_pars.setv(value=self.test_pars_vec)
-        if isinstance(self.scorer, optscores.Likelihood) or isinstance(self.scorer, optscores.CompositeLikelihood):
-            return -1 * self.scorer.compute_obj(self.test_pars)
-        else:
-            return self.scorer.compute_obj(self.test_pars)
+        f = self.obj.compute_obj(self.test_pars)
+        if isinstance(self.obj, optobj.MaxObjectiveFunction):
+            f *= -1
+        return f
     
     def optimize(self, **kwargs):
         """Calls the scipy.optimize.minimize routine.
@@ -40,7 +40,7 @@ class SciPyMinimizer(Minimizer):
         if 'method' not in kwargs:
             kwargs['method'] = 'Nelder-Mead'
         
-        p0 = self.scorer.p0
+        p0 = self.obj.p0
         p0_dict = p0.unpack()
         self.p0_vary_inds = np.where(p0_dict["vary"])[0]
         p0_vals_vary = p0_dict["value"][self.p0_vary_inds]

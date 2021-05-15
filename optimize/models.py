@@ -38,6 +38,9 @@ class Model:
 
 
 class PureGP(Model):
+    
+    def __init__(self, data):
+        self.data_zeros = np.zeros_like(data.gen_vec("x"))
 
     def build(self, pars):
         return self.data_zeros

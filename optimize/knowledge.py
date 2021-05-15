@@ -85,7 +85,7 @@ class Parameter:
                 return scale
         for prior in self.priors:
             if isinstance(prior, Gaussian):
-                return prior.sigma
+                return prior.sigma / 10
         for prior in self.priors:
             if isinstance(prior, Uniform):
                 dx1 = np.abs(prior.maxval - self.value)

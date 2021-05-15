@@ -30,9 +30,22 @@ class NoiseProcess:
     """
     def __init__(self, data):
         self.data = data
+        self.data_inds = self.data.gen_inds_dict()
         
     def compute_cov_matrix(self, *args, **kwargs):
         raise NotImplementedError(f"Must implemenent the method compute_cov_matrix for class {self.__class__.__name__}.")
+    
+    def get_intrinsic_data_errors(self):
+        """Generates the intrinsic data errors (measured apriori).
+
+        Returns:
+            np.ndarray: The intrinsic data error bars.
+        """
+        errors = np.zeros(self.data.n)
+        for data in self.data.values():
+            inds = self.data_inds[data.label]
+            errors[inds] = data.yerr
+        return errors
 
     
 class QuasiPeriodic(NoiseKernel):
@@ -84,14 +97,45 @@ class QuasiPeriodicMod(NoiseKernel):
         
         return K
 
+class WhiteNoiseProcess(NoiseProcess):
+    
+    def compute_cov_matrix(self, pars):
+        data_errors = self.compute_data_errors(pars)
+        K = np.diag(data_errors**2)
+        return K
+    
+    def compute_data_errors(self, pars):
+        """Computes the errors added in quadrature for all datasets corresponding to this kernel.
+
+        Args:
+            pars (Parameters): The parameters to use.
+            
+        Returns:
+            np.ndarray: The final data errors.
+        """
+    
+        # Get intrinsic data errors
+        errors = self.get_intrinsic_data_errors()
+        
+        # Square
+        errors = errors**2
+        
+        # Compute additional per-label jitter
+        for label in self.data:
+            inds = self.data_inds[label]
+            pname = f"jitter_{label}"
+            errors[inds] += pars[pname].value**2
+                    
+        # Square root
+        errors **= 0.5
+
+        return errors
 
 class CorrelatedNoiseProcess(NoiseProcess):
     
-    def __init__(self, data):
-        super().__init__(data=data)
-    
-    def compute_cov_matrix(self, *args, **kwargs):
-        raise NotImplementedError("Must implement the method compute_cov_matrix")
+    def __init__(self, data, kernel):
+        super().__init__(data)
+        self.kernel = kernel
 
 
 class GaussianProcess(CorrelatedNoiseProcess):
@@ -99,9 +143,7 @@ class GaussianProcess(CorrelatedNoiseProcess):
     """
     
     def __init__(self, data, kernel):
-        super().__init__(data)
-        self.kernel = kernel
-        self.data_inds = self.data.gen_inds_dict()
+        super().__init__(data, kernel)
         self.initialize()
         
     def compute_cov_matrix(self, pars, include_uncorr_error=True):
@@ -157,18 +199,6 @@ class GaussianProcess(CorrelatedNoiseProcess):
         # Square root
         errors **= 0.5
 
-        return errors
-    
-    def get_intrinsic_data_errors(self):
-        """Generates the intrinsic data errors (measured apriori).
-
-        Returns:
-            np.ndarray: The intrinsic data error bars.
-        """
-        errors = np.zeros(self.data.n)
-        for data in self.data.values():
-            inds = self.data_inds[data.label]
-            errors[inds] = data.yerr
         return errors
     
     def realize(self, pars, data_with_noise, xdata=None, xpred=None, return_gp_error=False):
