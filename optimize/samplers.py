@@ -316,7 +316,7 @@ class ZeusSampler(emceeLikeSampler):
             # Compute the autocorrelation time so far
             # Using tol=0 means that we'll always get an estimate even
             # if it isn't trustworthy
-            taus = self.sampler.act
+            taus = self.get_auto_corr_times()
             med_tau = np.nanmedian(taus)
             autocorrs.append(med_tau)
 
@@ -341,18 +341,19 @@ class ZeusSampler(emceeLikeSampler):
         mcmc_result["autocorrs"] = autocorrs
         
         # Get the flat chains and lnLs
-        mcmc_result["chains"] = self.sampler.get_chain(flat=True)
-        mcmc_result["lnLs"] = self.sampler.get_log_prob(flat=False)
+        mcmc_result["chains"] = self.get_parameter_chains(flat=True)
+        mcmc_result["lnLs"] = self.get_logprob_chains(flat=True)
         mcmc_result["acc"] = self.sampler.efficiency
         
         # Best parameters from best sampled like (sampling must be dense enough, probably is)
-        #pars_best = mcmc_result["chains"][self.sampler.chain[1, np.nanargmax(mcmc_result["lnLs"][]), :]
-        #pbest = copy.deepcopy(self.obj.p0)
-        #par_vec = np.copy(self.test_pars_vec)
-        #par_vec[self.p0_vary_inds] = pars_best
-        #pbest.setv(value=par_vec)
-        #mcmc_result["pbest"] = pbest
-        #mcmc_result["lnL"] = self.obj.compute_logaprob(mcmc_result["pbest"])
+        flat_chains = self.get_parameter_chains(flat=True)
+        pars_best = flat_chains[np.nanargmax(mcmc_result["lnLs"]), :]
+        pbest = copy.deepcopy(self.obj.p0)
+        par_vec = np.copy(self.test_pars_vec)
+        par_vec[self.p0_vary_inds] = pars_best
+        pbest.setv(value=par_vec)
+        mcmc_result["pbest"] = pbest
+        mcmc_result["lnL"] = self.obj.compute_logaprob(mcmc_result["pbest"])
         
         # Parameter uncertainties
         pnames_vary = mcmc_result["pbest"].unpack(keys='name', vary_only=True)['name']
@@ -367,6 +368,30 @@ class ZeusSampler(emceeLikeSampler):
         
         return mcmc_result
         
+    def get_auto_corr_times(self):
+        chain = self.sampler.get_chain(flat=False)
+        ii = self.sampler.iteration
+        ac_all = zeus.AutoCorrTime(chain[0:ii, :, :])
+        return ac_all
+    
+    def get_parameter_chains(self, flat=False):
+        n_steps = self.sampler.iteration
+        chains_all = self.sampler.get_chain(flat=False)
+        n_pars = chains_all.shape[2]
+        n_walkers = self.n_walkers
+        chains = chains_all[0:n_steps, :, :]
+        if flat:
+            chains = chains.reshape((n_steps * n_walkers, n_pars))
+        return chains
+    
+    def get_logprob_chains(self, flat=False):
+        n_steps = self.sampler.iteration
+        logprob_chains_all = self.sampler.get_log_prob(flat=False)
+        n_walkers = self.n_walkers
+        logprob_chains = logprob_chains_all[0:n_steps, :]
+        if flat:
+            logprob_chains = logprob_chains.reshape((n_steps * n_walkers))
+        return logprob_chains
         
     
     
