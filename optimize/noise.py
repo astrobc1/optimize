@@ -30,7 +30,6 @@ class NoiseProcess:
     """
     def __init__(self, data):
         self.data = data
-        self.data_inds = self.data.gen_inds_dict()
         
     def compute_cov_matrix(self, *args, **kwargs):
         raise NotImplementedError(f"Must implemenent the method compute_cov_matrix for class {self.__class__.__name__}.")
@@ -43,7 +42,7 @@ class NoiseProcess:
         """
         errors = np.zeros(self.data.n)
         for data in self.data.values():
-            inds = self.data_inds[data.label]
+            inds = self.data.indices[data.label]
             errors[inds] = data.yerr
         return errors
 
@@ -122,7 +121,7 @@ class WhiteNoiseProcess(NoiseProcess):
         
         # Compute additional per-label jitter
         for label in self.data:
-            inds = self.data_inds[label]
+            inds = self.data.indices[label]
             pname = f"jitter_{label}"
             errors[inds] += pars[pname].value**2
                     
@@ -182,14 +181,14 @@ class GaussianProcess(CorrelatedNoiseProcess):
         
         # Compute additional per-label jitter
         for label in self.data:
-            inds = self.data_inds[label]
+            inds = self.data.indices[label]
             pname = f"jitter_{label}"
             errors[inds] += pars[pname].value**2
             
         # Compute correlated error
         if include_gp_error:
             for data in self.data.values():
-                inds = self.data_inds[data.label]
+                inds = self.data.indices[data.label]
                 if gp_error is None:
                     _, _gp_error = self.realize(pars, data_with_noise=data_with_noise, xpred=data.t, return_gp_error=True)
                     errors[inds] += _gp_error**2
@@ -220,7 +219,7 @@ class GaussianProcess(CorrelatedNoiseProcess):
             xdata = self.data.gen_vec("x")
         if xpred is None:
             xpred = xdata
-        
+
         # Get K
         self.initialize(x1=xdata, x2=xdata)
         K = self.compute_cov_matrix(pars)
@@ -233,7 +232,7 @@ class GaussianProcess(CorrelatedNoiseProcess):
         L = cho_factor(K)
         alpha = cho_solve(L, data_with_noise)
         mu = np.dot(Ks, alpha).flatten()
-
+        
         # Compute the uncertainty in the GP fitting.
         if return_gp_error:
             self.initialize(x1=xpred, x2=xpred)

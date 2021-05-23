@@ -22,7 +22,7 @@ class Data:
 
  
 class DataS1d(Data):
-    """A base class for 1d datasets where there is .
+    """A base class for 1d->1d datasets.
  
     Attributes:
         x (np.ndarray): The effective independent variable.
@@ -83,8 +83,12 @@ class CompositeDataS1d(CompositeData):
     """A useful class to extend for composite 1d data sets where there is a bijection between measurements AND each measurement is represented by a an independent value x (float), measurement y (float), and uncertainy yerr (float, identical upper and lower values).
     """
     
+    def __init__(self):
+        super().__init__()
+        self.indices = {}
+    
     def gen_label_vec(self):
-        """Generates a vector where each index corresponds to the label of measurement x, sorted by x as well. This implies x is ordered.
+        """Generates a vector where each index corresponds to the label of measurement x, sorted by x as well.
 
         Returns:
             np.ndarray: The label vector in order of what makes sense for x according to np.argsort(x)
@@ -110,11 +114,12 @@ class CompositeDataS1d(CompositeData):
         """
         if labels is None:
             labels = list(self.keys())
+        else:
+            labels = np.atleast_1d(labels)
         out = np.array([], dtype=float)
         if sort:
             x = np.array([], dtype=float)
         for label in labels:
-            assert isinstance(self[label], DataS1d)
             out = np.concatenate((out, getattr(self[label], key)))
             if sort:
                 x = np.concatenate((x, self[label].x))
@@ -128,33 +133,17 @@ class CompositeDataS1d(CompositeData):
     def __setitem__(self, label, data):
         super().__setitem__(label, data)
         self.label_vec = self.gen_label_vec()
+        for data in self.values():
+            inds = np.where(self.label_vec == data.label)[0]
+            self.indices[data.label] = inds
         self.n = len(self.label_vec)
         
     def __delitem__(self, key):
         super().__delitem__(key)
+        del self.indices[key]
         self.label_vec = self.gen_label_vec()
+        for data in self.values():
+            inds = np.where(self.label_vec == data.label)[0]
+            self.indices[data.label] = inds
         self.n = len(self.label_vec)
-
-    def gen_inds(self, label):
-        """Generates the indices for a particular label. Indices are zero-based and relative to the full dataset for this likelihood when sorted according to the attribute, x.
-
-        Args:
-            label (str): The label of the indices to fetch.
-
-        Returns:
-            np.ndarray: The indices as a numpy vector.
-        """
-        inds = np.where(self.label_vec == label)[0]
-        return inds
-
-    def gen_inds_dict(self):
-        """Generates a dictinory containing the indices (zero-based) for each measurement for a given label.
-
-        Returns:
-            dict: Each key is a data label (str) and each value is a numpy array containing the indices for that label, relative to the full composite data object.
-        """
-        inds = {}
-        for label in self:
-            inds[label] = self.gen_inds(label)
-        return inds
             

@@ -34,14 +34,6 @@ class Likelihood(optobj.MaxObjectiveFunction):
     def compute_logL(self, pars):
         """Computes the log of the likelihood.
         
-        .. math::
-            \centering
-            \ln \mathcal{L} &= - \\frac{1}{2} \\vec{r}^{T} \hat{K}^{-1} \\vec{r} -\\frac{1}{2} \ln | \hat{K} | -\\frac{1}{2} N \ln(2 \pi) + \sum_{i} \ln \pi(x_{i}) \\\\
-            N &= \mathrm{Number\ of\ Data\ Points} \\\\
-            \\vec{r} &= \mathrm{Vector\ of\ Residuals} \\\\
-            \hat{K} &= \mathrm{Covariance\ Matrix} \\\\
-            \pi(x_{i}) &= \mathrm{Prior\ Probability\ For\ Parameter} \ x_{i}
-        
         Args:
             pars (Parameters): The parameters to use.
 
@@ -50,7 +42,7 @@ class Likelihood(optobj.MaxObjectiveFunction):
         """
 
         # Compute the residuals
-        data_with_noise = self.compute_data_pre_noise_process(pars)
+        residuals_with_noise = self.compute_data_pre_noise_process(pars)
 
         # Compute the cov matrix
         K = self.noise.compute_cov_matrix(pars)
@@ -117,10 +109,11 @@ class Likelihood(optobj.MaxObjectiveFunction):
         Returns:
             int: The degrees of freedom.
         """
-        return len(self.data.get_vec("x")) - pars.num_varied()
+        return len(self.data_x) - pars.num_varied()
     
     def __repr__(self):
-        return repr(self.data) + "\n" + repr(self.model)
+        repr(self.data)
+        repr(self.model)
     
     def set_pars(self, pars):
         """Sets the current parameters attribute.
@@ -146,14 +139,6 @@ class PureGPLikelihood(Likelihood):
     
     def compute_logL(self, pars):
         """Computes the log of the likelihood.
-        
-        .. math::
-            \centering
-            \ln \mathcal{L} &= - \\frac{1}{2} \\vec{r}^{T} \hat{K}^{-1} \\vec{r} -\\frac{1}{2} \ln | \hat{K} | -\\frac{1}{2} N \ln(2 \pi) + \sum_{i} \ln \pi(x_{i}) \\\\
-            N &= \mathrm{Number\ of\ Data\ Points} \\\\
-            \\vec{r} &= \mathrm{Vector\ of\ Residuals} \\\\
-            \hat{K} &= \mathrm{Covariance\ Matrix} \\\\
-            \pi(x_{i}) &= \mathrm{Prior\ Probability\ For\ Parameter} \ x_{i}
         
         Args:
             pars (Parameters): The parameters to use.
@@ -230,10 +215,11 @@ class PureGPLikelihood(Likelihood):
         Returns:
             int: The degrees of freedom.
         """
-        return len(self.data.get_vec("x")) - pars.num_varied()
+        return len(self.data_x) - pars.num_varied()
     
     def __repr__(self):
-        return repr(self.data) + "\n" + repr(self.model)
+        repr(self.data)
+        repr(self.model)
     
     def set_pars(self, pars):
         """Sets the current parameters attribute.
@@ -242,18 +228,10 @@ class PureGPLikelihood(Likelihood):
             pars (Parameters): The parameters object
         """
         self.p0 = pars
-    
-    
-    
-    
+  
 class Posterior(dict, optobj.MaxObjectiveFunction):
     """A class for joint likelihood functions. This should map 1-1 with the kernels map.
     """
-    
-    def __init__(self):
-        
-        # Init the dictionary
-        super().__init__()
     
     def __setitem__(self, label, like):
         """Overrides the default Python dict setter.

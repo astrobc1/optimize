@@ -20,7 +20,8 @@ class Model:
             kwargs_to_pass (dict, optional): The keyword arguments to pass to the build method. Defaults to {}.
             kernel (NoiseKernel, optional): The noise kernel to use, defaults to None (no noise).
         """
-        self.builder = builder
+        if builder is not None:
+            self.builder = builder
         self.args_to_pass = () if args_to_pass is None else args_to_pass
         self.kwargs_to_pass = {} if kwargs_to_pass is None else kwargs_to_pass
     
@@ -33,8 +34,8 @@ class Model:
         Returns:
             object: The constructed model, probably as a numpy array but is ultimately managed by the objective function.
         """
-        _model = self.builder(pars, *self.args_to_pass, **self.kwargs_to_pass)
-        return _model
+        model = self.builder(pars, *self.args_to_pass, **self.kwargs_to_pass)
+        return model
 
 
 class PureGP(Model):

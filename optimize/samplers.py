@@ -104,6 +104,10 @@ class emceeSampler(emceeLikeSampler):
     def init_sampler(self):
         """Initializes the emcee.Ensemble sampler.
         """
+        p0_dict = self.obj.p0.unpack()
+        self.test_pars = copy.deepcopy(self.obj.p0)
+        self.test_pars_vec = np.copy(p0_dict['value'])
+        self.p0_vary_inds = np.where(p0_dict["vary"])[0]
         n_pars_vary = self.obj.p0.num_varied()
         n_walkers = 2 * n_pars_vary
         self.sampler = emcee.EnsembleSampler(n_walkers, n_pars_vary, self.compute_obj)
@@ -232,6 +236,10 @@ class ZeusSampler(emceeLikeSampler):
     def init_sampler(self):
         """Initializes the zues Ensemble sampler.
         """
+        p0_dict = self.obj.p0.unpack()
+        self.test_pars = copy.deepcopy(self.obj.p0)
+        self.test_pars_vec = np.copy(p0_dict['value'])
+        self.p0_vary_inds = np.where(p0_dict["vary"])[0]
         n_pars_vary = self.obj.p0.num_varied()
         n_walkers = 2 * n_pars_vary
         self.sampler = zeus.EnsembleSampler(n_walkers, n_pars_vary, self.compute_obj)
