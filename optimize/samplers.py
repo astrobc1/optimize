@@ -1,31 +1,21 @@
-# Contains the custom Nelder-Mead algorithm
-import numpy as np
+# Base Python
 import copy
-import optimize.knowledge
-from optimize.optimizers import Sampler
+
+# Progress
 import tqdm
-from joblib import Parallel, delayed
+
+# Maths
+import numpy as np
+
+# optimize deps
+from optimize.optimizers import Sampler
+
+# Third party deps
 import emcee
-import time
 import corner
-import matplotlib.pyplot as plt
 import zeus
 
 class emceeLikeSampler(Sampler):
-    
-    def __init__(self, obj=None, options=None):
-        """Default constructor for emcee like samplers emcee and Zeus.
-
-        Args:
-            obj (CompositeLikelihood): The composite likelihood object.
-            options (dict): A dictionary containing any emcee.EnsembleSampler kwargs or Zeus kwargs. Defaults to None.
-        """
-        super().__init__(obj=obj, options=options)
-        p0_dict = self.obj.p0.unpack()
-        self.test_pars = copy.deepcopy(self.obj.p0)
-        self.test_pars_vec = np.copy(p0_dict['value'])
-        self.p0_vary_inds = np.where(p0_dict["vary"])[0]
-        self.init_sampler()
         
     def init_walkers(self, pars=None):
         """Initializes a set of walkers.
@@ -40,9 +30,8 @@ class emceeLikeSampler(Sampler):
         if pars is None:
             pars = self.obj.p0
         pars_vary_dict = pars.unpack(vary_only=True)
-        n_pars = len(pars)
-        n_pars_vary = pars.num_varied()
-        search_scales = np.array([par.compute_crude_scale() for par in pars.values() if par.vary])
+        n_pars_vary = pars.num_varied
+        search_scales = np.array([par.scale for par in pars.values() if par.vary])
         walkers = pars_vary_dict['value'] + search_scales * np.random.randn(self.n_walkers, n_pars_vary)
         return walkers
 
@@ -53,12 +42,23 @@ class emceeLikeSampler(Sampler):
             pars (np.ndarray): The parameter values for only the varied parameters.
 
         Returns:
-            float: The log(likelihood)
+            float: The log prob
         """
         self.test_pars_vec[self.p0_vary_inds] = pars
-        self.test_pars.setv(value=self.test_pars_vec)
-        lnL = self.obj.compute_logaprob(self.test_pars)
-        return lnL
+        self.test_pars.set_vec(self.test_pars_vec, "value", varied=False)
+        logprob = self.obj.compute_logaprob(self.test_pars)
+        return logprob
+
+    def initialize(self, obj):
+        super().initialize(obj)
+        p0_dict = self.obj.p0.unpack()
+        self.test_pars = copy.deepcopy(self.obj.p0)
+        self.test_pars_vec = np.copy(p0_dict['value'])
+        self.p0_vary_inds = np.where(p0_dict["vary"])[0]
+        self.init_sampler()
+        
+    def init_sampler(self):
+        pass
 
     @property
     def n_walkers(self):
@@ -108,17 +108,17 @@ class emceeSampler(emceeLikeSampler):
         self.test_pars = copy.deepcopy(self.obj.p0)
         self.test_pars_vec = np.copy(p0_dict['value'])
         self.p0_vary_inds = np.where(p0_dict["vary"])[0]
-        n_pars_vary = self.obj.p0.num_varied()
+        n_pars_vary = self.obj.p0.num_varied
         n_walkers = 2 * n_pars_vary
         self.sampler = emcee.EnsembleSampler(n_walkers, n_pars_vary, self.compute_obj)
         
-    def sample(self, pars=None, walkers=None, n_burn_steps=500, check_every=200, n_steps=75_000, rel_tau_thresh=0.01, n_min_steps=1000, n_cores=1, n_taus_thresh=40, progress=True):
+    def run_mcmc(self, pars=None, walkers=None, n_burn_steps=500, check_every=200, n_steps=75_000, rel_tau_thresh=0.01, n_min_steps=1000, n_cores=1, n_taus_thresh=40, progress=True):
         """Wrapper to perform a burn-in + full MCMC exploration.
 
         Args:
             pars (Parameters, optional): The starting parameters. Defaults to p0.
             walkers (np.ndarray, optional): The starting walkers. Defaults to calling self.init_walkers(pars).
-            n_burn_steps (int, optional): The number of burn in steps. Defaults to 100 * pars.num_varied().
+            n_burn_steps (int, optional): The number of burn in steps. Defaults to 100 * pars.num_varied.
             n_steps (int, optional): The number of mcmc steps to perform in the full phase (post burn-in). Defaults to 50_000 * pars.num_varied().
             rel_tau_thresh (float, optional): The relative change in the auto-correlation time for convergence. This criterion must be met for all walkers. Defaults to 0.01.
             n_min_steps (int, optional): The minimum number of steps to run. Defaults to 1000
@@ -152,8 +152,8 @@ class emceeSampler(emceeLikeSampler):
             _pbest = copy.deepcopy(self.obj.p0)
             _par_vec = np.copy(self.test_pars_vec)
             _par_vec[self.p0_vary_inds] = pars_best
-            _pbest.setv(value=_par_vec)
-            _pbest.pretty_print()
+            _pbest.set_vec(_par_vec, "value", varied=False)
+            print(_pbest)
     
             # Reset
             self.sampler.reset()
@@ -211,7 +211,7 @@ class emceeSampler(emceeLikeSampler):
         pbest = copy.deepcopy(self.obj.p0)
         par_vec = np.copy(self.test_pars_vec)
         par_vec[self.p0_vary_inds] = pars_best
-        pbest.setv(value=par_vec)
+        pbest.set_vec(par_vec, "value", varied=False)
         mcmc_result["pbest"] = pbest
         mcmc_result["lnL"] = self.obj.compute_logaprob(mcmc_result["pbest"])
         
@@ -240,25 +240,11 @@ class ZeusSampler(emceeLikeSampler):
         self.test_pars = copy.deepcopy(self.obj.p0)
         self.test_pars_vec = np.copy(p0_dict['value'])
         self.p0_vary_inds = np.where(p0_dict["vary"])[0]
-        n_pars_vary = self.obj.p0.num_varied()
+        n_pars_vary = self.obj.p0.num_varied
         n_walkers = 2 * n_pars_vary
         self.sampler = zeus.EnsembleSampler(n_walkers, n_pars_vary, self.compute_obj)
         
-    def compute_obj(self, pars):
-        """Wrapper to compute the objective.
-
-        Args:
-            pars (np.ndarray): The parameter values for only the varied parameters.
-
-        Returns:
-            float: The log(likelihood)
-        """
-        self.test_pars_vec[self.p0_vary_inds] = pars
-        self.test_pars.setv(value=self.test_pars_vec)
-        lnL = self.obj.compute_logaprob(self.test_pars)
-        return lnL
-        
-    def sample(self, pars=None, walkers=None, n_burn_steps=500, check_every=200, n_steps=75_000, rel_tau_thresh=0.01, n_min_steps=1000, n_cores=1, n_taus_thresh=40, progress=True):
+    def run_mcmc(self, pars=None, walkers=None, n_burn_steps=500, check_every=200, n_steps=75_000, rel_tau_thresh=0.01, n_min_steps=1000, n_cores=1, n_taus_thresh=40, progress=True):
         """Wrapper to perform a burn-in + full MCMC exploration.
 
         Args:
@@ -299,8 +285,8 @@ class ZeusSampler(emceeLikeSampler):
             _pbest = copy.deepcopy(self.obj.p0)
             _par_vec = np.copy(self.test_pars_vec)
             _par_vec[self.p0_vary_inds] = pars_best
-            _pbest.setv(value=_par_vec)
-            _pbest.pretty_print()
+            _pbest.set_vec(_par_vec, "value")
+            print(_pbest)
     
             # Reset
             self.sampler.reset()
@@ -359,7 +345,7 @@ class ZeusSampler(emceeLikeSampler):
         pbest = copy.deepcopy(self.obj.p0)
         par_vec = np.copy(self.test_pars_vec)
         par_vec[self.p0_vary_inds] = pars_best
-        pbest.setv(value=par_vec)
+        pbest.set_vec(par_vec, "value")
         mcmc_result["pbest"] = pbest
         mcmc_result["lnL"] = self.obj.compute_logaprob(mcmc_result["pbest"])
         
@@ -375,6 +361,7 @@ class ZeusSampler(emceeLikeSampler):
         mcmc_result["pmed"] = pmed
         
         return mcmc_result
+
         
     def get_auto_corr_times(self):
         chain = self.sampler.get_chain(flat=False)

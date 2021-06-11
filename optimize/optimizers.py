@@ -1,73 +1,68 @@
-import optimize.knowledge as optknowledge
-import optimize.objectives as optobj
-import matplotlib.pyplot as plt
+####################
+#### BASE TYPES ####
+####################
 
 class Optimizer:
     """An base optimizer class.
     
     Attributes:
-        obj (ObjectiveFunction, optional): . Defaults to MSE.
-        data (Data, optional): The data.
+        obj (ObjectiveFunction, optional): The objective function object.
         options (dict): The options dictionary, with keys specific to each optimizer.
     """
     
-    def __init__(self, obj=None, options=None):
+    ###############################
+    #### CONSTRUCTOR + HELPERS ####
+    ###############################
+    
+    def __init__(self, *args, **kwargs):
         """Construct for the base optimization class.
-
-        Args:
-            obj (ObjectiveFunction, optional): . Defaults to MSE.
-            p0 (Parameters, optional): [description]. Defaults to None.
-            options (dict, optional): [description]. Defaults to None.
         """
-        
-        # Store the objective function
-        self.obj = obj
-        
-        # Store the current options dictionary and resolve
-        self.options = options
-        self.resolve_options()
-    
-    def compute_obj(self, pars):
-        """A wrapper to computes the objective function.
-        """
-        return self.obj.compute_obj(pars, *self.obj.args_to_pass, **self.obj.kwargs_to_pass)
-    
-    def resolve_options(self):
         pass
     
-    def optimize(self, *args, **kwargs):
-        raise NotImplementedError("Need to implement an optimize method")
+    def initialize(self, obj):
+        self.obj = obj
     
-    def resolve_option(self, key, default_value):
-        """Given an option key and default value, this will set the corresponding item in the options dictionary if not already set.
-
-        Args:
-            key (str): The key to set or check.
-            default_value (object): The default value to use if not set by the user.
+    #####################
+    #### COMPUTE OBJ ####
+    #####################
+    
+    def compute_obj(self, pars):
+        """A wrapper to computes the objective function. This method may further take in any number of args or kwargs, unlike the compute_obj method.
         """
-        if key not in self.options:
-            self.options[key] = default_value
-            
-    def set_pars(self, pars):
-        self.obj.set_pars(pars)
+        return self.obj.compute_obj(pars)
+    
+    ##################
+    #### OPTIMIZE ####
+    ##################
+    
+    def optimize(self):
+        raise NotImplementedError("Need to implement an optimize method")
+        
+    ###############
+    #### MISC. ####
+    ###############
+        
+    def __repr__(self):
+        return "Optimizer"
         
 class Minimizer(Optimizer):
     """Right now, just a node in the type tree that offers no additional functionality.
     """
-    pass
+    def __repr__(self):
+        return "Minimizer"
 
 class Maximizer(Optimizer):
-    """Right now, just a node in the type tree that offers no additional functionality.
+    """Trait.
     """
-    pass
-
+    def __repr__(self):
+        return "Maximizer"
 
 class Sampler(Optimizer):
-    """Right now, just a node in the type tree that offers no additional functionality.
+    """Base class for mcmc samplers.
     """
-    pass
-        
-    
+    def __repr__(self):
+        return "Sampler"
+
 
 # Import into namespace
 from .neldermead import *

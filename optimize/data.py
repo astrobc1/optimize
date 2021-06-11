@@ -1,12 +1,20 @@
 # Science / maths
 import numpy as np
 
-class Data:
-    """A base class for datasets. Additional datasets may ignore the slots and define their own attributes, but the memory usage will resort to the Python dict implementation for classes. Defining a new __slots__ class attribute for the new class will avoid this.
+####################
+#### BASE TYPES ####
+####################
+
+class Dataset:
+    """A base class for datasets. This class is not useful to instantiate on its own.
  
     Attributes:
-        label (str): The label for this dataset. Defaults to "User Data".
+        label (str): The label for this dataset. Defaults to None.
     """
+    
+    #####################
+    #### CONSTRUCTOR ####
+    #####################
     
     def __init__(self, label=None):
         """Constructs a general dataset, simply stores a label for now.
@@ -17,133 +25,292 @@ class Data:
         
         self.label = label
         
-    def __repr__(self):
-        return 'Data: ' + self.label
+    #######################
+    #### GET TRAINABLE ####
+    #######################
+        
+    def get_trainable(self, *args, **kwargs):
+        """Gets the trainable dataset as a numpy array.
 
- 
-class DataS1d(Data):
-    """A base class for 1d->1d datasets.
- 
-    Attributes:
-        x (np.ndarray): The effective independent variable.
-        y (np.ndarray): The effective dependent variable.
-        yerr (np.ndarray): The intrinsic errorbars for y.
-        mask (np.ndarray): An array defining good (=1) and bad (=0) data points, must have the same shape as y. Defaults to None (all good data).
-        label (str): The label for this dataset. Defaults to None.
-    """
+        Raises:
+            NotImplementedError: Must implement this method for a given subclass.
+        """
+        raise NotImplementedError(f"Must implement a method get_trainable for class {self.__class__.__name__}")
+        
+    #########################
+    #### GET DATA ERRORS ####
+    #########################
     
-    __slots__ = ['x', 'y', 'yerr', 'mask', 'label']
+    def get_apriori_errors(self):
+        """Gets the aprior errors (likely known beforehand and provided by the user).
+
+        Raises:
+            NotImplementedError Must implement this method.
+        """
+        raise NotImplementedError(f"Must implement a method get_apriori_errors for class {self.__class__.__name__}")
+        
+    ####################
+    #### INITIALIZE ####
+    ####################
     
-    def __init__(self, x, y, yerr=None, mask=None, label=None):
-        """Constructs a general dataset.
+    def initialize(self, pars):
+        """Called before optimization routines.
 
         Args:
-            x (np.ndarray): The effective independent variable.
-            y (np.ndarray): The effective dependent variable.
-            yerr (np.ndarray): The intrinsic errorbars for y.
-            mask (np.ndarray): An array defining good (=1) and bad (=0) data points, must have the same shape as y. Defaults to None (all good data).
-            label (str): The label for this dataset.
+            pars (Parameters): The parameters.
         """
-        super().__init__(label=label)
-        self.x = x
-        self.y = y
-        self.yerr = yerr
-        self.mask = mask
+        pass
         
     def __repr__(self):
-        return f"Data S1d {self.label}"
+        return f"Data: {self.label}"
 
 
-class CompositeData(dict):
-    """A useful class to extend for composite 1d data sets. Data sets of the same physical measurement, or different measurements of the same object may be utilized here. The labels of each dataset correspond the the keys of the dictionary. The independent variable may be can be composed of a value or array of observations.
+class CompositeDataset(Dataset, dict):
+    """A useful class to extend for composite data sets.
     """
-
-    def get(self, labels):
+    
+    #######################
+    #### GET TRAINABLE ####
+    #######################
+    
+    def get_trainable(self, labels=None):
+        raise NotImplementedError(f"Must implement a method get_trainable for class {self.__class__.__name__}")
+    
+    
+    ###############
+    #### MISC. ####
+    ###############
+    
+    def get_view(self, labels):
         """Returns a view into sub data objects.
 
         Args:
-            labels (str or list of strings): A 
+            labels (str or list of strings): The labels to get.
 
         Returns:
-            CompositeData: A view into the original data object.
+            type(self): A view into the original data object.
         """
-        data_view = self.__class__()
+        out = self.__class__()
         labels = np.atleast_1d(labels)
         for label in labels:
-            data_view[label] = self[label]
-        return data_view
+            out[label] = self[label]
+        return out
     
     def __setitem__(self, label, data):
         if data.label is None:
             data.label = label
-        super().__setitem__(label, data)
+        dict.__setitem__(self, label, data)
+        
+    def __repr__(self):
+        s = "Composite Data:\n"
+        for data in self.values():
+            s += f"  {repr(data)}\n"
+        return s
+
         
 
-class CompositeDataS1d(CompositeData):
-    """A useful class to extend for composite 1d data sets where there is a bijection between measurements AND each measurement is represented by a an independent value x (float), measurement y (float), and uncertainy yerr (float, identical upper and lower values).
+#####################
+#### BASIC TYPES ####
+#####################
+
+class SimpleSeries(Dataset):
+    """A class for a 1d->1d homogeneous dataset, sorted according to x. This class may be used directly or extended.
+ 
+    Attributes:
+        x (np.ndarray): The effective independent variable.
+        y (np.ndarray): The effective dependent variable.
+        yerr (np.ndarray, optional): The intrinsic errorbars for y. Defaults to None.
+        label (str): The label for this dataset. Defaults to None.
     """
+    
+    __slots__ = ['x', 'y', 'yerr', 'label']
+    
+    #####################
+    #### CONSTRUCTOR ####
+    #####################
+    
+    def __init__(self, x, y, yerr=None, label=None):
+        """Constructs a series dataset.
+
+        Args:
+            x (np.ndarray): The effective independent variable.
+            y (np.ndarray): The effective dependent variable.
+            yerr (np.ndarray): The intrinsic errorbars for y. Defaults to None. If not provided, one cannot use noise-based modeling.
+            label (str): The label for this dataset. Defaults to None.
+        """
+        super().__init__(label)
+        self.x = x
+        self.y = y
+        self.yerr = yerr
+    
+    #######################
+    #### GET TRAINABLE ####
+    #######################
+    
+    def get_trainable(self):
+        return self.y
+    
+    #########################
+    #### GET DATA ERRORS ####
+    #########################
+    
+    def get_apriori_errors(self):
+        return self.yerr
+    
+    def get_trainable_errors(self, *args, **kwargs):
+        return self.yerr
+    
+    
+    ###############
+    #### MISC. ####
+    ###############
+    
+    def __repr__(self):
+        return f"Homogeneous Series: {self.label}"
+
+class HomogeneousCompositeSimpleSeries(CompositeDataset):
+    """A useful class to extend for composite 1d datasets which are all instances of SimpleSeries on the same data set.
+    
+    Attributes:
+        indices (dict): The indices for each dataset when sorted according to x.
+    
+    Properties:
+        x (np.ndarray): The x vector.
+        y (np.ndarray): The y vector.
+        yerr (np.ndarray): The yerr vector.
+    """
+    
+    #####################
+    #### CONSTRUCTOR ####
+    #####################
     
     def __init__(self):
         super().__init__()
         self.indices = {}
     
+    #######################
+    #### GET TRAINABLE ####
+    #######################
+        
+    def get_trainable(self):
+        """Gets the trainable dataset as a numpy array.
+
+        Returns:
+            np.ndarray: Returns self.y.
+        """
+        return self.y
+        
+    ##########################
+    #### COLLECT VECTORS #####
+    ##########################
+    
+    @property
+    def n(self):
+        """The number of data points.
+
+        Returns:
+            int: The number of data points.
+        """
+        n = 0
+        for data in self.values():
+            n += len(data.x)
+        return n
+    
+    @property
+    def x(self):
+        """The x vector.
+
+        Returns:
+            np.ndarray: The sorted x vector.
+        """
+        return self.get_vec("x")
+    
+    @property
+    def y(self):
+        """The y vector.
+
+        Returns:
+            np.ndarray: The y vector sorted according to x.
+        """
+        return self.get_vec("y")
+    
+    @property
+    def yerr(self):
+        """The yerr vector.
+
+        Returns:
+            np.ndarray: The yerr vector sorted according to x.
+        """
+        return self.get_vec("yerr")
+    
+    def get_vec(self, attr, sort=True, labels=None):
+        """Gets a vector for certain labels and possibly sorts it.
+
+        Args:
+            attr (str): The attribute to get.
+            sort (bool): Whether or not to sort the returned vector.
+            labels (list of strings, optional): The labels to get. Defaults to all.
+
+        Returns:
+            np.ndarray: The vector, sorted according to x if sort=True.
+        """
+        if labels is None:
+            labels = list(self.keys())
+        if sort:
+            out = np.zeros(self.n)
+            for label in labels:
+                out[self.indices[label]] = getattr(self[label], attr)
+        else:
+            out = np.array([], dtype=float)
+            for label in labels:
+                out = np.concatenate((out, getattr(self[label], attr)))
+        return out
+    
+    #########################
+    #### GET DATA ERRORS ####
+    #########################
+    
+    def get_apriori_errors(self):
+        return self.yerr
+    
+    ###############
+    #### MISC. ####
+    ###############
+    
     def gen_label_vec(self):
         """Generates a vector where each index corresponds to the label of measurement x, sorted by x as well.
 
         Returns:
-            np.ndarray: The label vector in order of what makes sense for x according to np.argsort(x)
+            np.ndarray: The label vector sorted according to self.indices.
         """
-        label_vec = np.array([], dtype='<U50')
-        x = self.gen_vec('x', sort=False)
+        label_vec = np.empty(self.n, dtype='<U50')
         for data in self.values():
-            label_vec = np.concatenate((label_vec, np.full(len(data.x), fill_value=data.label, dtype='<U50')))
-        ss = np.argsort(x)
-        label_vec = label_vec[ss]
+            label_vec[self.indices[data.label]] = data.label
         return label_vec
     
-    def gen_vec(self, key, labels=None, sort=True):
-        """Combines a certain vector from all labels into one vector, and can then sort it according to x if sort=True.
-
-        Args:
-            key (str): The key to get, must be an attribute of each data object.
-            labels (list): A list of labels.
-            sort (bool): Whether or not to sort the returned vector.
+    def gen_indices(self):
+        """Utility function to generate the indices of each dataset (when sorted according to x).
 
         Returns:
-            np.ndarray: The vector, sorted according to x if sort=True is set.
+            dict: A dictionary with keys = data labels, values = numpy array of indices (ints).
         """
-        if labels is None:
-            labels = list(self.keys())
-        else:
-            labels = np.atleast_1d(labels)
-        out = np.array([], dtype=float)
-        if sort:
-            x = np.array([], dtype=float)
-        for label in labels:
-            out = np.concatenate((out, getattr(self[label], key)))
-            if sort:
-                x = np.concatenate((x, self[label].x))
-        # Sort
-        if sort:
-            ss = np.argsort(x)
-            out = out[ss]
-
-        return out
+        indices = {}
+        label_vec = np.array([], dtype="<U50")
+        x = np.array([], dtype=float)
+        for data in self.values():
+            x = np.concatenate((x, data.x))
+            label_vec = np.concatenate((label_vec, np.full(len(data.x), fill_value=data.label, dtype="<U50")))
+        ss = np.argsort(x)
+        label_vec = label_vec[ss]
+        for data in self.values():
+            inds = np.where(label_vec == data.label)[0]
+            indices[data.label] = inds
+        return indices
     
     def __setitem__(self, label, data):
         super().__setitem__(label, data)
-        self.label_vec = self.gen_label_vec()
-        for data in self.values():
-            inds = np.where(self.label_vec == data.label)[0]
-            self.indices[data.label] = inds
-        self.n = len(self.label_vec)
-        
+        self.indices = self.gen_indices()
+    
     def __delitem__(self, key):
         super().__delitem__(key)
-        del self.indices[key]
-        self.label_vec = self.gen_label_vec()
-        for data in self.values():
-            inds = np.where(self.label_vec == data.label)[0]
-            self.indices[data.label] = inds
-        self.n = len(self.label_vec)
-            
+        self.indices = self.gen_indices()

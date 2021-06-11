@@ -13,18 +13,20 @@ import optimize.objectives as optobj
 import optimize.optimizers as optimizers
 import matplotlib.pyplot as plt
 
-class NelderMead(optimizers.Minimizer):
-    """A class to interact with the Nelder Mead optimizer.
+class IterativeNelderMead(optimizers.Minimizer):
+    """A class to interact with the iterative Nelder Mead optimizer.
     """
-        
-    def __init__(self, obj=None, options=None):
-        """Initiate a Nelder Mead solver.
-        
-        Args:
-        """
-        
-        super().__init__(obj=obj, options=options)
-            
+    
+    def __init__(self, alpha=1.0, gamma=2.0, sigma=0.5, delta=0.5):
+        self.alpha = alpha
+        self.gamma = gamma
+        self.sigma = sigma
+        self.delta = delta
+    
+    #############################
+    #### CONSTRUCTOR HELPERS ####
+    #############################
+    
     def init_params(self):
         """Initialize the parameters
 
@@ -33,7 +35,7 @@ class NelderMead(optimizers.Minimizer):
         
         # The number of parameters
         self.n_pars = len(self.obj.p0)
-        self.n_pars_vary = self.obj.p0.num_varied()
+        self.n_pars_vary = self.obj.p0.num_varied
 
         # Remap pointers
         self.p0_numpy = self.obj.p0.unpack()
@@ -49,46 +51,42 @@ class NelderMead(optimizers.Minimizer):
         # For each column, offset a uniqe parameter according to p=1.5*p
         self.current_full_simplex[:, :-1] += np.diag(0.5 * self.p0_numpy_vary['value'])
 
-    def resolve_options(self):
+    ####################
+    #### INITIALIZE ####
+    ####################
+
+    def initialize(self, obj):
         
-        # Define the dictionary if not properly defined
-        if type(self.options) is not dict:
-            self.options = {}
+        # Store objective function
+        self.obj = obj
         
-        # Resolve the usual Hyperparams for NM
-        self.resolve_option('alpha', 1.0)
-        self.resolve_option('gamma', 2.0)
-        self.resolve_option('sigma', 0.5)
-        self.resolve_option('delta', 0.5)
-            
+        # Alias p0
+        p0 = self.obj.p0
+        
         # Resolve the number of fevals
-        self.resolve_option('max_f_evals', int(self.obj.p0.num_varied() * 500))
+        self.max_f_evals = int(p0.num_varied * 500)
         
-        # Resolve number of times solver has effecively converged to declare true convergence
-        self.resolve_option('no_improve_break', 3)
+        # Resolve number of times solver has effectively converged to declare true convergence
+        self.no_improve_break = 3
         
         # Number of ameoba iterations
-        self.resolve_option('n_iterations', self.obj.p0.num_varied())
+        self.n_iterations = p0.num_varied
         
         # Resolve xtol and ftol
-        self.resolve_option('xtol', 1E-6)
-        self.resolve_option('ftol', 1E-6)
+        self.xtol = 1E-6
+        self.ftol = 1E-6
         
         # Resolve penalty
-        self.resolve_option('penalty', 1E6)
+        self.penalty = 1E6
         
     def init_subspaces(self):
         
         # Subspaces
-        if 'subspaces' not in self.options:
-            self.subspaces = []
-            pars_varied = self.obj.p0.get_varied()
-            for i in range(len(pars_varied) - 1):
-                self.subspaces.append([pars_varied[i].name, pars_varied[i + 1].name])
-            self.subspaces.append([pars_varied[-1].name, pars_varied[0].name])
-            
-        else:
-            self.subspaces = self.options["subspaces"]
+        self.subspaces = []
+        pars_varied = self.obj.p0.get_varied()
+        for i in range(len(pars_varied) - 1):
+            self.subspaces.append([pars_varied[i].name, pars_varied[i + 1].name])
+        self.subspaces.append([pars_varied[-1].name, pars_varied[0].name])
             
         self.subspace_inds = []
         self.subspace_inds_vary = []
@@ -118,6 +116,10 @@ class NelderMead(optimizers.Minimizer):
             
         self.test_pars = copy.deepcopy(self.pmin)
 
+    ##################
+    #### OPTIMIZE ####
+    ##################
+
     def optimize_space(self, subspace_index=None):
         
         # Generate a simplex for this subspace
@@ -127,7 +129,7 @@ class NelderMead(optimizers.Minimizer):
         simplex = self.current_simplex
         
         # Alias the hyperparams
-        alpha, gamma, sigma, delta = self.options["alpha"], self.options["gamma"], self.options["sigma"], self.options["delta"]
+        alpha, gamma, sigma, delta = self.alpha, self.gamma, self.sigma, self.delta
         
         # Define these as they are used often
         nx, nxp1 = simplex.shape
@@ -172,15 +174,15 @@ class NelderMead(optimizers.Minimizer):
             shrink = False
 
             # break after max number function calls is reached.
-            if self.fcalls >= self.options["max_f_evals"]:
+            if self.fcalls >= self.max_f_evals:
                 break
                 
             # Break if f tolerance has been met
-            if self.compute_ftol(fmin, fnp1) > self.options["ftol"]:
+            if self.compute_ftol(fmin, fnp1) > self.ftol:
                 n_converged = 0
             else:
                 n_converged += 1
-            if n_converged >= self.options["no_improve_break"]:
+            if n_converged >= self.no_improve_break:
                 break
 
             # Idea of NM: Given a sorted simplex; N + 1 Vectors of N parameters,
@@ -248,10 +250,10 @@ class NelderMead(optimizers.Minimizer):
         if subspace_index is None:
             self.current_full_simplex = np.copy(simplex)
             for i, p in enumerate(self.p0_numpy_vary['name']):
-                self.pmin[p].setv(value=pmin[i])
+                self.pmin[p].value = pmin[i]
         else:
             for i, p in enumerate(self.subspaces[subspace_index]):
-                self.pmin[p].setv(value=pmin[i])
+                self.pmin[p].value = pmin[i]
         
         # Update the current function minimum
         self.fmin = fmin
@@ -276,10 +278,10 @@ class NelderMead(optimizers.Minimizer):
         # The current fmin = inf
         self.fmin = np.inf
         
-        for iteration in range(self.options["n_iterations"]):
+        for iteration in range(self.n_iterations):
             
             dx = self.compute_xtol(self.current_full_simplex)
-            if dx < self.options["xtol"]:
+            if dx < self.xtol:
                 break
 
             # Perform Ameoba call for all parameters
@@ -305,56 +307,11 @@ class NelderMead(optimizers.Minimizer):
         out['fcalls'] = self.fcalls
 
         return out
+        
+    ###############
+    #### MISC. ####
+    ###############
     
-    def compute_uncertainties(self, sim):
-        
-        # fit quadratic coefficients
-        sim = sim.T
-        n = len(sim) - 1
-        fsim = np.zeros(n+1)
-        for i in range(n+1):
-            fsim[i] = self.compute_obj(sim[i])
-
-        ymin = fsim[0]
-
-        sim = np.copy(sim)
-        fsim = np.copy(fsim)
-
-        centroid = np.mean(sim, axis=0)
-        fcentroid = self.compute_obj(centroid)
-
-        # enlarge distance of simplex vertices from centroid until all have at
-        # least an absolute function value distance of 0.1
-        for i in range(n + 1):
-            while np.abs(fsim[i] - fcentroid) < 0.01:
-                sim[i] += sim[i] - centroid
-                fsim[i] = self.compute_obj(sim[i])
-
-        # the vertices and the midpoints x_ij
-        x = 0.5 * (
-            sim[np.mgrid[0:n + 1, 0:n + 1]][1] +
-            sim[np.mgrid[0:n + 1, 0:n + 1]][0]
-        )
-
-        y = np.nan * np.ones(shape=(n + 1, n + 1))
-        for i in range(n + 1):
-            y[i, i] = fsim[i]
-            for j in range(i + 1, n + 1):
-                y[i, j] = y[j, i] = self.compute_obj(x[i, j])
-
-        y0i = y[np.mgrid[0:n + 1, 0:n + 1]][0][1:, 1:, 0]
-
-        y0j = y[np.mgrid[0:n + 1, 0:n + 1]][0][0, 1:, 1:]
-
-        b = 2 * (y[1:, 1:] + y[0, 0] - y0i - y0j)
-
-        q = (sim - sim[0])[1:].T
-
-        varco = ymin * np.dot(q, np.dot(np.linalg.inv(b), q.T))
-        errors = np.sqrt(np.diag(varco))
-        
-        return errors
-        
     @staticmethod
     def compute_xtol(simplex):
         a = np.nanmin(simplex, axis=1)
@@ -371,15 +328,15 @@ class NelderMead(optimizers.Minimizer):
     @njit(numba.types.float64(numba.types.float64, numba.types.float64))
     def compute_ftol(a, b):
         return np.abs(a - b)
-            
+    
     def compute_obj(self, x, subspace_index=None):
         
         if subspace_index is None:
             for i, p in enumerate(self.p0_numpy_vary['name']):
-                self.test_pars[p].setv(value=x[i])
+                self.test_pars[p].value = x[i]
         else:
             for i, p in enumerate(self.subspaces[subspace_index]):
-                self.test_pars[p].setv(value=x[i])
+                self.test_pars[p].value = x[i]
         
         # Call the target function
         f = self.obj.compute_obj(self.test_pars)
@@ -387,12 +344,15 @@ class NelderMead(optimizers.Minimizer):
         # Update fcalls
         self.fcalls += 1
             
-        # Return max or min of score
+        # Return max or min of obj
         if isinstance(self.obj, optobj.MaxObjectiveFunction):
             f *= -1
             
         # If f is not finite, don't return -inf, return a large number
         if not np.isfinite(f):
-            f = self.options["penalty"]
+            f = self.penalty
         
         return f
+    
+    def __repr__(self):
+        return "Optimizer: Iterative Nelder Mead"

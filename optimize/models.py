@@ -1,53 +1,91 @@
+
+# Maths
 import numpy as np
-import optimize.noise as optnoise
-import matplotlib.pyplot as plt
+
+# Optimize deps
+from optimize.noise import CorrelatedNoiseProcess
+
+
+####################
+#### BASE TYPES ####
+####################
 
 class Model:
-    """Constructs a base model for optimization. This class may be instantiated for simple optimization problems but extending it is preferred.
-
-    Attributes:
-        builder (callable, optional): Funtion that constructs the model with signature fun(*args_to_pass, **kwargs_to_pass). Models extending this class may define their build method elsewhere. Defaults to None. If None, the class must override the build method.
-        args_to_pass (tuple, optional): The arguments to pass to the build method. Defaults to ().
-        kwargs_to_pass (dict, optional): The keyword arguments to pass to the build method. Defaults to {}.
-    """
     
-    def __init__(self, builder=None, args_to_pass=None, kwargs_to_pass=None):
-        """Constructs a base model for optimization.
-
-        Args:
-            builder (callable, optional): Funtion that constructs the model with signature fun(pars, *args_to_pass, **kwargs_to_pass).
-            args_to_pass (tuple, optional): The arguments to pass to the build method. Defaults to ().
-            kwargs_to_pass (dict, optional): The keyword arguments to pass to the build method. Defaults to {}.
-            kernel (NoiseKernel, optional): The noise kernel to use, defaults to None (no noise).
-        """
-        if builder is not None:
-            self.builder = builder
-        self.args_to_pass = () if args_to_pass is None else args_to_pass
-        self.kwargs_to_pass = {} if kwargs_to_pass is None else kwargs_to_pass
+    def __init__(self, data=None, name=None):
+        self.data = data
+        self.name = name
+    
+    def __repr__(self):
+        return f"Model: {self.name}"
     
     def build(self, pars):
-        """Constructs the model.
-
-        Args:
-            pars (Parameters): The parameters to use to build the model.
-
-        Returns:
-            object: The constructed model, probably as a numpy array but is ultimately managed by the objective function.
-        """
-        model = self.builder(pars, *self.args_to_pass, **self.kwargs_to_pass)
-        return model
-
-
-class PureGP(Model):
+        raise NotImplementedError(f"Must implement a build method for the class {self.__class__.__name__}")
     
-    def __init__(self, data):
-        self.data_zeros = np.zeros_like(data.gen_vec("x"))
+    def initialize(self, p0):
+        self.p0 = p0
+        
+    def compute_residuals(self, pars):
+        data_arr = self.data.get_trainable()
+        model_arr = self.build(pars)
+        return data_arr - model_arr
+    
+    def compute_data_errors(self, pars):
+        return self.data.get_apriori_errors()
 
+class DeterministicModel(Model):
+    
+    def __call__(self, pars):
+        return self.build(pars)
+    
+    def __repr__(self):
+        return f"Deterministic model: {self.name}"
+ 
+class NoiseBasedModel(Model):
+    
+    def __init__(self, det_model=None, noise_process=None, data=None, name=None):
+        super().__init__(data=data, name=name)
+        self.det_model = det_model
+        self.noise_process = noise_process
+    
+    def initialize(self, p0):
+        super().initialize(p0)
+        self.det_model.initialize(self.p0)
+        self.noise_process.initialize(self.p0)
+    
     def build(self, pars):
-        return self.data_zeros
-
-# class PyMC3Model(Model, pm.model.Model):
+        if self.det_model is not None:
+            return self.det_model.build(pars)
+        else:
+            return 0
     
-#     def __init__(self, p0=None, data=None, kernel=None):
-#         super().__init__(p0=p0, data=data, kernel=kernel)
-#         self.pars_to_pmd()
+    def compute_raw_residuals(self, pars):
+        if self.det_model is not None:
+            return self.data.get_trainable() - self.build(pars)
+        else:
+            return self.data.get_trainable()
+        
+    def compute_residuals(self, pars):
+        residuals = self.compute_raw_residuals(pars)
+        if isinstance(self.noise_process, CorrelatedNoiseProcess):
+            residuals -= self.realize(pars, linpred=residuals)
+        else:
+            return residuals
+    
+    def compute_data_errors(self, pars, include_corr_error=False):
+        if isinstance(self.noise_process, CorrelatedNoiseProcess):
+            if include_corr_error:
+                linpred = self.compute_raw_residuals(pars)
+            else:
+                linpred = None
+            return self.noise_process.compute_data_errors(pars, include_corr_error=include_corr_error, linpred=linpred)
+        else:
+            return self.noise_process.compute_data_errors(pars)
+        
+    def __repr__(self):
+        return f"Noise model: {self.name}"
+
+class GPBasedModel(NoiseBasedModel):
+
+    def __repr__(self):
+        return f"GP Based Model: {self.name}"
