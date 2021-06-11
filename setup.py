@@ -13,11 +13,11 @@ with open("README.rst", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="bayesoptimize",
+    name="optimize",
     version="1.0.2",
     author="Bryson Cale",
     author_email="bryson.cale1@gmail.com",
-    description="A framework to solve optimization problems",
+    description="A framework to solve optimization problems, primarily through simple Bayesian inference.",
     longdescription=long_description,
     long_description_content_type="text/x-rst",
     packages = setuptools.find_packages(),
@@ -29,5 +29,5 @@ setuptools.setup(
         "Programming Language :: Python :: 3",
         "Operating System :: Unix"
     ],
-    python_requires='>=3.6'
+    python_requires='>=3.8'
 )
