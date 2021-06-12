@@ -1,8 +1,13 @@
 optimize API reference
 ======================
 
-Kernels
-+++++++
+Noise
++++++
+
+.. automodule:: optimize.noise
+    :members:
+    :show-inheritance:
+
 
 .. automodule:: optimize.kernels
     :members:

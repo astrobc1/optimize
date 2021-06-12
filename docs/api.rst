@@ -8,7 +8,7 @@ optimize API reference
     Data <data_api>
     Knowledge <knowledge_api>
     Models <models_api>
-    Kernels <kernels_api>
-    Scores <scores_api.rst>
+    Noise <noise_api>
+    Objectives <objectives_api.rst>
     Optimizers <optimizers_api>
     Frameworks <frameworks_api>

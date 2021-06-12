@@ -35,68 +35,77 @@
             
   <div class="section" id="tutorials">
 <h1>Tutorials<a class="headerlink" href="#tutorials" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="example-1-fitting-a-gaussian">
-<h2>Example 1: Fitting a Gaussian<a class="headerlink" href="#example-1-fitting-a-gaussian" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="example-1-fitting-a-gaussian-with-an-mse-objective">
+<h2>Example 1: Fitting a Gaussian with an MSE objective.<a class="headerlink" href="#example-1-fitting-a-gaussian-with-an-mse-objective" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
 <span class="c1"># Standard imports</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
-<span class="c1"># Optimize imports</span>
-<span class="kn">import</span> <span class="nn">optimize.knowledge</span> <span class="k">as</span> <span class="nn">optknow</span>
-<span class="kn">import</span> <span class="nn">optimize.models</span> <span class="k">as</span> <span class="nn">optmodels</span>
-<span class="kn">import</span> <span class="nn">optimize.optimizers</span> <span class="k">as</span> <span class="nn">optimizers</span>
-<span class="kn">import</span> <span class="nn">optimize.scores</span> <span class="k">as</span> <span class="nn">optscores</span>
-<span class="kn">import</span> <span class="nn">optimize.data</span> <span class="k">as</span> <span class="nn">optdatasets</span>
-<span class="kn">import</span> <span class="nn">optimize.frameworks</span> <span class="k">as</span> <span class="nn">optframeworks</span>
+<span class="c1"># Import optimize</span>
+<span class="c1"># import optimize as opt</span>
+<span class="kn">from</span> <span class="nn">optimize.knowledge</span> <span class="kn">import</span> <span class="n">Parameter</span><span class="p">,</span> <span class="n">Parameters</span>
+<span class="kn">from</span> <span class="nn">optimize.data</span> <span class="kn">import</span> <span class="n">SimpleSeries</span>
+<span class="kn">from</span> <span class="nn">optimize.frameworks</span> <span class="kn">import</span> <span class="n">OptProblem</span>
+<span class="kn">from</span> <span class="nn">optimize.models</span> <span class="kn">import</span> <span class="n">DeterministicModel</span>
+<span class="kn">from</span> <span class="nn">optimize.objectives</span> <span class="kn">import</span> <span class="n">MSE</span>
+<span class="kn">from</span> <span class="nn">optimize.optimizers</span> <span class="kn">import</span> <span class="n">IterativeNelderMead</span><span class="p">,</span> <span class="n">SciPyMinimizer</span>
 
-<span class="c1"># Define a build method for the model</span>
-<span class="c1"># By default, models are called via builder(pars, *args, **kwargs)</span>
-<span class="c1"># where pars is an instance of optimize.Parameters</span>
-<span class="c1"># The score (target / obejctive) function comes later</span>
-<span class="k">def</span> <span class="nf">gauss</span><span class="p">(</span><span class="n">pars</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">pars</span><span class="p">[</span><span class="s2">&quot;amp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="n">pars</span><span class="p">[</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="o">/</span> <span class="n">pars</span><span class="p">[</span><span class="s2">&quot;sigma&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">gauss</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">amp</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="n">mu</span><span class="p">)</span> <span class="o">/</span> <span class="n">sigma</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
 
-<span class="c1"># Create some noisy data</span>
+
+<span class="c1"># Define a model for a Gaussian function.</span>
+<span class="k">class</span> <span class="nc">GaussianModel</span><span class="p">(</span><span class="n">DeterministicModel</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pars</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">gauss</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pars</span><span class="p">[</span><span class="s2">&quot;amp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">pars</span><span class="p">[</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">pars</span><span class="p">[</span><span class="s2">&quot;sigma&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+<span class="c1"># An x grid</span>
 <span class="n">dx</span> <span class="o">=</span> <span class="mf">0.01</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span> <span class="o">+</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dx</span><span class="p">)</span>
-<span class="n">pars_true</span> <span class="o">=</span> <span class="n">optknow</span><span class="o">.</span><span class="n">Parameters</span><span class="p">()</span>
-<span class="n">pars_true</span><span class="p">[</span><span class="s2">&quot;amp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">optknow</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mf">2.5</span><span class="p">)</span>
-<span class="n">pars_true</span><span class="p">[</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">optknow</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">value</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">pars_true</span><span class="p">[</span><span class="s2">&quot;sigma&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">optknow</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
-<span class="n">y_true</span> <span class="o">=</span> <span class="n">gauss</span><span class="p">(</span><span class="n">pars_true</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+
+<span class="c1"># True parameters</span>
+<span class="n">pars_true</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
+<span class="n">pars_true</span><span class="p">[</span><span class="s2">&quot;amp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mf">2.5</span><span class="p">)</span>
+<span class="n">pars_true</span><span class="p">[</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">value</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">pars_true</span><span class="p">[</span><span class="s2">&quot;sigma&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+
+<span class="c1"># Noisy data</span>
+<span class="n">y_true</span> <span class="o">=</span> <span class="n">gauss</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">pars_true</span><span class="p">[</span><span class="s2">&quot;amp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">pars_true</span><span class="p">[</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">pars_true</span><span class="p">[</span><span class="s2">&quot;sigma&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 <span class="n">y_true</span> <span class="o">+=</span> <span class="mf">0.01</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">y_true</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
 
-<span class="c1"># Guess parameters and model</span>
-<span class="n">pars_guess</span> <span class="o">=</span> <span class="n">optknow</span><span class="o">.</span><span class="n">Parameters</span><span class="p">()</span>
-<span class="n">pars_guess</span><span class="p">[</span><span class="s2">&quot;amp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">optknow</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
-<span class="n">pars_guess</span><span class="p">[</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">optknow</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">value</span><span class="o">=-</span><span class="mf">0.4</span><span class="p">)</span>
-<span class="n">pars_guess</span><span class="p">[</span><span class="s2">&quot;sigma&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">optknow</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mf">0.4</span><span class="p">)</span>
-<span class="n">model_guess</span> <span class="o">=</span> <span class="n">gauss</span><span class="p">(</span><span class="n">pars_guess</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+<span class="c1"># Create a data object</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">SimpleSeries</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y_true</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;My data&quot;</span><span class="p">)</span>
 
-<span class="c1"># Create dedicated data and model objects</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">optdatasets</span><span class="o">.</span><span class="n">Data</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y_true</span><span class="p">)</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">optmodels</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">builder</span><span class="o">=</span><span class="n">gauss</span><span class="p">,</span> <span class="n">p0</span><span class="o">=</span><span class="n">pars_guess</span><span class="p">,</span> <span class="n">args_to_pass</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,))</span>
+<span class="c1"># Guess parameters and model</span>
+<span class="n">pars_guess</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
+<span class="n">pars_guess</span><span class="p">[</span><span class="s2">&quot;amp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
+<span class="n">pars_guess</span><span class="p">[</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">value</span><span class="o">=-</span><span class="mf">0.4</span><span class="p">)</span>
+<span class="n">pars_guess</span><span class="p">[</span><span class="s2">&quot;sigma&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mf">0.4</span><span class="p">)</span>
+<span class="n">model_guess</span> <span class="o">=</span> <span class="n">gauss</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">pars_guess</span><span class="p">[</span><span class="s2">&quot;amp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">pars_guess</span><span class="p">[</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">pars_guess</span><span class="p">[</span><span class="s2">&quot;sigma&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+<span class="c1"># Make a model</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">GaussianModel</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
 
 <span class="c1"># Create a mean squared error score function</span>
-<span class="n">scorer</span> <span class="o">=</span> <span class="n">optscores</span><span class="o">.</span><span class="n">MSE</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
+<span class="n">obj</span> <span class="o">=</span> <span class="n">MSE</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
 
-<span class="c1"># Create an optimizer</span>
-<span class="n">optimizer</span> <span class="o">=</span> <span class="n">optimizers</span><span class="o">.</span><span class="n">NelderMead</span><span class="p">(</span><span class="n">scorer</span><span class="o">=</span><span class="n">scorer</span><span class="p">)</span>
-
-<span class="c1"># Create an optimize problem.</span>
-<span class="n">optprob</span> <span class="o">=</span> <span class="n">optframeworks</span><span class="o">.</span><span class="n">OptProblem</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">p0</span><span class="o">=</span><span class="n">pars_guess</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span><span class="p">)</span>
+<span class="c1"># Create the opt problem</span>
+<span class="n">optprob</span> <span class="o">=</span> <span class="n">OptProblem</span><span class="p">(</span><span class="n">p0</span><span class="o">=</span><span class="n">pars_guess</span><span class="p">,</span> <span class="n">obj</span><span class="o">=</span><span class="n">obj</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="n">SciPyMinimizer</span><span class="p">())</span>
 
 <span class="c1"># Optimize the model via Nelder Mead</span>
 <span class="n">opt_result</span> <span class="o">=</span> <span class="n">optprob</span><span class="o">.</span><span class="n">optimize</span><span class="p">()</span>
-<span class="n">pars_fit</span> <span class="o">=</span> <span class="n">opt_result</span><span class="p">[</span><span class="s2">&quot;pbest&quot;</span><span class="p">]</span>
-<span class="n">pars_fit</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">()</span>
+<span class="n">pars_best</span> <span class="o">=</span> <span class="n">opt_result</span><span class="p">[</span><span class="s2">&quot;pbest&quot;</span><span class="p">]</span>
+
+<span class="c1"># Print the best fit pars</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">pars_best</span><span class="p">)</span>
 
 <span class="c1"># Build the best fit model</span>
-<span class="n">model_best</span> <span class="o">=</span> <span class="n">gauss</span><span class="p">(</span><span class="n">pars_fit</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+<span class="n">model_best</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">pars_best</span><span class="p">)</span>
 
 <span class="c1"># Plot</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y_true</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y_true</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;my data&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">model_guess</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Starting Model&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">model_best</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Best Fit Model&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
@@ -106,10 +115,197 @@
 </pre></div>
 </div>
 <p>The result …</p>
-<p><code class="docutils literal notranslate"><span class="pre">(Parameter)</span>&#160; <span class="pre">Name:</span> <span class="pre">amp</span> <span class="pre">|</span> <span class="pre">Value:</span> <span class="pre">2.501808472212764</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">(Parameter)</span>&#160; <span class="pre">Name:</span> <span class="pre">mu</span> <span class="pre">|</span> <span class="pre">Value:</span> <span class="pre">-0.9993725521536447</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">(Parameter)</span>&#160; <span class="pre">Name:</span> <span class="pre">sigma</span> <span class="pre">|</span> <span class="pre">Value:</span> <span class="pre">0.799639841776913</span></code></p>
-<img alt="_images/data_model_example.png" src="_images/data_model_example.png" />
+<img alt="_images/gaussfit_example1.png" src="_images/gaussfit_example1.png" />
+</div>
+<div class="section" id="example-2-fitting-a-gaussian-with-a-chi-2-objective">
+<h2>Example 2: Fitting a Gaussian with a Chi-2 objective.<a class="headerlink" href="#example-2-fitting-a-gaussian-with-a-chi-2-objective" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+<span class="c1"># Standard imports</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="c1"># Import optimize</span>
+<span class="c1"># import optimize as opt</span>
+<span class="kn">from</span> <span class="nn">optimize.knowledge</span> <span class="kn">import</span> <span class="n">Parameter</span><span class="p">,</span> <span class="n">Parameters</span>
+<span class="kn">from</span> <span class="nn">optimize.data</span> <span class="kn">import</span> <span class="n">SimpleSeries</span>
+<span class="kn">from</span> <span class="nn">optimize.frameworks</span> <span class="kn">import</span> <span class="n">OptProblem</span>
+<span class="kn">from</span> <span class="nn">optimize.models</span> <span class="kn">import</span> <span class="n">DeterministicModel</span>
+<span class="kn">from</span> <span class="nn">optimize.objectives</span> <span class="kn">import</span> <span class="n">Chi2</span>
+<span class="kn">from</span> <span class="nn">optimize.optimizers</span> <span class="kn">import</span> <span class="n">IterativeNelderMead</span><span class="p">,</span> <span class="n">SciPyMinimizer</span>
+
+<span class="k">def</span> <span class="nf">gauss</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">amp</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="n">mu</span><span class="p">)</span> <span class="o">/</span> <span class="n">sigma</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+
+<span class="c1"># Define a model for a Gaussian function.</span>
+<span class="k">class</span> <span class="nc">GaussianModel</span><span class="p">(</span><span class="n">DeterministicModel</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pars</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">gauss</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pars</span><span class="p">[</span><span class="s2">&quot;amp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">pars</span><span class="p">[</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">pars</span><span class="p">[</span><span class="s2">&quot;sigma&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+<span class="c1"># An x grid</span>
+<span class="n">dx</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span> <span class="o">+</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dx</span><span class="p">)</span>
+
+<span class="c1"># True parameters</span>
+<span class="n">pars_true</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
+<span class="n">pars_true</span><span class="p">[</span><span class="s2">&quot;amp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mf">2.5</span><span class="p">)</span>
+<span class="n">pars_true</span><span class="p">[</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">value</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">pars_true</span><span class="p">[</span><span class="s2">&quot;sigma&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+
+<span class="c1"># Noisy data</span>
+<span class="n">y_true</span> <span class="o">=</span> <span class="n">gauss</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">pars_true</span><span class="p">[</span><span class="s2">&quot;amp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">pars_true</span><span class="p">[</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">pars_true</span><span class="p">[</span><span class="s2">&quot;sigma&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+<span class="n">noise_level</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="n">y_true</span> <span class="o">+=</span> <span class="n">noise_level</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">y_true</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+
+<span class="c1"># Create the opt problem</span>
+<span class="n">optprob</span> <span class="o">=</span> <span class="n">OptProblem</span><span class="p">()</span>
+
+<span class="c1"># Create a data object</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">SimpleSeries</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y_true</span><span class="p">,</span> <span class="n">yerr</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">y_true</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">noise_level</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;My data&quot;</span><span class="p">)</span>
+
+<span class="c1"># Guess parameters and model</span>
+<span class="n">pars_guess</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
+<span class="n">pars_guess</span><span class="p">[</span><span class="s2">&quot;amp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
+<span class="n">pars_guess</span><span class="p">[</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">value</span><span class="o">=-</span><span class="mf">0.4</span><span class="p">)</span>
+<span class="n">pars_guess</span><span class="p">[</span><span class="s2">&quot;sigma&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mf">0.4</span><span class="p">)</span>
+<span class="n">model_guess</span> <span class="o">=</span> <span class="n">gauss</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">pars_guess</span><span class="p">[</span><span class="s2">&quot;amp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">pars_guess</span><span class="p">[</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">pars_guess</span><span class="p">[</span><span class="s2">&quot;sigma&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+<span class="c1"># Make a model</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">GaussianModel</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+
+<span class="c1"># Create a Chi2 score function</span>
+<span class="n">obj</span> <span class="o">=</span> <span class="n">Chi2</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
+
+<span class="n">optprob</span> <span class="o">=</span> <span class="n">OptProblem</span><span class="p">(</span><span class="n">p0</span><span class="o">=</span><span class="n">pars_guess</span><span class="p">,</span> <span class="n">obj</span><span class="o">=</span><span class="n">obj</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="n">IterativeNelderMead</span><span class="p">())</span>
+
+<span class="c1"># Optimize the model via Nelder Mead</span>
+<span class="n">opt_result</span> <span class="o">=</span> <span class="n">optprob</span><span class="o">.</span><span class="n">optimize</span><span class="p">()</span>
+<span class="n">pars_best</span> <span class="o">=</span> <span class="n">opt_result</span><span class="p">[</span><span class="s2">&quot;pbest&quot;</span><span class="p">]</span>
+
+<span class="c1"># Print the best fit pars</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">pars_best</span><span class="p">)</span>
+
+<span class="c1"># Build the best fit model</span>
+<span class="n">model_best</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">pars_best</span><span class="p">)</span>
+
+<span class="c1"># Plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y_true</span><span class="p">,</span> <span class="n">yerr</span><span class="o">=</span><span class="n">noise_level</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;my data&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">elinewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">model_guess</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Starting Model&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">model_best</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Best Fit Model&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="_images/gaussfit_example2.png" src="_images/gaussfit_example2.png" />
+</div>
+<div class="section" id="example-3-fitting-a-gaussian-with-a-gaussian-likelihood">
+<h2>Example 3: Fitting a Gaussian with a Gaussian Likelihood.<a class="headerlink" href="#example-3-fitting-a-gaussian-with-a-gaussian-likelihood" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+<span class="c1"># Standard imports</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="c1"># Import optimize</span>
+<span class="c1"># import optimize as opt</span>
+<span class="kn">from</span> <span class="nn">optimize.knowledge</span> <span class="kn">import</span> <span class="n">BayesianParameter</span><span class="p">,</span> <span class="n">BayesianParameters</span><span class="p">,</span> <span class="n">priors</span>
+<span class="kn">from</span> <span class="nn">optimize.data</span> <span class="kn">import</span> <span class="n">SimpleSeries</span>
+<span class="kn">from</span> <span class="nn">optimize.frameworks</span> <span class="kn">import</span> <span class="n">BayesianProblem</span>
+<span class="kn">from</span> <span class="nn">optimize.models</span> <span class="kn">import</span> <span class="n">NoiseBasedModel</span><span class="p">,</span> <span class="n">DeterministicModel</span>
+<span class="kn">from</span> <span class="nn">optimize.noise</span> <span class="kn">import</span> <span class="n">WhiteNoiseProcess</span>
+<span class="kn">from</span> <span class="nn">optimize.samplers</span> <span class="kn">import</span> <span class="n">emceeSampler</span>
+<span class="kn">from</span> <span class="nn">optimize.objectives</span> <span class="kn">import</span> <span class="n">GaussianLikelihood</span><span class="p">,</span> <span class="n">Posterior</span>
+<span class="kn">from</span> <span class="nn">optimize.optimizers</span> <span class="kn">import</span> <span class="n">IterativeNelderMead</span><span class="p">,</span> <span class="n">SciPyMinimizer</span>
+
+<span class="k">def</span> <span class="nf">gauss</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">amp</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="n">mu</span><span class="p">)</span> <span class="o">/</span> <span class="n">sigma</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+
+<span class="c1"># Define a model for a Gaussian function.</span>
+<span class="c1"># You always have access to the data object here.</span>
+<span class="c1"># You must either 1. define a method build(self, pars:BayesianParameters)</span>
+<span class="c1"># or 2. define the method compute_residuals(self, pars:BayesianParameters)</span>
+<span class="k">class</span> <span class="nc">GaussianModel</span><span class="p">(</span><span class="n">DeterministicModel</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pars</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">gauss</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pars</span><span class="p">[</span><span class="s2">&quot;amp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">pars</span><span class="p">[</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">pars</span><span class="p">[</span><span class="s2">&quot;sigma&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+<span class="c1"># An x grid</span>
+<span class="n">dx</span> <span class="o">=</span> <span class="mf">0.05</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span> <span class="o">+</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dx</span><span class="p">)</span>
+
+<span class="c1"># True parameters</span>
+<span class="n">pars_true</span> <span class="o">=</span> <span class="n">BayesianParameters</span><span class="p">()</span>
+<span class="n">pars_true</span><span class="p">[</span><span class="s2">&quot;amp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">BayesianParameter</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mf">2.5</span><span class="p">)</span>
+<span class="n">pars_true</span><span class="p">[</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">BayesianParameter</span><span class="p">(</span><span class="n">value</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">pars_true</span><span class="p">[</span><span class="s2">&quot;sigma&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">BayesianParameter</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+
+<span class="c1"># Noisy data</span>
+<span class="n">y_true</span> <span class="o">=</span> <span class="n">gauss</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">pars_true</span><span class="p">[</span><span class="s2">&quot;amp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">pars_true</span><span class="p">[</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">pars_true</span><span class="p">[</span><span class="s2">&quot;sigma&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+<span class="n">noise_level</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="n">y_true</span> <span class="o">+=</span> <span class="n">noise_level</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">y_true</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+
+<span class="c1"># Create the opt problem</span>
+<span class="n">optprob</span> <span class="o">=</span> <span class="n">BayesianProblem</span><span class="p">()</span>
+
+<span class="c1"># Create a data object</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">SimpleSeries</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y_true</span><span class="p">,</span> <span class="n">yerr</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">y_true</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;my_data&quot;</span><span class="p">)</span>
+
+<span class="c1"># Guess parameters and model</span>
+<span class="n">pars_guess</span> <span class="o">=</span> <span class="n">BayesianParameters</span><span class="p">()</span>
+<span class="n">pars_guess</span><span class="p">[</span><span class="s2">&quot;amp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">BayesianParameter</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
+<span class="n">pars_guess</span><span class="p">[</span><span class="s2">&quot;amp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">add_prior</span><span class="p">(</span><span class="n">priors</span><span class="o">.</span><span class="n">Positive</span><span class="p">())</span>
+
+<span class="n">pars_guess</span><span class="p">[</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">BayesianParameter</span><span class="p">(</span><span class="n">value</span><span class="o">=-</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">latex_str</span><span class="o">=</span><span class="s2">&quot;$\mu$&quot;</span><span class="p">)</span>
+<span class="n">pars_guess</span><span class="p">[</span><span class="s2">&quot;sigma&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">BayesianParameter</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">latex_str</span><span class="o">=</span><span class="s2">&quot;$\sigma$&quot;</span><span class="p">)</span>
+<span class="n">pars_guess</span><span class="p">[</span><span class="s2">&quot;sigma&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">add_prior</span><span class="p">(</span><span class="n">priors</span><span class="o">.</span><span class="n">Positive</span><span class="p">())</span>
+<span class="n">pars_guess</span><span class="p">[</span><span class="s2">&quot;jitter_my_data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">BayesianParameter</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">latex_str</span><span class="o">=</span><span class="s2">&quot;$\mathrm</span><span class="si">{JIT}</span><span class="s2">_{my-data}$&quot;</span><span class="p">)</span>
+<span class="n">pars_guess</span><span class="p">[</span><span class="s2">&quot;jitter_my_data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">add_prior</span><span class="p">(</span><span class="n">priors</span><span class="o">.</span><span class="n">Positive</span><span class="p">())</span>
+<span class="n">model_guess</span> <span class="o">=</span> <span class="n">gauss</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">pars_guess</span><span class="p">[</span><span class="s2">&quot;amp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">pars_guess</span><span class="p">[</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">pars_guess</span><span class="p">[</span><span class="s2">&quot;sigma&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+<span class="c1"># Make a model</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">NoiseBasedModel</span><span class="p">(</span><span class="n">det_model</span><span class="o">=</span><span class="n">GaussianModel</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">),</span> <span class="n">noise_process</span><span class="o">=</span><span class="n">WhiteNoiseProcess</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">),</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+
+<span class="c1"># Create a Posterior obj function</span>
+<span class="n">post</span> <span class="o">=</span> <span class="n">Posterior</span><span class="p">()</span>
+<span class="n">post</span><span class="p">[</span><span class="s2">&quot;my_like&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GaussianLikelihood</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
+
+<span class="c1"># Bayesian problem</span>
+<span class="n">optprob</span> <span class="o">=</span> <span class="n">BayesianProblem</span><span class="p">(</span><span class="n">p0</span><span class="o">=</span><span class="n">pars_guess</span><span class="p">,</span> <span class="n">post</span><span class="o">=</span><span class="n">post</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="n">SciPyMinimizer</span><span class="p">(),</span> <span class="n">sampler</span><span class="o">=</span><span class="n">emceeSampler</span><span class="p">())</span>
+
+<span class="c1"># Optimize the model</span>
+<span class="n">opt_result</span> <span class="o">=</span> <span class="n">optprob</span><span class="o">.</span><span class="n">optimize</span><span class="p">()</span>
+<span class="n">pars_best</span> <span class="o">=</span> <span class="n">opt_result</span><span class="p">[</span><span class="s2">&quot;pbest&quot;</span><span class="p">]</span>
+
+<span class="c1"># Print the best fit pars</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">pars_best</span><span class="p">)</span>
+
+<span class="c1"># Build the best fit model</span>
+<span class="n">model_best</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">pars_best</span><span class="p">)</span>
+
+<span class="c1"># Plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y_true</span><span class="p">,</span> <span class="n">yerr</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">compute_data_errors</span><span class="p">(</span><span class="n">pars_best</span><span class="p">),</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;my data&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">elinewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">model_guess</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Starting Model&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">model_best</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Best Fit Model&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># Run the mcmc</span>
+<span class="c1"># The mccmc will break once converged according to the auto-correlation time</span>
+<span class="n">mcmc_result</span> <span class="o">=</span> <span class="n">optprob</span><span class="o">.</span><span class="n">run_mcmc</span><span class="p">()</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">optprob</span><span class="o">.</span><span class="n">corner_plot</span><span class="p">(</span><span class="n">mcmc_result</span><span class="p">)</span>
+<span class="n">breakpoint</span><span class="p">()</span>
+
+<span class="c1"># Show the corner plot</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="_images/gaussfit_example3.png" src="_images/gaussfit_example3.png" />
+<img alt="_images/corner.png" src="_images/corner.png" />
 </div>
 </div>
 <div class="section" id="indices-and-tables">
@@ -144,7 +340,9 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Tutorials</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#example-1-fitting-a-gaussian">Example 1: Fitting a Gaussian</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-1-fitting-a-gaussian-with-an-mse-objective">Example 1: Fitting a Gaussian with an MSE objective.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-2-fitting-a-gaussian-with-a-chi-2-objective">Example 2: Fitting a Gaussian with a Chi-2 objective.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-3-fitting-a-gaussian-with-a-gaussian-likelihood">Example 3: Fitting a Gaussian with a Gaussian Likelihood.</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>

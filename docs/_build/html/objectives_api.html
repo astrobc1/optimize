@@ -1,0 +1,255 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>optimize API reference &#8212; optimize  documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/optimize_logo.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="optimize-api-reference">
+<h1>optimize API reference<a class="headerlink" href="#optimize-api-reference" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-optimize.objectives">
+<span id="objectives"></span><h2>Objectives<a class="headerlink" href="#module-optimize.objectives" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="optimize.objectives.Chi2">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.objectives.</code><code class="sig-name descname">Chi2</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.objectives.Chi2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#optimize.objectives.MinObjectiveFunction" title="optimize.objectives.MinObjectiveFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.objectives.MinObjectiveFunction</span></code></a></p>
+<p>A class for a simple reduced chi square loss.</p>
+<dl class="py method">
+<dt id="optimize.objectives.Chi2.compute_chi2">
+<em class="property">static </em><code class="sig-name descname">compute_chi2</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">residuals</span></em>, <em class="sig-param"><span class="n">errors</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.objectives.Chi2.compute_chi2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the (non-reduced) chi2 statistic (weighted MSE).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>residuals</strong> (<em>np.ndarray</em>) – The residuals array.</p></li>
+<li><p><strong>errors</strong> (<em>np.ndarray</em>) – The effective errorbars.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The chi-squared statistic.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.objectives.Chi2.compute_obj">
+<code class="sig-name descname">compute_obj</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.objectives.Chi2.compute_obj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the reduced chi2 statistic.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pars</strong> (<em>Parameters</em>) – The parameters to use.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The RMS.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.objectives.Chi2.compute_redchi2">
+<em class="property">static </em><code class="sig-name descname">compute_redchi2</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">residuals</span></em>, <em class="sig-param"><span class="n">errors</span></em>, <em class="sig-param"><span class="n">n_dof</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.objectives.Chi2.compute_redchi2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the reduced chi2 statistic (weighted MSE).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>residuals</strong> (<em>np.ndarray</em>) – The residuals = data - model</p></li>
+<li><p><strong>errors</strong> (<em>np.ndarray</em>) – The effective errorbars (intrinsic and any white noise).</p></li>
+<li><p><strong>n_dof</strong> (<em>int</em>) – The degrees of freedom, defaults to len(res) - 1.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The reduced chi-squared statistic.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="optimize.objectives.MSE">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.objectives.</code><code class="sig-name descname">MSE</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.objectives.MSE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#optimize.objectives.MinObjectiveFunction" title="optimize.objectives.MinObjectiveFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.objectives.MinObjectiveFunction</span></code></a></p>
+<p>A class for the standard mean squared error (MSE=RMS) loss.</p>
+<dl class="py method">
+<dt id="optimize.objectives.MSE.compute_obj">
+<code class="sig-name descname">compute_obj</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.objectives.MSE.compute_obj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the unweighted mean squared error loss.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pars</strong> (<em>Parameters</em>) – The parameters to use.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The RMS.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.objectives.MSE.compute_rms">
+<em class="property">static </em><code class="sig-name descname">compute_rms</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">residuals</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.objectives.MSE.compute_rms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the RMS (Root mean squared) loss. This method does not account for</p>
+<dl class="simple">
+<dt>Args_data</dt><dd><p>data_arr (np.ndarray): The data array.
+model_arr (np.ndarray): The model array.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The RMS.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="optimize.objectives.MaxObjectiveFunction">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.objectives.</code><code class="sig-name descname">MaxObjectiveFunction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.objectives.MaxObjectiveFunction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#optimize.objectives.ObjectiveFunction" title="optimize.objectives.ObjectiveFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.objectives.ObjectiveFunction</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="optimize.objectives.MinObjectiveFunction">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.objectives.</code><code class="sig-name descname">MinObjectiveFunction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.objectives.MinObjectiveFunction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#optimize.objectives.ObjectiveFunction" title="optimize.objectives.ObjectiveFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.objectives.ObjectiveFunction</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="optimize.objectives.ObjectiveFunction">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.objectives.</code><code class="sig-name descname">ObjectiveFunction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.objectives.ObjectiveFunction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>An base class for a general objective function. Not useful to instantiate on its own.</p>
+<dl class="py method">
+<dt id="optimize.objectives.ObjectiveFunction.compute_obj">
+<code class="sig-name descname">compute_obj</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.objectives.ObjectiveFunction.compute_obj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the score from a given set of parameters. This method must be implemented for each score function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pars</strong> (<em>Parameters</em>) – The parameters to use.</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – Must implement this method.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/optimize_logo.png" alt="Logo"/>
+            </a></p>
+<h1 class="logo"><a href="index.html">optimize</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html#indices-and-tables">Indices and tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending.html">Extending optimize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Bryson Cale.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/objectives_api.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

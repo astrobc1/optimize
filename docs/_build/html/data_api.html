@@ -38,13 +38,271 @@
 <div class="section" id="module-optimize.data">
 <span id="data"></span><h2>Data<a class="headerlink" href="#module-optimize.data" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
-<dt id="optimize.data.Data">
-<em class="property">class </em><code class="sig-prename descclassname">optimize.data.</code><code class="sig-name descname">Data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">yerr</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">mask</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">label</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.data.Data" title="Permalink to this definition">¶</a></dt>
+<dt id="optimize.data.CompositeDataset">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.data.</code><code class="sig-name descname">CompositeDataset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">label</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.data.CompositeDataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#optimize.data.Dataset" title="optimize.data.Dataset"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.data.Dataset</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+<p>A useful class to extend for composite data sets.</p>
+<p>Constructs a general dataset, simply stores a label for now.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>label</strong> (<em>str</em>) – The label for this dataset.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="optimize.data.CompositeDataset.get_trainable">
+<code class="sig-name descname">get_trainable</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">labels</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.data.CompositeDataset.get_trainable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the trainable dataset as a numpy array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>NotImplementedError</strong> – Must implement this method for a given subclass.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.data.CompositeDataset.get_view">
+<code class="sig-name descname">get_view</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">labels</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.data.CompositeDataset.get_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a view into sub data objects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>labels</strong> (<em>str</em><em> or </em><em>list of strings</em>) – The labels to get.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A view into the original data object.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>type(self)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="optimize.data.Dataset">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.data.</code><code class="sig-name descname">Dataset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">label</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.data.Dataset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>A base class for simple datasets. Additional datasets may ignore the slots and define their own attributes, but the memory usage will resort to the typical Python dict implementation. A __dict__ will be created unless a new __slots__ class attribute is used.</p>
+<p>A base class for datasets. This class is not useful to instantiate on its own.</p>
 <dl class="py attribute">
-<dt id="optimize.data.Data.x">
-<code class="sig-name descname">x</code><a class="headerlink" href="#optimize.data.Data.x" title="Permalink to this definition">¶</a></dt>
+<dt id="optimize.data.Dataset.label">
+<code class="sig-name descname">label</code><a class="headerlink" href="#optimize.data.Dataset.label" title="Permalink to this definition">¶</a></dt>
+<dd><p>The label for this dataset. Defaults to None.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p>Constructs a general dataset, simply stores a label for now.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>label</strong> (<em>str</em>) – The label for this dataset.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="optimize.data.Dataset.get_apriori_errors">
+<code class="sig-name descname">get_apriori_errors</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#optimize.data.Dataset.get_apriori_errors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the aprior errors (likely known beforehand and provided by the user).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>NotImplementedError Must implement this method.</strong> – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.data.Dataset.get_trainable">
+<code class="sig-name descname">get_trainable</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.data.Dataset.get_trainable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the trainable dataset as a numpy array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>NotImplementedError</strong> – Must implement this method for a given subclass.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.data.Dataset.initialize">
+<code class="sig-name descname">initialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.data.Dataset.initialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called before optimization routines.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pars</strong> (<em>Parameters</em>) – The parameters.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="optimize.data.HomogeneousCompositeSimpleSeries">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.data.</code><code class="sig-name descname">HomogeneousCompositeSimpleSeries</code><a class="headerlink" href="#optimize.data.HomogeneousCompositeSimpleSeries" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#optimize.data.CompositeDataset" title="optimize.data.CompositeDataset"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.data.CompositeDataset</span></code></a></p>
+<p>A useful class to extend for composite 1d datasets which are all instances of SimpleSeries on the same data set.</p>
+<dl class="py attribute">
+<dt id="optimize.data.HomogeneousCompositeSimpleSeries.indices">
+<code class="sig-name descname">indices</code><a class="headerlink" href="#optimize.data.HomogeneousCompositeSimpleSeries.indices" title="Permalink to this definition">¶</a></dt>
+<dd><p>The indices for each dataset when sorted according to x.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="simple">
+<dt>Properties:</dt><dd><p>x (np.ndarray): The x vector.
+y (np.ndarray): The y vector.
+yerr (np.ndarray): The yerr vector.</p>
+</dd>
+</dl>
+<p>Constructs a general dataset, simply stores a label for now.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>label</strong> (<em>str</em>) – The label for this dataset.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="optimize.data.HomogeneousCompositeSimpleSeries.gen_indices">
+<code class="sig-name descname">gen_indices</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#optimize.data.HomogeneousCompositeSimpleSeries.gen_indices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Utility function to generate the indices of each dataset (when sorted according to x).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A dictionary with keys = data labels, values = numpy array of indices (ints).</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.data.HomogeneousCompositeSimpleSeries.gen_label_vec">
+<code class="sig-name descname">gen_label_vec</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#optimize.data.HomogeneousCompositeSimpleSeries.gen_label_vec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a vector where each index corresponds to the label of measurement x, sorted by x as well.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The label vector sorted according to self.indices.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.data.HomogeneousCompositeSimpleSeries.get_apriori_errors">
+<code class="sig-name descname">get_apriori_errors</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#optimize.data.HomogeneousCompositeSimpleSeries.get_apriori_errors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the aprior errors (likely known beforehand and provided by the user).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>NotImplementedError Must implement this method.</strong> – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.data.HomogeneousCompositeSimpleSeries.get_trainable">
+<code class="sig-name descname">get_trainable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#optimize.data.HomogeneousCompositeSimpleSeries.get_trainable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the trainable dataset as a numpy array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Returns self.y.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.data.HomogeneousCompositeSimpleSeries.get_vec">
+<code class="sig-name descname">get_vec</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">attr</span></em>, <em class="sig-param"><span class="n">sort</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">labels</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.data.HomogeneousCompositeSimpleSeries.get_vec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets a vector for certain labels and possibly sorts it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>attr</strong> (<em>str</em>) – The attribute to get.</p></li>
+<li><p><strong>sort</strong> (<em>bool</em>) – Whether or not to sort the returned vector.</p></li>
+<li><p><strong>labels</strong> (<em>list of strings</em><em>, </em><em>optional</em>) – The labels to get. Defaults to all.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The vector, sorted according to x if sort=True.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.data.HomogeneousCompositeSimpleSeries.n">
+<em class="property">property </em><code class="sig-name descname">n</code><a class="headerlink" href="#optimize.data.HomogeneousCompositeSimpleSeries.n" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of data points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The number of data points.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.data.HomogeneousCompositeSimpleSeries.x">
+<em class="property">property </em><code class="sig-name descname">x</code><a class="headerlink" href="#optimize.data.HomogeneousCompositeSimpleSeries.x" title="Permalink to this definition">¶</a></dt>
+<dd><p>The x vector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The sorted x vector.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.data.HomogeneousCompositeSimpleSeries.y">
+<em class="property">property </em><code class="sig-name descname">y</code><a class="headerlink" href="#optimize.data.HomogeneousCompositeSimpleSeries.y" title="Permalink to this definition">¶</a></dt>
+<dd><p>The y vector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The y vector sorted according to x.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.data.HomogeneousCompositeSimpleSeries.yerr">
+<em class="property">property </em><code class="sig-name descname">yerr</code><a class="headerlink" href="#optimize.data.HomogeneousCompositeSimpleSeries.yerr" title="Permalink to this definition">¶</a></dt>
+<dd><p>The yerr vector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The yerr vector sorted according to x.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="optimize.data.SimpleSeries">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.data.</code><code class="sig-name descname">SimpleSeries</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">yerr</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">label</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.data.SimpleSeries" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#optimize.data.Dataset" title="optimize.data.Dataset"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.data.Dataset</span></code></a></p>
+<p>A class for a 1d-&gt;1d homogeneous dataset, sorted according to x. This class may be used directly or extended.</p>
+<dl class="py attribute">
+<dt id="optimize.data.SimpleSeries.x">
+<code class="sig-name descname">x</code><a class="headerlink" href="#optimize.data.SimpleSeries.x" title="Permalink to this definition">¶</a></dt>
 <dd><p>The effective independent variable.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -54,8 +312,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="optimize.data.Data.y">
-<code class="sig-name descname">y</code><a class="headerlink" href="#optimize.data.Data.y" title="Permalink to this definition">¶</a></dt>
+<dt id="optimize.data.SimpleSeries.y">
+<code class="sig-name descname">y</code><a class="headerlink" href="#optimize.data.SimpleSeries.y" title="Permalink to this definition">¶</a></dt>
 <dd><p>The effective dependent variable.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -65,31 +323,20 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="optimize.data.Data.yerr">
-<code class="sig-name descname">yerr</code><a class="headerlink" href="#optimize.data.Data.yerr" title="Permalink to this definition">¶</a></dt>
-<dd><p>The intrinsic errorbars for y.</p>
+<dt id="optimize.data.SimpleSeries.yerr">
+<code class="sig-name descname">yerr</code><a class="headerlink" href="#optimize.data.SimpleSeries.yerr" title="Permalink to this definition">¶</a></dt>
+<dd><p>The intrinsic errorbars for y. Defaults to None.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>np.ndarray</p>
+<dd class="field-odd"><p>np.ndarray, optional</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="optimize.data.Data.mask">
-<code class="sig-name descname">mask</code><a class="headerlink" href="#optimize.data.Data.mask" title="Permalink to this definition">¶</a></dt>
-<dd><p>An array defining good (=1) and bad (=0) data points, must have the same shape as y. Defaults to None (all good data).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>np.ndarray</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="optimize.data.Data.label">
-<code class="sig-name descname">label</code><a class="headerlink" href="#optimize.data.Data.label" title="Permalink to this definition">¶</a></dt>
-<dd><p>The label for this dataset.</p>
+<dt id="optimize.data.SimpleSeries.label">
+<code class="sig-name descname">label</code><a class="headerlink" href="#optimize.data.SimpleSeries.label" title="Permalink to this definition">¶</a></dt>
+<dd><p>The label for this dataset. Defaults to None.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>str</p>
@@ -97,55 +344,35 @@
 </dl>
 </dd></dl>
 
-<p>Constructs a general dataset.</p>
+<p>Constructs a series dataset.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>x</strong> (<em>np.ndarray</em>) – The effective independent variable.</p></li>
 <li><p><strong>y</strong> (<em>np.ndarray</em>) – The effective dependent variable.</p></li>
-<li><p><strong>yerr</strong> (<em>np.ndarray</em>) – The intrinsic errorbars for y.</p></li>
-<li><p><strong>mask</strong> (<em>np.ndarray</em>) – An array defining good (=1) and bad (=0) data points, must have the same shape as y. Defaults to None (all good data).</p></li>
-<li><p><strong>label</strong> (<em>str</em>) – The label for this dataset.</p></li>
+<li><p><strong>yerr</strong> (<em>np.ndarray</em>) – The intrinsic errorbars for y. Defaults to None. If not provided, one cannot use noise-based modeling.</p></li>
+<li><p><strong>label</strong> (<em>str</em>) – The label for this dataset. Defaults to None.</p></li>
 </ul>
 </dd>
 </dl>
 <dl class="py method">
-<dt id="optimize.data.Data.compute_errorbars">
-<code class="sig-name descname">compute_errorbars</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.data.Data.compute_errorbars" title="Permalink to this definition">¶</a></dt>
-<dd><p>Computes the effective error bars after including additional white noise (“jitter”) terms. Errors are added in quadrature. Jitter params must be names label_jitter.</p>
+<dt id="optimize.data.SimpleSeries.get_apriori_errors">
+<code class="sig-name descname">get_apriori_errors</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#optimize.data.SimpleSeries.get_apriori_errors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the aprior errors (likely known beforehand and provided by the user).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>pars</strong> (<a class="reference internal" href="knowledge_api.html#optimize.knowledge.Parameters" title="optimize.knowledge.Parameters"><em>Parameters</em></a>) – The parameters object containing the “jitter” parameter. If not present, the errorbars are returned.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The computed errorbars for this dataset.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>np.ndarray</p>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>NotImplementedError Must implement this method.</strong> – </p>
 </dd>
 </dl>
 </dd></dl>
 
-</dd></dl>
-
-<dl class="py class">
-<dt id="optimize.data.MixedData">
-<em class="property">class </em><code class="sig-prename descclassname">optimize.data.</code><code class="sig-name descname">MixedData</code><a class="headerlink" href="#optimize.data.MixedData" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
-<p>A useful class to extend for composite data sets. Data sets of the same physical measurement, or different measurements of the same object may be utilized here. The labels of each dataset correspond the the keys of the dictionary.</p>
 <dl class="py method">
-<dt id="optimize.data.MixedData.get">
-<code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">labels</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.data.MixedData.get" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a view into sub data objects.</p>
+<dt id="optimize.data.SimpleSeries.get_trainable">
+<code class="sig-name descname">get_trainable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#optimize.data.SimpleSeries.get_trainable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the trainable dataset as a numpy array.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>labels</strong> (<em>list</em>) – A list of labels (str).</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A view into the original data object.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#optimize.data.MixedData" title="optimize.data.MixedData">MixedData</a></p>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>NotImplementedError</strong> – Must implement this method for a given subclass.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -184,8 +411,6 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="knowledge_api.html">Knowledge</a></li>
 <li class="toctree-l2"><a class="reference internal" href="models_api.html">Models</a></li>
-<li class="toctree-l2"><a class="reference internal" href="kernels_api.html">Kernels</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scores_api.html">Scores</a></li>
 <li class="toctree-l2"><a class="reference internal" href="optimizers_api.html">Optimizers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="frameworks_api.html">Frameworks</a></li>
 </ul>

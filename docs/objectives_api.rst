@@ -1,9 +1,9 @@
 optimize API reference
 ======================
 
-Scores
-++++++
+Objectives
+++++++++++
 
-.. automodule:: optimize.scores
+.. automodule:: optimize.objectives
     :members:
     :show-inheritance:

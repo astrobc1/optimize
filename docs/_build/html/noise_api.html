@@ -1,0 +1,361 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>optimize API reference &#8212; optimize  documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/optimize_logo.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="optimize-api-reference">
+<h1>optimize API reference<a class="headerlink" href="#optimize-api-reference" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-optimize.noise">
+<span id="noise"></span><h2>Noise<a class="headerlink" href="#module-optimize.noise" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="optimize.noise.CorrelatedNoiseProcess">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.noise.</code><code class="sig-name descname">CorrelatedNoiseProcess</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">kernel</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.noise.CorrelatedNoiseProcess" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#optimize.noise.NoiseProcess" title="optimize.noise.NoiseProcess"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.noise.NoiseProcess</span></code></a></p>
+<dl class="py method">
+<dt id="optimize.noise.CorrelatedNoiseProcess.compute_residuals">
+<code class="sig-name descname">compute_residuals</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em>, <em class="sig-param"><span class="n">linpred</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.noise.CorrelatedNoiseProcess.compute_residuals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the final residuals (linpred - noise process)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pars</strong> (<em>Parameters</em>) – The parameters to use.</p></li>
+<li><p><strong>linpred</strong> (<em>np.ndarray</em>) – The linear predictor.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The final residuals.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.noise.CorrelatedNoiseProcess.initialize">
+<code class="sig-name descname">initialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">p0</span></em>, <em class="sig-param"><span class="n">x1</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">xpred</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.noise.CorrelatedNoiseProcess.initialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default initializer for correlated noise kernels. By default, only the distance matrix is constructed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x1</strong> (<em>np.ndarray</em><em>, </em><em>optional</em>) – The x1 vector. Defaults to the Data grid (self.x).</p></li>
+<li><p><strong>xpred</strong> (<em>np.ndarray</em><em>, </em><em>optional</em>) – The vector to make predictions on. Defaults to x1.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="optimize.noise.GaussianProcess">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.noise.</code><code class="sig-name descname">GaussianProcess</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">kernel</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.noise.GaussianProcess" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#optimize.noise.CorrelatedNoiseProcess" title="optimize.noise.CorrelatedNoiseProcess"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.noise.CorrelatedNoiseProcess</span></code></a></p>
+<p>A noise kernel defined through a single GP and diagonal error terms with an additional “jitter” parameter. Each jitter parameter must be named “jitter_label” where label is the data label.</p>
+<dl class="py method">
+<dt id="optimize.noise.GaussianProcess.compute_data_errors">
+<code class="sig-name descname">compute_data_errors</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em>, <em class="sig-param"><span class="n">include_corr_error</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">linpred</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.noise.GaussianProcess.compute_data_errors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the errors added in quadrature for all datasets corresponding to this kernel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pars</strong> (<em>Parameters</em>) – The parameters to use.</p></li>
+<li><p><strong>include_gp_error</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether or not to include the gp error. Defaults to False.</p></li>
+<li><p><strong>linear_pred</strong> (<em>np.ndarray</em>) – The linear predictor; the data vector containing noise.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The data errors.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="optimize.noise.NoiseProcess">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.noise.</code><code class="sig-name descname">NoiseProcess</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.noise.NoiseProcess" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A base noise process class defined through a covariance matrix. This class is not useful to instantiate on its own.</p>
+<dl class="py attribute">
+<dt id="optimize.noise.NoiseProcess.data">
+<code class="sig-name descname">data</code><a class="headerlink" href="#optimize.noise.NoiseProcess.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>The dataset for this noise process.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="data_api.html#optimize.data.Dataset" title="optimize.data.Dataset">Dataset</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="optimize.noise.NoiseProcess.name">
+<code class="sig-name descname">name</code><a class="headerlink" href="#optimize.noise.NoiseProcess.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of this noise process. Defaults to None.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="optimize.noise.StationaryNoiseProcess">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.noise.</code><code class="sig-name descname">StationaryNoiseProcess</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">kernel</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.noise.StationaryNoiseProcess" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#optimize.noise.CorrelatedNoiseProcess" title="optimize.noise.CorrelatedNoiseProcess"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.noise.CorrelatedNoiseProcess</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="optimize.noise.UnCorrelatedNoiseProcess">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.noise.</code><code class="sig-name descname">UnCorrelatedNoiseProcess</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.noise.UnCorrelatedNoiseProcess" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#optimize.noise.NoiseProcess" title="optimize.noise.NoiseProcess"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.noise.NoiseProcess</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="optimize.noise.WhiteNoiseProcess">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.noise.</code><code class="sig-name descname">WhiteNoiseProcess</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.noise.WhiteNoiseProcess" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#optimize.noise.UnCorrelatedNoiseProcess" title="optimize.noise.UnCorrelatedNoiseProcess"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.noise.UnCorrelatedNoiseProcess</span></code></a></p>
+<dl class="py method">
+<dt id="optimize.noise.WhiteNoiseProcess.compute_data_errors">
+<code class="sig-name descname">compute_data_errors</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.noise.WhiteNoiseProcess.compute_data_errors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the errors added in quadrature for all datasets corresponding to this kernel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pars</strong> (<em>Parameters</em>) – The parameters to use.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The final data errors.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-optimize.kernels"></span><dl class="py class">
+<dt id="optimize.kernels.CorrelatedNoiseKernel">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.kernels.</code><code class="sig-name descname">CorrelatedNoiseKernel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">par_names</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.kernels.CorrelatedNoiseKernel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#optimize.kernels.NoiseKernel" title="optimize.kernels.NoiseKernel"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.kernels.NoiseKernel</span></code></a></p>
+<p>Behaves as a trait for now.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="optimize.kernels.NoiseKernel">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.kernels.</code><code class="sig-name descname">NoiseKernel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">par_names</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.kernels.NoiseKernel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A base noise kernel class defined through a covariance matrix. This class is not useful to instantiate on its own.</p>
+<dl class="py attribute">
+<dt id="optimize.kernels.NoiseKernel.data">
+<code class="sig-name descname">data</code><a class="headerlink" href="#optimize.kernels.NoiseKernel.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>The dataset using this noise kernel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="data_api.html#optimize.data.Dataset" title="optimize.data.Dataset">Dataset</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="optimize.kernels.NoiseKernel.par_names">
+<code class="sig-name descname">par_names</code><a class="headerlink" href="#optimize.kernels.NoiseKernel.par_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>The parameter names for this kernel, optional.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list of strings, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.kernels.NoiseKernel.initialize">
+<code class="sig-name descname">initialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">p0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.kernels.NoiseKernel.initialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default wrapper to initialize the kernel, storing the parameters.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="optimize.kernels.QuasiPeriodic">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.kernels.</code><code class="sig-name descname">QuasiPeriodic</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">par_names</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.kernels.QuasiPeriodic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#optimize.kernels.StationaryNoiseKernel" title="optimize.kernels.StationaryNoiseKernel"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.kernels.StationaryNoiseKernel</span></code></a></p>
+<p>A Quasiperiodic kernel. The hyperparameters may be called anything, but must be in the order of amplitude, exp length scale, period length scale, and period.</p>
+<dl class="py method">
+<dt id="optimize.kernels.QuasiPeriodic.compute_cov_matrix">
+<code class="sig-name descname">compute_cov_matrix</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.kernels.QuasiPeriodic.compute_cov_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the QP kernel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pars</strong> (<em>Parameters</em>) – The parameters to use.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The covariance matrix K.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="optimize.kernels.StationaryNoiseKernel">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.kernels.</code><code class="sig-name descname">StationaryNoiseKernel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">par_names</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.kernels.StationaryNoiseKernel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#optimize.kernels.CorrelatedNoiseKernel" title="optimize.kernels.CorrelatedNoiseKernel"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.kernels.CorrelatedNoiseKernel</span></code></a></p>
+<p>Noise kernel which only dependes on the relative difference between 2 values. Also has trait like behavior.</p>
+<dl class="py method">
+<dt id="optimize.kernels.StationaryNoiseKernel.compute_dist_matrix">
+<code class="sig-name descname">compute_dist_matrix</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x1</span></em>, <em class="sig-param"><span class="n">x2</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.kernels.StationaryNoiseKernel.compute_dist_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the stationary distance matrix, D_ij = <a href="#id1"><span class="problematic" id="id2">|x_i - x_j|</span></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x1</strong> (<em>np.ndarray</em>) – The first vector.</p></li>
+<li><p><strong>x2</strong> (<em>np.ndarray</em>) – The second vector.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The stationary distance matrix D_ij</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.kernels.StationaryNoiseKernel.initialize">
+<code class="sig-name descname">initialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">p0</span></em>, <em class="sig-param"><span class="n">x1</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">xpred</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.kernels.StationaryNoiseKernel.initialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes the noise kernel by computing the stationary distance matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p0</strong> (<em>Parameters</em>) – The parameters to use.</p></li>
+<li><p><strong>x1</strong> (<em>np.ndarray</em><em>, </em><em>optional</em>) – The first vector. Defaults to data.x.</p></li>
+<li><p><strong>xpred</strong> (<em>np.ndarray</em><em>, </em><em>optional</em>) – The vector to make predictions on. Defaults to x1.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="optimize.kernels.UnCorrelatedNoiseKernel">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.kernels.</code><code class="sig-name descname">UnCorrelatedNoiseKernel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">par_names</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.kernels.UnCorrelatedNoiseKernel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#optimize.kernels.NoiseKernel" title="optimize.kernels.NoiseKernel"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.kernels.NoiseKernel</span></code></a></p>
+<p>Behaves as a trait for now.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/optimize_logo.png" alt="Logo"/>
+            </a></p>
+<h1 class="logo"><a href="index.html">optimize</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html#indices-and-tables">Indices and tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending.html">Extending optimize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Bryson Cale.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/noise_api.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

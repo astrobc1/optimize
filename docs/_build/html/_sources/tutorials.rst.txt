@@ -6,23 +6,36 @@
 Tutorials
 =========
 
-Example 1: Fitting a Gaussian
-+++++++++++++++++++++++++++++
+Example 1: Fitting a Gaussian with an MSE objective.
+++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-.. literalinclude:: ../examples/gauss_fit_example.py
+.. literalinclude:: ../examples/gauss_fit_example1.py
     :language: python
 
 The result ...
 
-
-``(Parameter)  Name: amp | Value: 2.501808472212764``
-
-``(Parameter)  Name: mu | Value: -0.9993725521536447``
-
-``(Parameter)  Name: sigma | Value: 0.799639841776913``
+.. image:: ../examples/gaussfit_example1.png
 
 
-.. image:: ../examples/data_model_example.png
+
+Example 2: Fitting a Gaussian with a Chi-2 objective.
+++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+.. literalinclude:: ../examples/gauss_fit_example2.py
+    :language: python
+
+.. image:: ../examples/gaussfit_example2.png
+
+
+
+Example 3: Fitting a Gaussian with a Gaussian Likelihood.
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+.. literalinclude:: ../examples/gauss_fit_example3.py
+    :language: python
+
+.. image:: ../examples/gaussfit_example3.png
+.. image:: ../examples/corner.png
 
 Indices and tables
 ==================
