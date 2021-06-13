@@ -11,4 +11,5 @@ optimize API reference
     Noise <noise_api>
     Objectives <objectives_api.rst>
     Optimizers <optimizers_api>
+    Samplers <samplers_api>
     Frameworks <frameworks_api>

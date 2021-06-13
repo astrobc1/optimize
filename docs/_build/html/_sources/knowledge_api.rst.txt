@@ -4,6 +4,10 @@ optimize API reference
 Knowledge
 +++++++++
 
-.. automodule:: optimize.knowledge
+.. automodule:: optimize.parameters
+    :members:
+    :show-inheritance:
+
+.. automodule:: optimize.priors
     :members:
     :show-inheritance:

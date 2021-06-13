@@ -6,122 +6,461 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>optimize API reference &#8212; optimize  documentation</title>
+    
+  <link href="_static/css/theme.css" rel="stylesheet" />
+  <link href="_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/sphinx-book-theme.acff12b8f9c144ce68a297486a2fa670.css" type="text/css" />
+    
+  <link rel="preload" as="script" href="_static/js/index.1c5a1a01449ed65a7b51.js">
+
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
     <link rel="shortcut icon" href="_static/optimize_logo.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="optimize API reference" href="optimizers_api.html" />
+    <link rel="next" title="optimize API reference" href="noise_api.html" />
     <link rel="prev" title="optimize API reference" href="knowledge_api.html" />
-   
-  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
-  
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
 
-  </head><body>
-  
+    
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+      <img src="_static/optimize_logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">optimize  documentation</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <div class="bd-toc-item active">
+        <ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="installation.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="tutorials.html">
+   Tutorials
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="extending.html">
+   Extending optimize
+  </a>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="api.html">
+   API
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="data_api.html">
+     Data
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="knowledge_api.html">
+     Knowledge
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Models
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="noise_api.html">
+     Noise
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="objectives_api.html">
+     Objectives
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="optimizers_api.html">
+     Optimizers
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="samplers_api.html">
+     Samplers
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="frameworks_api.html">
+     Frameworks
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+</div>
+
+</div>
+
+
           
 
-          <div class="body" role="main">
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
             
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="_sources/models_api.rst.txt"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.rst</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-optimize.models">
+   Models
+  </a>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
   <div class="section" id="optimize-api-reference">
 <h1>optimize API reference<a class="headerlink" href="#optimize-api-reference" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-optimize.models">
 <span id="models"></span><h2>Models<a class="headerlink" href="#module-optimize.models" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="optimize.models.DeterministicModel">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.models.</code><code class="sig-name descname">DeterministicModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.models.DeterministicModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#optimize.models.Model" title="optimize.models.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.models.Model</span></code></a></p>
+<p>This class primarily serves as a trait with little additional functionality.</p>
+<p>Base constructor for a model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<a class="reference internal" href="data_api.html#optimize.data.Dataset" title="optimize.data.Dataset"><em>Dataset</em></a><em>, </em><em>optional</em>) – The dataset for this model.</p></li>
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – The name of this model.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="optimize.models.GPBasedModel">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.models.</code><code class="sig-name descname">GPBasedModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">det_model</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">noise_process</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.models.GPBasedModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#optimize.models.NoiseBasedModel" title="optimize.models.NoiseBasedModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.models.NoiseBasedModel</span></code></a></p>
+<p>Class for a GP based noise model.</p>
+<p>Base constructor for a noise based model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>det_model</strong> (<a class="reference internal" href="#optimize.models.DeterministicModel" title="optimize.models.DeterministicModel"><em>DeterministicModel</em></a>) – The deterministic model.</p></li>
+<li><p><strong>noise_process</strong> (<a class="reference internal" href="noise_api.html#optimize.noise.NoiseProcess" title="optimize.noise.NoiseProcess"><em>NoiseProcess</em></a>) – The noise process.</p></li>
+<li><p><strong>data</strong> (<a class="reference internal" href="data_api.html#optimize.data.Dataset" title="optimize.data.Dataset"><em>Dataset</em></a>) – The dataset for this model.</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – The name of this model.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="optimize.models.Model">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.models.</code><code class="sig-name descname">Model</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.models.Model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base class for a model. This class provides a minimal api to work with the other objects. The model is assumed to hold an instance of the relevant data.</p>
+<dl class="py attribute">
+<dt id="optimize.models.Model.data">
+<code class="sig-name descname">data</code><a class="headerlink" href="#optimize.models.Model.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>The dataset for this model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="data_api.html#optimize.data.Dataset" title="optimize.data.Dataset">Dataset</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="optimize.models.Model.name">
+<code class="sig-name descname">name</code><a class="headerlink" href="#optimize.models.Model.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of this model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p>Base constructor for a model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<a class="reference internal" href="data_api.html#optimize.data.Dataset" title="optimize.data.Dataset"><em>Dataset</em></a><em>, </em><em>optional</em>) – The dataset for this model.</p></li>
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – The name of this model.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="optimize.models.Model.compute_data_errors">
+<code class="sig-name descname">compute_data_errors</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.models.Model.compute_data_errors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default method to generate the data errors, which may be parametrized. Here the data a priori error bars are returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pars</strong> (<a class="reference internal" href="knowledge_api.html#optimize.parameters.Parameters" title="optimize.parameters.Parameters"><em>Parameters</em></a>) – The parameters.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The data errors.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.models.Model.compute_residuals">
+<code class="sig-name descname">compute_residuals</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.models.Model.compute_residuals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default method to generate the residuals (data - model).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pars</strong> (<a class="reference internal" href="knowledge_api.html#optimize.parameters.Parameters" title="optimize.parameters.Parameters"><em>Parameters</em></a>) – The parameters.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The residuals.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="optimize.models.NoiseBasedModel">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.models.</code><code class="sig-name descname">NoiseBasedModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">det_model</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">noise_process</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.models.NoiseBasedModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#optimize.models.Model" title="optimize.models.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.models.Model</span></code></a></p>
+<p>A base class for models composed of a deterministic model and a noise process.</p>
+<dl class="py attribute">
+<dt id="optimize.models.NoiseBasedModel.det_model">
+<code class="sig-name descname">det_model</code><a class="headerlink" href="#optimize.models.NoiseBasedModel.det_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>The deterministic model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#optimize.models.DeterministicModel" title="optimize.models.DeterministicModel">DeterministicModel</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="optimize.models.NoiseBasedModel.noise_process">
+<code class="sig-name descname">noise_process</code><a class="headerlink" href="#optimize.models.NoiseBasedModel.noise_process" title="Permalink to this definition">¶</a></dt>
+<dd><p>The noise process.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="noise_api.html#optimize.noise.NoiseProcess" title="optimize.noise.NoiseProcess">NoiseProcess</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="optimize.models.NoiseBasedModel.data">
+<code class="sig-name descname">data</code><a class="headerlink" href="#optimize.models.NoiseBasedModel.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>The dataset for this model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="data_api.html#optimize.data.Dataset" title="optimize.data.Dataset">Dataset</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="optimize.models.NoiseBasedModel.name">
+<code class="sig-name descname">name</code><a class="headerlink" href="#optimize.models.NoiseBasedModel.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of this model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p>Base constructor for a noise based model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>det_model</strong> (<a class="reference internal" href="#optimize.models.DeterministicModel" title="optimize.models.DeterministicModel"><em>DeterministicModel</em></a>) – The deterministic model.</p></li>
+<li><p><strong>noise_process</strong> (<a class="reference internal" href="noise_api.html#optimize.noise.NoiseProcess" title="optimize.noise.NoiseProcess"><em>NoiseProcess</em></a>) – The noise process.</p></li>
+<li><p><strong>data</strong> (<a class="reference internal" href="data_api.html#optimize.data.Dataset" title="optimize.data.Dataset"><em>Dataset</em></a>) – The dataset for this model.</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – The name of this model.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="optimize.models.NoiseBasedModel.compute_data_errors">
+<code class="sig-name descname">compute_data_errors</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em>, <em class="sig-param"><span class="n">include_corr_error</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.models.NoiseBasedModel.compute_data_errors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default method to generate the data errors, which may be parametrized. Here the data a priori error bars are returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pars</strong> (<a class="reference internal" href="knowledge_api.html#optimize.parameters.Parameters" title="optimize.parameters.Parameters"><em>Parameters</em></a>) – The parameters.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The data errors.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.models.NoiseBasedModel.compute_residuals">
+<code class="sig-name descname">compute_residuals</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.models.NoiseBasedModel.compute_residuals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default method to generate the residuals (data - model).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pars</strong> (<a class="reference internal" href="knowledge_api.html#optimize.parameters.Parameters" title="optimize.parameters.Parameters"><em>Parameters</em></a>) – The parameters.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The residuals.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 </div>
 
 
-          </div>
-          
+              </div>
+              
+        
+        <div class='prev-next-bottom'>
+            
+    <a class='left-prev' id="prev-link" href="knowledge_api.html" title="previous page">optimize API reference</a>
+    <a class='right-next' id="next-link" href="noise_api.html" title="next page">optimize API reference</a>
+
         </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-            <p class="logo"><a href="index.html">
-              <img class="logo" src="_static/optimize_logo.png" alt="Logo"/>
-            </a></p>
-<h1 class="logo"><a href="index.html">optimize</a></h1>
-
-
-
-
-
-
-
-
-<h3>Navigation</h3>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorials.html#indices-and-tables">Indices and tables</a></li>
-<li class="toctree-l1"><a class="reference internal" href="extending.html">Extending optimize</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="api.html">API</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="data_api.html">Data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="knowledge_api.html">Knowledge</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Models</a></li>
-<li class="toctree-l2"><a class="reference internal" href="optimizers_api.html">Optimizers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="frameworks_api.html">Frameworks</a></li>
-</ul>
-</li>
-</ul>
-
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="index.html">Documentation overview</a><ul>
-  <li><a href="api.html">optimize API reference</a><ul>
-      <li>Previous: <a href="knowledge_api.html" title="previous chapter">optimize API reference</a></li>
-      <li>Next: <a href="optimizers_api.html" title="next chapter">optimize API reference</a></li>
-  </ul></li>
-  </ul></li>
-</ul>
-</div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
-
-
-
-
-
-
-
-
+        
         </div>
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Bryson Cale<br/>
+        
+            &copy; Copyright 2020, Bryson Cale.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
       </div>
-      <div class="clearer"></div>
     </div>
-    <div class="footer">
-      &copy;2020, Bryson Cale.
-      
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
-      
-      |
-      <a href="_sources/models_api.rst.txt"
-          rel="nofollow">Page source</a>
-    </div>
+  
+  <script src="_static/js/index.1c5a1a01449ed65a7b51.js"></script>
 
-    
-
-    
+  
   </body>
 </html>

@@ -1,0 +1,428 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>optimize API reference &#8212; optimize  documentation</title>
+    
+  <link href="_static/css/theme.css" rel="stylesheet" />
+  <link href="_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/sphinx-book-theme.acff12b8f9c144ce68a297486a2fa670.css" type="text/css" />
+    
+  <link rel="preload" as="script" href="_static/js/index.1c5a1a01449ed65a7b51.js">
+
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <link rel="shortcut icon" href="_static/optimize_logo.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="optimize API reference" href="frameworks_api.html" />
+    <link rel="prev" title="optimize API reference" href="optimizers_api.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+      <img src="_static/optimize_logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">optimize  documentation</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <div class="bd-toc-item active">
+        <ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="installation.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="tutorials.html">
+   Tutorials
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="extending.html">
+   Extending optimize
+  </a>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="api.html">
+   API
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="data_api.html">
+     Data
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="knowledge_api.html">
+     Knowledge
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="models_api.html">
+     Models
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="noise_api.html">
+     Noise
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="objectives_api.html">
+     Objectives
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="optimizers_api.html">
+     Optimizers
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Samplers
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="frameworks_api.html">
+     Frameworks
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="_sources/samplers_api.rst.txt"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.rst</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-optimize.samplers">
+   Samplers
+  </a>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="optimize-api-reference">
+<h1>optimize API reference<a class="headerlink" href="#optimize-api-reference" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-optimize.samplers">
+<span id="samplers"></span><h2>Samplers<a class="headerlink" href="#module-optimize.samplers" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="optimize.samplers.HNUT">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.samplers.</code><code class="sig-name descname">HNUT</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.samplers.HNUT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="optimizers_api.html#optimize.optimizers.Sampler" title="optimize.optimizers.Sampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.optimizers.Sampler</span></code></a></p>
+<p>Construct for the base optimization class.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="optimize.samplers.MultiNest">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.samplers.</code><code class="sig-name descname">MultiNest</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.samplers.MultiNest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="optimizers_api.html#optimize.optimizers.Sampler" title="optimize.optimizers.Sampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.optimizers.Sampler</span></code></a></p>
+<p>Construct for the base optimization class.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="optimize.samplers.ZeusSampler">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.samplers.</code><code class="sig-name descname">ZeusSampler</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.samplers.ZeusSampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#optimize.samplers.emceeLikeSampler" title="optimize.samplers.emceeLikeSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.samplers.emceeLikeSampler</span></code></a></p>
+<p>A class to interface with the zeus sliced Ensemble Sampler.</p>
+<p>Construct for the base optimization class.</p>
+<dl class="py method">
+<dt id="optimize.samplers.ZeusSampler.init_sampler">
+<code class="sig-name descname">init_sampler</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#optimize.samplers.ZeusSampler.init_sampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes the zues Ensemble sampler.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.samplers.ZeusSampler.run_mcmc">
+<code class="sig-name descname">run_mcmc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">walkers</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">n_burn_steps</span><span class="o">=</span><span class="default_value">500</span></em>, <em class="sig-param"><span class="n">check_every</span><span class="o">=</span><span class="default_value">200</span></em>, <em class="sig-param"><span class="n">n_steps</span><span class="o">=</span><span class="default_value">75000</span></em>, <em class="sig-param"><span class="n">rel_tau_thresh</span><span class="o">=</span><span class="default_value">0.01</span></em>, <em class="sig-param"><span class="n">n_min_steps</span><span class="o">=</span><span class="default_value">1000</span></em>, <em class="sig-param"><span class="n">n_cores</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">n_taus_thresh</span><span class="o">=</span><span class="default_value">40</span></em>, <em class="sig-param"><span class="n">progress</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.samplers.ZeusSampler.run_mcmc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper to perform a burn-in + full MCMC exploration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pars</strong> (<a class="reference internal" href="knowledge_api.html#optimize.parameters.Parameters" title="optimize.parameters.Parameters"><em>Parameters</em></a><em>, </em><em>optional</em>) – The starting parameters. Defaults to p0.</p></li>
+<li><p><strong>walkers</strong> (<em>np.ndarray</em><em>, </em><em>optional</em>) – The starting walkers. Defaults to calling self.init_walkers(pars).</p></li>
+<li><p><strong>n_burn_steps</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of burn in steps. Defaults to 100 * pars.num_varied().</p></li>
+<li><p><strong>n_steps</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of mcmc steps to perform in the full phase (post burn-in). Defaults to 50_000 * pars.num_varied().</p></li>
+<li><p><strong>rel_tau_thresh</strong> (<em>float</em><em>, </em><em>optional</em>) – The relative change in the auto-correlation time for convergence. This criterion must be met for all walkers. Defaults to 0.01.</p></li>
+<li><p><strong>n_min_steps</strong> (<em>int</em><em>, </em><em>optional</em>) – The minimum number of steps to run. Defaults to 1000</p></li>
+<li><p><strong>n_threads</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of threads to use. Defaults to 1.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The sampler result, with keys: flat_chains, autocorrs, steps, pbest, errors, lnL.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="optimize.samplers.emceeLikeSampler">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.samplers.</code><code class="sig-name descname">emceeLikeSampler</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.samplers.emceeLikeSampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="optimizers_api.html#optimize.optimizers.Sampler" title="optimize.optimizers.Sampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.optimizers.Sampler</span></code></a></p>
+<p>Construct for the base optimization class.</p>
+<dl class="py method">
+<dt id="optimize.samplers.emceeLikeSampler.compute_obj">
+<code class="sig-name descname">compute_obj</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.samplers.emceeLikeSampler.compute_obj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper to compute the objective.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pars</strong> (<em>np.ndarray</em>) – The parameter values for only the varied parameters.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The log prob</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.samplers.emceeLikeSampler.corner_plot">
+<em class="property">static </em><code class="sig-name descname">corner_plot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mcmc_result</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.samplers.emceeLikeSampler.corner_plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructs a corner plot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>mcmc_result</strong> (<em>dict</em>) – The mcmc result.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A matplotlib figure.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>fig</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.samplers.emceeLikeSampler.init_walkers">
+<code class="sig-name descname">init_walkers</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.samplers.emceeLikeSampler.init_walkers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes a set of walkers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pars</strong> (<a class="reference internal" href="knowledge_api.html#optimize.parameters.Parameters" title="optimize.parameters.Parameters"><em>Parameters</em></a><em>, </em><em>optional</em>) – The starting parameters. Defaults to p0.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A set of walkers as a numpy array with shape=(n_walkers, n_parameters_vary)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.samplers.emceeLikeSampler.n_walkers">
+<em class="property">property </em><code class="sig-name descname">n_walkers</code><a class="headerlink" href="#optimize.samplers.emceeLikeSampler.n_walkers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for the number of walkers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The number of walkers.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="optimize.samplers.emceeSampler">
+<em class="property">class </em><code class="sig-prename descclassname">optimize.samplers.</code><code class="sig-name descname">emceeSampler</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.samplers.emceeSampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#optimize.samplers.emceeLikeSampler" title="optimize.samplers.emceeLikeSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.samplers.emceeLikeSampler</span></code></a></p>
+<p>An class to interface to the emcee affine invariant Ensemble Sampler.</p>
+<p>Construct for the base optimization class.</p>
+<dl class="py method">
+<dt id="optimize.samplers.emceeSampler.init_sampler">
+<code class="sig-name descname">init_sampler</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#optimize.samplers.emceeSampler.init_sampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes the emcee.Ensemble sampler.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.samplers.emceeSampler.run_mcmc">
+<code class="sig-name descname">run_mcmc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">walkers</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">n_burn_steps</span><span class="o">=</span><span class="default_value">500</span></em>, <em class="sig-param"><span class="n">check_every</span><span class="o">=</span><span class="default_value">200</span></em>, <em class="sig-param"><span class="n">n_steps</span><span class="o">=</span><span class="default_value">75000</span></em>, <em class="sig-param"><span class="n">rel_tau_thresh</span><span class="o">=</span><span class="default_value">0.01</span></em>, <em class="sig-param"><span class="n">n_min_steps</span><span class="o">=</span><span class="default_value">1000</span></em>, <em class="sig-param"><span class="n">n_cores</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">n_taus_thresh</span><span class="o">=</span><span class="default_value">40</span></em>, <em class="sig-param"><span class="n">progress</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.samplers.emceeSampler.run_mcmc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper to perform a burn-in + full MCMC exploration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pars</strong> (<a class="reference internal" href="knowledge_api.html#optimize.parameters.Parameters" title="optimize.parameters.Parameters"><em>Parameters</em></a><em>, </em><em>optional</em>) – The starting parameters. Defaults to p0.</p></li>
+<li><p><strong>walkers</strong> (<em>np.ndarray</em><em>, </em><em>optional</em>) – The starting walkers. Defaults to calling self.init_walkers(pars).</p></li>
+<li><p><strong>n_burn_steps</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of burn in steps. Defaults to 100 * pars.num_varied.</p></li>
+<li><p><strong>n_steps</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of mcmc steps to perform in the full phase (post burn-in). Defaults to 50_000 * pars.num_varied().</p></li>
+<li><p><strong>rel_tau_thresh</strong> (<em>float</em><em>, </em><em>optional</em>) – The relative change in the auto-correlation time for convergence. This criterion must be met for all walkers. Defaults to 0.01.</p></li>
+<li><p><strong>n_min_steps</strong> (<em>int</em><em>, </em><em>optional</em>) – The minimum number of steps to run. Defaults to 1000</p></li>
+<li><p><strong>n_threads</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of threads to use. Defaults to 1.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The sampler result, with keys: flat_chains, autocorrs, steps, pbest, errors, lnL.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+              </div>
+              
+        
+        <div class='prev-next-bottom'>
+            
+    <a class='left-prev' id="prev-link" href="optimizers_api.html" title="previous page">optimize API reference</a>
+    <a class='right-next' id="next-link" href="frameworks_api.html" title="next page">optimize API reference</a>
+
+        </div>
+        
+        </div>
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Bryson Cale<br/>
+        
+            &copy; Copyright 2020, Bryson Cale.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="_static/js/index.1c5a1a01449ed65a7b51.js"></script>
+
+  
+  </body>
+</html>
