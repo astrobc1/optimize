@@ -105,6 +105,10 @@ class BoundedParameter(Parameter):
     ###############
     #### MISC. ####
     ###############
+    
+    def sanity_lock(self):
+        if self.lower_bound == self.upper_bound and self.vary:
+            self.vary = False
 
     def __repr__(self):
         s = f"Name: {self.name} | Value: {self.value}"
@@ -507,6 +511,10 @@ class BoundedParameters(Parameters):
     #### MISC. ####
     ###############
     
+    def sanity_lock(self):
+        for par in self.values():
+            par.sanity_lock()
+    
     @property
     def num_in_bounds(self):
         """The number of parameters in bounds.
@@ -515,8 +523,8 @@ class BoundedParameters(Parameters):
             int: The number of parameters in bounds.
         """
         n = 0
-        for par in par.values():
-            if par.in_bounds:
+        for par in self.values():
+            if par.in_bounds and par.vary:
                 n += 1
         return n
     
@@ -528,8 +536,8 @@ class BoundedParameters(Parameters):
             int: The number of parameters out of bounds.
         """
         n = 0
-        for par in par.values():
-            if par.out_of_bounds:
+        for par in self.values():
+            if par.out_of_bounds and par.vary:
                 n += 1
         return n
     
