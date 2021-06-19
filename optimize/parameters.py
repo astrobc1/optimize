@@ -239,8 +239,8 @@ class BayesianParameter(Parameter):
                 return prior.sigma / 10
         for prior in self.priors:
             if isinstance(prior, optknow.priors.Uniform):
-                dx1 = np.abs(prior.maxval - self.value)
-                dx2 = np.abs(self.value - prior.minval)
+                dx1 = np.abs(prior.upper_bound - self.value)
+                dx2 = np.abs(self.value - prior.lower_bound)
                 scale = np.min([dx1, dx2]) / 100
                 if scale == 0:
                     return 1
