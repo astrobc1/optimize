@@ -203,10 +203,10 @@ class Posterior(dict, MaxObjectiveFunction):
         chi2 = 0
         n_dof = 0
         for like in self.values():
-            residuals = like.noise.compute_data_post_noise_process(pars)
-            errors = like.noise.compute_data_errors(pars)
+            residuals = like.model.compute_raw_residuals(pars)
+            errors = like.model.compute_data_errors(pars)
             chi2 += optmath.compute_chi2(residuals, errors)
-            n_dof += len(like.data.get_trainable())
+            n_dof += len(like.model.data.get_trainable())
         n_dof -= pars.num_varied
         redchi2 = chi2 / n_dof
         return redchi2
@@ -222,7 +222,7 @@ class Posterior(dict, MaxObjectiveFunction):
         """
         n = 0
         for like in self.likes:
-            n += len(like.data.get_trainable())
+            n += len(like.model.data.get_trainable())
         k = pars.num_varied
         lnL = self.compute_logL(pars)
         bic = k * np.log(n) - 2.0 * lnL
@@ -241,7 +241,7 @@ class Posterior(dict, MaxObjectiveFunction):
         # Number of data points
         n = 0
         for like in self.values():
-            n += len(like.data.get_trainable())
+            n += len(like.model.data.get_trainable())
             
         # Number of estimated parameters
         k = pars.num_varied
@@ -255,7 +255,7 @@ class Posterior(dict, MaxObjectiveFunction):
         # Small sample correction
         d = n - k - 1
         if d > 0:
-            aicc = aic (2 * k**2 + 2 * k) / d
+            aicc = aic + (2 * k**2 + 2 * k) / d
         else:
             aicc = np.inf
 
