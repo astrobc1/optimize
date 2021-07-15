@@ -1,5 +1,6 @@
 import numpy as np
 import optimize.knowledge as optknow
+import copy
 
 ##########################
 #### SINGLE PARAMETER ####
@@ -65,6 +66,12 @@ class Parameter:
             str: The value as a string
         """
         return f"{self.value}"
+
+    def gen_nan_pars(self):
+        pars = copy.deepcopy(self)
+        for par in pars:
+            par.value = np.nan
+        return pars
 
 class BoundedParameter(Parameter):
     """A class for a bounded model parameter.
