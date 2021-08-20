@@ -94,7 +94,7 @@ class WhiteNoiseProcess(UnCorrelatedNoiseProcess):
         errors = self.data.get_apriori_errors()
         
         # Add jitter in quadrature
-        errors = np.sqrt(errors**2 + pars[f"jitter_{self.data.label}"].value**2)
+        errors = np.sqrt(errors**2 + pars[f"jitter_{next(iter(self.data)).label}"].value**2)
         
         return errors
 
@@ -135,6 +135,9 @@ class GaussianProcess(CorrelatedNoiseProcess):
     
         # Get intrinsic data errors
         errors = self.data.get_apriori_errors()
+        
+        # Add any jitter
+        errors += pars[f"jitter_{next(iter(self.data.items()))[1].label}"].value
             
         # Add in quadrature the gp error
         if include_corr_error:

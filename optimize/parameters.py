@@ -342,11 +342,16 @@ class Parameters(dict):
         if vary_only:
             for key in keys:
                 t = type(getattr(self[0], key))
+                if t is int:
+                    t = float
                 out[key] = np.array([getattr(self[pname], key) for pname in self if self[pname].vary], dtype=t)
         else:
             for key in keys:
                 t = type(getattr(self[0], key))
+                if t is int:
+                    t = float
                 out[key] = np.array([getattr(self[pname], key) for pname in self], dtype=t)
+
         return out
 
     ###########################

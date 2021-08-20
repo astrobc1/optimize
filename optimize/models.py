@@ -96,14 +96,15 @@ class NoiseBasedModel(Model):
     
     def initialize(self, p0):
         super().initialize(p0)
-        self.det_model.initialize(self.p0)
+        if self.det_model is not None:
+            self.det_model.initialize(self.p0)
         self.noise_process.initialize(self.p0)
     
     def build(self, pars):
         if self.det_model is not None:
             return self.det_model.build(pars)
         else:
-            return 0
+            return np.zeros_like(self.data.get_trainable())
     
     def compute_raw_residuals(self, pars):
         if self.det_model is not None:

@@ -44,7 +44,7 @@ class IterativeNelderMead(optimizers.Minimizer):
         
         # Initialize a simplex
         self.current_full_simplex = np.zeros(shape=(self.n_pars_vary, self.n_pars_vary + 1), dtype=float)
-        
+
         # Fill each column with the initial parameters
         self.current_full_simplex[:, :] = np.tile(self.p0_numpy_vary['value'].reshape(self.n_pars_vary, 1), (1, self.n_pars_vary + 1))
         
@@ -297,7 +297,11 @@ class IterativeNelderMead(optimizers.Minimizer):
         
         # Output variable
         out = {}
-        out['status'] = "converged"
+        if self.fmin == self.penalty:
+            out['status'] = "Failed"
+        else:
+            out['status'] = "Converged"
+        
         out['fbest'] = self.fmin
         out['fcalls'] = self.fcalls
             
