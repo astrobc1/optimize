@@ -67,12 +67,6 @@ class Parameter:
         """
         return f"{self.value}"
 
-    def gen_nan_pars(self):
-        pars = copy.deepcopy(self)
-        for par in pars:
-            par.value = np.nan
-        return pars
-
 class BoundedParameter(Parameter):
     """A class for a bounded model parameter.
 
@@ -514,6 +508,12 @@ class Parameters(dict):
             if par.vary:
                 n += 1
         return n
+    
+    def gen_nan_pars(self):
+        pars = copy.deepcopy(self)
+        for par in pars.values():
+            par.value = np.nan
+        return pars
 
 class BoundedParameters(Parameters):
     
