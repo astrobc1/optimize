@@ -203,10 +203,10 @@ class Posterior(dict, MaxObjectiveFunction):
         chi2 = 0
         n_dof = 0
         for like in self.values():
-            residuals = like.model.compute_raw_residuals(pars)
+            residuals = like.model.compute_residuals(pars)
             errors = like.model.compute_data_errors(pars)
             chi2 += optmath.compute_chi2(residuals, errors)
-            n_dof += len(like.model.data.get_trainable())
+            n_dof += len(residuals)
         n_dof -= pars.num_varied
         redchi2 = chi2 / n_dof
         return redchi2
