@@ -60,8 +60,8 @@ class Likelihood(MaxObjectiveFunction):
     
     def __repr__(self):
         return "Likelihood"
-    
-    
+
+
 class GaussianLikelihood(Likelihood):
     """A Bayesian likelihood objective function.
     """
@@ -122,7 +122,6 @@ class GaussianLikelihood(Likelihood):
     
     def __repr__(self):
         return "Gaussian Likelihood"
-        
 
 
 ###################
@@ -143,7 +142,7 @@ class Posterior(dict, MaxObjectiveFunction):
     #####################
     #### COMPUTE OBJ ####
     #####################
-      
+
     def compute_obj(self, pars):
         """Computes the log of the a posteriori probability.
         
@@ -298,4 +297,3 @@ class Posterior(dict, MaxObjectiveFunction):
         for like in self.values():
             s += repr(like) + "\n"
         return s
-            

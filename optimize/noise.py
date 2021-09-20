@@ -11,12 +11,12 @@ class NoiseProcess:
     
     Attributes:
         data (Dataset): The dataset for this noise process.
-        name (str, optional): The name of this noise process. Defaults to None.
+        label (str, optional): The name of this noise process. Defaults to None.
     """
     
-    def __init__(self, data=None, name=None):
+    def __init__(self, data=None, label=None):
         self.data = data
-        self.name = name
+        self.label = label
 
     def compute_cov_matrix(self, pars):
         raise NotImplementedError(f"Must implemenent the method compute_cov_matrix for class {self.__class__.__name__}.")
@@ -31,12 +31,14 @@ class NoiseProcess:
         return {}
 
 class UnCorrelatedNoiseProcess(NoiseProcess):
+    """ Trait.
+    """
     pass
 
 class CorrelatedNoiseProcess(NoiseProcess):
     
-    def __init__(self, data=None, kernel=None, name=None):
-        super().__init__(data=data, name=name)
+    def __init__(self, data=None, kernel=None, label=None):
+        super().__init__(data=data, label=label)
         self.kernel = kernel
         
     def initialize(self, p0, x1=None, xpred=None):
@@ -66,6 +68,8 @@ class CorrelatedNoiseProcess(NoiseProcess):
         return linpred - self.realize(pars, linpred=linpred)
         
 class StationaryNoiseProcess(CorrelatedNoiseProcess):
+    """Trait.
+    """
     pass
 
 
@@ -91,10 +95,10 @@ class WhiteNoiseProcess(UnCorrelatedNoiseProcess):
         """
     
         # Get intrinsic data errors
-        errors = self.data.get_apriori_errors()
+        errors = self.data.get_errors()
         
         # Add jitter in quadrature
-        errors = np.sqrt(errors**2 + pars[f"jitter_{next(iter(self.data)).label}"].value**2)
+        errors = np.sqrt(errors**2 + pars[f"jitter_{self.data.label}"].value**2)
         
         return errors
 
@@ -172,7 +176,7 @@ class GaussianProcess(CorrelatedNoiseProcess):
         if xpred is None:
             xpred = self.data.x
         comps = {}
-        comps[self.name] = self.compute_gp_with_error(pars, linpred, xpred)
+        comps[self.label] = self.compute_gp_with_error(pars, linpred, xpred)
         return comps
     
     def compute_corr_error(self, pars, linpred, xpred=None):
@@ -234,4 +238,4 @@ class GaussianProcess(CorrelatedNoiseProcess):
 #### IMPORT KERNELS ####
 ########################
 
-from .kernels import *
+from .kernels import QuasiPeriodic

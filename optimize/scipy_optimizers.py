@@ -1,7 +1,6 @@
 # Contains the custom Nelder-Mead algorithm
 import numpy as np
 import copy
-import optimize.knowledge
 import inspect
 import scipy.optimize
 
@@ -13,10 +12,11 @@ class SciPyMinimizer(Minimizer):
     """A class that interfaces to scipy.optimize.minimize.
     """
     
-    def __init__(self, method="Nelder-Mead", options=None):
+    def __init__(self, method="Nelder-Mead", tol=1E-6, options=None):
         super().__init__()
         self.method = method
-        self.options = {} if options is None else options
+        self.tol = tol
+        self.options = options
     
     ##################
     #### OPTIMIZE ####
@@ -37,7 +37,7 @@ class SciPyMinimizer(Minimizer):
         p0_vals_vary = p0_dict["value"][self.p0_vary_inds]
         self.test_pars = copy.deepcopy(p0)
         self.test_pars_vec = self.test_pars.unpack(keys="value")["value"]
-        res = scipy.optimize.minimize(self.compute_obj, p0_vals_vary, options=self.options)
+        res = scipy.optimize.minimize(self.compute_obj, p0_vals_vary, tol=self.tol, options=self.options)
         opt_result = {}
         opt_result["pbest"] = copy.deepcopy(p0)
         opt_result["pbest"].set_vec(res.x, "value", varied=True)
@@ -65,6 +65,7 @@ class SciPyMinimizer(Minimizer):
         self.test_pars.set_vec(pars, "value", varied=True)
         
         f = self.obj.compute_obj(self.test_pars)
+        f = self.penalize(self.test_pars, f)
         if isinstance(self.obj, MaxObjectiveFunction):
             f *= -1
         return f

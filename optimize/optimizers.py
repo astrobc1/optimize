@@ -1,23 +1,12 @@
+import optimize.parameters as optpars
+
 ####################
 #### BASE TYPES ####
 ####################
 
 class Optimizer:
     """An base optimizer class.
-    
-    Attributes:
-        obj (ObjectiveFunction, optional): The objective function object.
-        options (dict): The options dictionary, with keys specific to each optimizer.
     """
-    
-    ###############################
-    #### CONSTRUCTOR + HELPERS ####
-    ###############################
-    
-    def __init__(self, *args, **kwargs):
-        """Construct for the base optimization class.
-        """
-        pass
     
     def initialize(self, obj):
         self.obj = obj
@@ -27,7 +16,7 @@ class Optimizer:
     #####################
     
     def compute_obj(self, pars):
-        """A wrapper to computes the objective function. This method may further take in any number of args or kwargs, unlike the compute_obj method.
+        """A wrapper to computes the objective function. This method may further take in any number of args or kwargs, unlike the obj.compute_obj method.
         """
         return self.obj.compute_obj(pars)
     
@@ -46,10 +35,17 @@ class Optimizer:
         return "Optimizer"
         
 class Minimizer(Optimizer):
-    """Right now, just a node in the type tree that offers no additional functionality.
+    """Trait.
     """
     def __repr__(self):
         return "Minimizer"
+
+    def penalize(self, pars, f):
+        """Penalize the objective function for bounded parameters.
+        """
+        if type(pars) is optpars.BoundedParameters:
+            f += pars.num_out_of_bounds * self.penalty
+        return f
 
 class Maximizer(Optimizer):
     """Trait.
@@ -57,14 +53,21 @@ class Maximizer(Optimizer):
     def __repr__(self):
         return "Maximizer"
 
+    def penalize(self, pars, f):
+        """Penalize the objective function for bounded parameters.
+        """
+        if type(pars) is optpars.BoundedParameters:
+            f += pars.num_out_of_bounds * self.penalty
+        return f
+
 class Sampler(Optimizer):
-    """Base class for mcmc samplers.
+    """Base class for MCMC samplers.
     """
     def __repr__(self):
         return "Sampler"
 
 
 # Import into namespace
-from .neldermead import *
-from .scipy_optimizers import *
-from .samplers import *
+from .neldermead import IterativeNelderMead
+from .scipy_optimizers import SciPyMinimizer
+from .samplers import emceeSampler, ZeusSampler

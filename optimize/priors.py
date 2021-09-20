@@ -36,7 +36,6 @@ class Gaussian(Prior):
     """
     
     __slots__ = ['mu', 'sigma']
-    name = 'Gaussian'
     
     def __init__(self, mu, sigma):
         """Constructor for a Gaussian prior.
@@ -60,8 +59,8 @@ class Gaussian(Prior):
         return -0.5 * ((x - self.mu) / self.sigma)**2 - 0.5 * np.log((self.sigma**2) * 2 * np.pi)
     
     def __repr__(self):
-        return f"{self.name}: [{self.mu}, {self.sigma}]"
-    
+        return f"Gaussian: [{self.mu}, {self.sigma}]"
+
 class Uniform(Prior):
     """A prior defined by hard bounds.
 
@@ -71,8 +70,6 @@ class Uniform(Prior):
         """
     
     __slots__ = ['lower_bound', 'upper_bound']
-    
-    name = "Uniform"
     
     def __init__(self, lower_bound, upper_bound):
         """Constructor for a Uniform prior.
@@ -99,15 +96,13 @@ class Uniform(Prior):
            return -np.inf
         
     def __repr__(self):
-        return f"{self.name}: [{self.lower_bound}, {self.upper_bound}]"
+        return f"Uniform: [{self.lower_bound}, {self.upper_bound}]"
 
 class Positive(Prior):
     """A prior to force x > 0.
     """
     
     __slots__ = []
-    
-    name = "Positive"
     
     def __init__(self):
         """Constructs a positive prior.
@@ -125,15 +120,13 @@ class Positive(Prior):
         return 0 if x > 0 else -np.inf
         
     def __repr__(self):
-        return self.name
+        return "Positive"
     
 class Negative(Prior):
     """A prior to force x < 0.
     """
     
     __slots__ = []
-    
-    name = "Negative"
     
     def __init__(self):
         """Constructs a negative prior.
@@ -151,10 +144,10 @@ class Negative(Prior):
         return 0 if x < 0 else -np.inf
         
     def __repr__(self):
-        return self.name
+        return "Negative"
       
-class JeffreysG(Prior):
-    """A Jeffrey's prior for a Gaussian likelihood which is proportional to 1 / x.
+class JeffreysSG(Prior):
+    """A Jeffrey's prior for the stddev of a Gaussian likelihood, proportional to 1 / x.
 
         Attributes:
             lower_bound (float): The lower bound.
@@ -162,7 +155,6 @@ class JeffreysG(Prior):
         """
     
     __slots__ = ['lower_bound', 'upper_bound', 'lognorm', 'knee']
-    name = "Jeffrey's"
     
     def __init__(self, lower_bound, upper_bound, knee=0):
         """Constructs a Jeffrey's prior for a Gaussian likelihood.
@@ -172,7 +164,7 @@ class JeffreysG(Prior):
             upper_bound (float): The upper bound of the prior.
             knee (int, optional): The knee of the distribution (x0) The distribution is proportional to 1 / (x - x0). Defaults to 0.
         """
-        assert lower_bound <= upper_bound
+        assert lower_bound < upper_bound
         self.lower_bound = lower_bound
         self.upper_bound = upper_bound
         self.knee = knee
@@ -192,5 +184,5 @@ class JeffreysG(Prior):
             return -np.inf
         
     def __repr__(self):
-        return f"{self.name}: [{self.lower_bound}, {self.knee}, {self.upper_bound}]"
+        return f"Jeffrey's SG: [{self.lower_bound}, {self.knee}, {self.upper_bound}]"
 

@@ -1,10 +1,8 @@
-
 # Maths
 import numpy as np
 
 # Optimize deps
 from optimize.noise import CorrelatedNoiseProcess
-
 
 ####################
 #### BASE TYPES ####
@@ -15,18 +13,18 @@ class Model:
     
     Attributes:
         data (Dataset): The dataset for this model.
-        name (str): The name of this model.
+        label (str): The label of this model.
     """
     
-    def __init__(self, data=None, name=None):
+    def __init__(self, data, label=None):
         """Base constructor for a model.
 
         Args:
-            data (Dataset, optional): The dataset for this model.
-            name (str, optional): The name of this model.
+            data (Dataset): The dataset for this model.
+            label (str, optional): The label of this model.
         """
         self.data = data
-        self.name = name
+        self.label = label
     
     def initialize(self, p0):
         self.p0 = p0
@@ -48,7 +46,7 @@ class Model:
         raise NotImplementedError(f"Must implement a build method for the class {self.__class__.__name__}")
         
     def __repr__(self):
-        return f"Model: {self.name}"
+        return f"Model: {self.label}"
 
     def compute_data_errors(self, pars):
         """Default method to generate the data errors, which may be parametrized. Here the data a priori error bars are returned.
@@ -59,7 +57,7 @@ class Model:
         Returns:
             np.ndarray: The data errors.
         """
-        return self.data.get_apriori_errors()
+        return self.data.get_errors()
 
 class DeterministicModel(Model):
     """This class primarily serves as a trait with little additional functionality.
@@ -69,28 +67,28 @@ class DeterministicModel(Model):
         return self.build(pars)
     
     def __repr__(self):
-        return f"Deterministic model: {self.name}"
- 
-class NoiseBasedModel(Model):
+        return f"Deterministic model: {self.label}"
+
+class NoiseModel(Model):
     """A base class for models composed of a deterministic model and a noise process.
     
     Attributes:
         det_model (DeterministicModel): The deterministic model.
         noise_process (NoiseProcess): The noise process.
         data (Dataset): The dataset for this model.
-        name (str): The name of this model.
+        label (str): The label of this model.
     """
     
-    def __init__(self, det_model=None, noise_process=None, data=None, name=None):
+    def __init__(self, data, det_model=None, noise_process=None, label=None):
         """Base constructor for a noise based model.
 
         Args:
             det_model (DeterministicModel): The deterministic model.
             noise_process (NoiseProcess): The noise process.
             data (Dataset): The dataset for this model.
-            name (str): The name of this model.
+            label (str): The label of this model.
         """
-        super().__init__(data=data, name=name)
+        super().__init__(data=data, label=label)
         self.det_model = det_model
         self.noise_process = noise_process
     
@@ -130,11 +128,4 @@ class NoiseBasedModel(Model):
             return self.noise_process.compute_data_errors(pars)
         
     def __repr__(self):
-        return f"Noise model: {self.name}"
-
-class GPBasedModel(NoiseBasedModel):
-    """Class for a GP based noise model.
-    """
-
-    def __repr__(self):
-        return f"GP Based Model: {self.name}"
+        return f"Noise model: {self.label}"

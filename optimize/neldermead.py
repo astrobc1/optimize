@@ -8,7 +8,7 @@ import copy
 import numba
 from numba import jit, njit, prange
 
-import optimize.knowledge as optknow
+import optimize.parameters as optpars
 import optimize.objectives as optobj
 import optimize.optimizers as optimizers
 import matplotlib.pyplot as plt
@@ -17,11 +17,18 @@ class IterativeNelderMead(optimizers.Minimizer):
     """A class to interact with the iterative Nelder Mead optimizer.
     """
     
-    def __init__(self, alpha=1.0, gamma=2.0, sigma=0.5, delta=0.5):
+    def __init__(self, alpha=1.0, gamma=2.0, sigma=0.5, delta=0.5, xtol=1E-8, ftol=1E-6, n_iterations=None, no_improve_break=3, penalty=1E-6, max_f_evals=None, initial_scale_factor=0.5):
         self.alpha = alpha
         self.gamma = gamma
         self.sigma = sigma
         self.delta = delta
+        self.ftol = ftol
+        self.xtol = xtol
+        self.max_f_evals = max_f_evals
+        self.n_iterations = n_iterations
+        self.no_improve_break = no_improve_break
+        self.penalty = penalty
+        self.initial_scale_factor = initial_scale_factor
     
     #############################
     #### CONSTRUCTOR HELPERS ####
@@ -48,8 +55,8 @@ class IterativeNelderMead(optimizers.Minimizer):
         # Fill each column with the initial parameters
         self.current_full_simplex[:, :] = np.tile(self.p0_numpy_vary['value'].reshape(self.n_pars_vary, 1), (1, self.n_pars_vary + 1))
         
-        # For each column, offset a uniqe parameter according to p=1.5*p
-        self.current_full_simplex[:, :-1] += np.diag(0.5 * self.p0_numpy_vary['value'])
+        # For each column, offset a uniqe parameter according to p=initial_scale_factor*p
+        self.current_full_simplex[:, :-1] += np.diag(self.initial_scale_factor * self.p0_numpy_vary['value'])
 
     ####################
     #### INITIALIZE ####
@@ -64,20 +71,12 @@ class IterativeNelderMead(optimizers.Minimizer):
         p0 = self.obj.p0
         
         # Resolve the number of fevals
-        self.max_f_evals = int(p0.num_varied * 500)
-        
-        # Resolve number of times solver has effectively converged to declare true convergence
-        self.no_improve_break = 3
+        if self.max_f_evals is None:
+            self.max_f_evals = p0.num_varied * 500
         
         # Number of ameoba iterations
-        self.n_iterations = p0.num_varied
-        
-        # Resolve xtol and ftol
-        self.xtol = 1E-6
-        self.ftol = 1E-6
-        
-        # Resolve penalty
-        self.penalty = 1E6
+        if self.n_iterations is None:
+            self.n_iterations = p0.num_varied
         
     def init_subspaces(self):
         
@@ -178,7 +177,7 @@ class IterativeNelderMead(optimizers.Minimizer):
                 break
                 
             # Break if f tolerance has been met
-            if self.compute_ftol(fmin, fnp1) > self.ftol:
+            if self.compute_df(fmin, fnp1) > self.ftol:
                 n_converged = 0
             else:
                 n_converged += 1
@@ -277,11 +276,15 @@ class IterativeNelderMead(optimizers.Minimizer):
         
         # The current fmin = inf
         self.fmin = np.inf
+
+        # The current status
+        self.status = "failed"
         
         for iteration in range(self.n_iterations):
             
-            dx = self.compute_xtol(self.current_full_simplex)
+            dx = self.compute_dx(self.current_full_simplex)
             if dx < self.xtol:
+                self.status = "success"
                 break
 
             # Perform Ameoba call for all parameters
@@ -297,18 +300,13 @@ class IterativeNelderMead(optimizers.Minimizer):
         
         # Output variable
         out = {}
-        if self.fmin == self.penalty:
-            out['status'] = "Failed"
-        else:
-            out['status'] = "Converged"
         
+        out['status'] = self.status
         out['fbest'] = self.fmin
         out['fcalls'] = self.fcalls
             
         # Recreate new parameter obejcts
         out['pbest'] = self.pmin
-        out['fbest'] = self.fmin
-        out['fcalls'] = self.fcalls
 
         return out
         
@@ -317,7 +315,7 @@ class IterativeNelderMead(optimizers.Minimizer):
     ###############
     
     @staticmethod
-    def compute_xtol(simplex):
+    def compute_dx(simplex):
         a = np.nanmin(simplex, axis=1)
         b = np.nanmax(simplex, axis=1)
         c = (np.abs(b) + np.abs(a)) / 2
@@ -330,7 +328,7 @@ class IterativeNelderMead(optimizers.Minimizer):
 
     @staticmethod
     @njit(numba.types.float64(numba.types.float64, numba.types.float64))
-    def compute_ftol(a, b):
+    def compute_df(a, b):
         return np.abs(a - b)
     
     def compute_obj(self, x, subspace_index=None):
@@ -347,12 +345,15 @@ class IterativeNelderMead(optimizers.Minimizer):
         
         # Update fcalls
         self.fcalls += 1
+
+        # Penalize
+        self.penalize(self.test_pars, f)
             
         # Return max or min of obj
         if isinstance(self.obj, optobj.MaxObjectiveFunction):
             f *= -1
-            
-        # If f is not finite, don't return -inf, return a large number
+
+        # If f is not finite, don't return inf or nan, return a large number
         if not np.isfinite(f):
             f = self.penalty
         

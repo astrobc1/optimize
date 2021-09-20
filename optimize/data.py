@@ -22,7 +22,6 @@ class Dataset:
         Args:
             label (str): The label for this dataset.
         """
-        
         self.label = label
         
     #######################
@@ -41,13 +40,13 @@ class Dataset:
     #### GET DATA ERRORS ####
     #########################
     
-    def get_apriori_errors(self):
+    def get_errors(self):
         """Gets the aprior errors (likely known beforehand and provided by the user).
 
         Raises:
             NotImplementedError Must implement this method.
         """
-        raise NotImplementedError(f"Must implement a method get_apriori_errors for class {self.__class__.__name__}")
+        raise NotImplementedError(f"Must implement a method get_errors for class {self.__class__.__name__}")
         
     ####################
     #### INITIALIZE ####
@@ -76,7 +75,7 @@ class CompositeDataset(Dataset, dict):
     def get_trainable(self, labels=None):
         raise NotImplementedError(f"Must implement a method get_trainable for class {self.__class__.__name__}")
     
-    
+
     ###############
     #### MISC. ####
     ###############
@@ -90,11 +89,11 @@ class CompositeDataset(Dataset, dict):
         Returns:
             type(self): A view into the original data object.
         """
-        out = self.__class__()
+        data_view = self.__class__()
         labels = np.atleast_1d(labels)
         for label in labels:
-            out[label] = self[label]
-        return out
+            data_view[label] = self[label]
+        return data_view
     
     def __setitem__(self, label, data):
         if data.label is None:
@@ -119,7 +118,7 @@ class SimpleSeries(Dataset):
     Attributes:
         x (np.ndarray): The effective independent variable.
         y (np.ndarray): The effective dependent variable.
-        yerr (np.ndarray, optional): The intrinsic errorbars for y. Defaults to None.
+        yerr (np.ndarray, optional): The errorbars for y. Defaults to None.
         label (str): The label for this dataset. Defaults to None.
     """
     
@@ -154,22 +153,21 @@ class SimpleSeries(Dataset):
     #### GET DATA ERRORS ####
     #########################
     
-    def get_apriori_errors(self):
-        return self.yerr
-    
-    def get_trainable_errors(self, *args, **kwargs):
-        return self.yerr
-    
+    def get_errors(self):
+        if self.yerr is not None:
+            return self.yerr
+        else:
+            return np.zeros_like(self.y)
     
     ###############
     #### MISC. ####
     ###############
     
     def __repr__(self):
-        return f"Homogeneous Series: {self.label}"
+        return f"Simple Series: {self.label}"
 
-class HomogeneousCompositeSimpleSeries(CompositeDataset):
-    """A useful class to extend for composite 1d datasets which are all instances of SimpleSeries on the same data set.
+class CompositeSimpleSeries(CompositeDataset):
+    """A useful class to extend for composite 1d datasets which are all instances of SimpleSeries on the same data set and of the same kind of observations. Useful for like datasets from different facilities.
     
     Attributes:
         indices (dict): The indices for each dataset when sorted according to x.
@@ -248,7 +246,7 @@ class HomogeneousCompositeSimpleSeries(CompositeDataset):
 
         Args:
             attr (str): The attribute to get.
-            sort (bool): Whether or not to sort the returned vector.
+            sort (bool): Whether or not to sort the returned vector according to x.
             labels (list of strings, optional): The labels to get. Defaults to all.
 
         Returns:
@@ -270,7 +268,7 @@ class HomogeneousCompositeSimpleSeries(CompositeDataset):
     #### GET DATA ERRORS ####
     #########################
     
-    def get_apriori_errors(self):
+    def get_errors(self):
         return self.yerr
     
     ###############

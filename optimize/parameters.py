@@ -1,6 +1,6 @@
 import numpy as np
-import optimize.knowledge as optknow
 import copy
+import optimize.priors as optpriors
 
 ##########################
 #### SINGLE PARAMETER ####
@@ -184,7 +184,7 @@ class BayesianParameter(Parameter):
         self.vary = vary
         if priors is None:
             self.priors = []
-        elif type(priors) is optknow.Prior:
+        elif type(priors) is optpriors.Prior:
             self.priors = [self.priors]
         self._scale = scale
         self.latex_str = self.name if latex_str is None else latex_str
@@ -236,10 +236,10 @@ class BayesianParameter(Parameter):
             else:
                 return scale
         for prior in self.priors:
-            if isinstance(prior, optknow.priors.Gaussian):
+            if isinstance(prior, optpriors.Gaussian):
                 return prior.sigma / 10
         for prior in self.priors:
-            if isinstance(prior, optknow.priors.Uniform):
+            if isinstance(prior, optpriors.Uniform):
                 dx1 = np.abs(prior.upper_bound - self.value)
                 dx2 = np.abs(self.value - prior.lower_bound)
                 scale = np.min([dx1, dx2]) / 100
