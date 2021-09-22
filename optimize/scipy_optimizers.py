@@ -12,10 +12,11 @@ class SciPyMinimizer(Minimizer):
     """A class that interfaces to scipy.optimize.minimize.
     """
     
-    def __init__(self, method="Nelder-Mead", tol=1E-6, options=None):
+    def __init__(self, method="Nelder-Mead", tol=1E-6, options=None, penalty=1E6):
         super().__init__()
         self.method = method
         self.tol = tol
+        self.penalty = penalty
         self.options = options
     
     ##################
