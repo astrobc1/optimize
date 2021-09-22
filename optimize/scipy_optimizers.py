@@ -13,6 +13,14 @@ class SciPyMinimizer(Minimizer):
     """
     
     def __init__(self, method="Nelder-Mead", tol=1E-6, options=None, penalty=1E6):
+        """Construct the Scipy minimizer.
+
+        Args:
+            method (str, optional): The method to use. Defaults to "Nelder-Mead".
+            tol ([type], optional): The f tolerance. Defaults to 1E-6.
+            options ([type], optional): The options to pass to scipy. Defaults to None.
+            penalty ([type], optional): The penalty to add for each bounded parameter. Defaults to 1E6.
+        """
         super().__init__()
         self.method = method
         self.tol = tol

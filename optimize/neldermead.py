@@ -14,10 +14,25 @@ import optimize.optimizers as optimizers
 import matplotlib.pyplot as plt
 
 class IterativeNelderMead(optimizers.Minimizer):
-    """A class to interact with the iterative Nelder Mead optimizer.
+    """An iterative Nelder-Mead optimizer for high-dimensional parameter spaces.
     """
     
     def __init__(self, alpha=1.0, gamma=2.0, sigma=0.5, delta=0.5, xtol=1E-8, ftol=1E-6, n_iterations=None, no_improve_break=3, penalty=1E6, max_f_evals=None, initial_scale_factor=0.5):
+        """Construct the iterative Nelder-Mead optimizer.
+
+        Args:
+            alpha (float, optional): Nelder-Mead hyper-parameter. Defaults to 1.0.
+            gamma (float, optional): Nelder-Mead hyper-parameter. Defaults to 2.0.
+            sigma (float, optional): Nelder-Mead hyper-parameter. Defaults to 0.5.
+            delta (float, optional): Nelder-Mead hyper-parameter. Defaults to 0.5.
+            xtol (float, optional): The relative x tolderance for convergence. Defaults to 1E-8.
+            ftol (float, optional): The relative f tolerance for convergence. Defaults to 1E-6.
+            n_iterations (int, optional): The number of iterations. Defaults to len(p0).
+            no_improve_break (int, optional): The number of times in a row the solver must converge before actually breaking. Defaults to 3.
+            penalty (float, optional): The penalty to add to the objective for each BoundedParameter. Defaults to 1E6.
+            max_f_evals (float, optional): The maximum number of f evaluations. Defaults to 500 * len(p0).
+            initial_scale_factor (float, optional): A scale factor to initiate the initial simplex. Defaults to 0.5.
+        """
         self.alpha = alpha
         self.gamma = gamma
         self.sigma = sigma
