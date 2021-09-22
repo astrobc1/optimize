@@ -1,8 +1,8 @@
 optimize API reference
 ======================
 
-Knowledge
-+++++++++
+Parameters
+++++++++++
 
 .. automodule:: optimize.parameters
     :members:

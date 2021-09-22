@@ -23,7 +23,7 @@
 
     
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/sphinx-book-theme.acff12b8f9c144ce68a297486a2fa670.css" type="text/css" />
+    <link rel="stylesheet" href="_static/sphinx-book-theme.e8f53015daec13862f6db5e763c41738.css" type="text/css" />
     
   <link rel="preload" as="script" href="_static/js/index.1c5a1a01449ed65a7b51.js">
 
@@ -35,7 +35,6 @@
     <link rel="shortcut icon" href="_static/optimize_logo.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="optimize API reference" href="frameworks_api.html" />
     <link rel="prev" title="optimize API reference" href="optimizers_api.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
@@ -64,7 +63,7 @@
 </div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
   <i class="icon fas fa-search"></i>
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
-</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item active">
         <ul class="current nav bd-sidenav">
  <li class="toctree-l1">
@@ -75,11 +74,6 @@
  <li class="toctree-l1">
   <a class="reference internal" href="tutorials.html">
    Tutorials
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="extending.html">
-   Extending optimize
   </a>
  </li>
  <li class="toctree-l1 current active has-children">
@@ -93,18 +87,23 @@
   </label>
   <ul class="current">
    <li class="toctree-l2">
+    <a class="reference internal" href="frameworks_api.html">
+     Frameworks
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="data_api.html">
      Data
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="knowledge_api.html">
-     Knowledge
+    <a class="reference internal" href="models_api.html">
+     Models
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="models_api.html">
-     Models
+    <a class="reference internal" href="parameters_api.html">
+     Parameters
     </a>
    </li>
    <li class="toctree-l2">
@@ -125,11 +124,6 @@
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
      Samplers
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="frameworks_api.html">
-     Frameworks
     </a>
    </li>
   </ul>
@@ -203,7 +197,7 @@
             <div class="tocsection onthispage pt-5 pb-3">
                 <i class="fas fa-list"></i> Contents
             </div>
-            <nav id="bd-toc-nav">
+            <nav id="bd-toc-nav" aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#module-optimize.samplers">
@@ -227,38 +221,35 @@
 <span id="samplers"></span><h2>Samplers<a class="headerlink" href="#module-optimize.samplers" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="optimize.samplers.HNUT">
-<em class="property">class </em><code class="sig-prename descclassname">optimize.samplers.</code><code class="sig-name descname">HNUT</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.samplers.HNUT" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">optimize.samplers.</span></code><code class="sig-name descname"><span class="pre">HNUT</span></code><a class="headerlink" href="#optimize.samplers.HNUT" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="optimizers_api.html#optimize.optimizers.Sampler" title="optimize.optimizers.Sampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.optimizers.Sampler</span></code></a></p>
-<p>Construct for the base optimization class.</p>
 </dd></dl>
 
 <dl class="py class">
 <dt id="optimize.samplers.MultiNest">
-<em class="property">class </em><code class="sig-prename descclassname">optimize.samplers.</code><code class="sig-name descname">MultiNest</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.samplers.MultiNest" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">optimize.samplers.</span></code><code class="sig-name descname"><span class="pre">MultiNest</span></code><a class="headerlink" href="#optimize.samplers.MultiNest" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="optimizers_api.html#optimize.optimizers.Sampler" title="optimize.optimizers.Sampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.optimizers.Sampler</span></code></a></p>
-<p>Construct for the base optimization class.</p>
 </dd></dl>
 
 <dl class="py class">
 <dt id="optimize.samplers.ZeusSampler">
-<em class="property">class </em><code class="sig-prename descclassname">optimize.samplers.</code><code class="sig-name descname">ZeusSampler</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.samplers.ZeusSampler" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">optimize.samplers.</span></code><code class="sig-name descname"><span class="pre">ZeusSampler</span></code><a class="headerlink" href="#optimize.samplers.ZeusSampler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#optimize.samplers.emceeLikeSampler" title="optimize.samplers.emceeLikeSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.samplers.emceeLikeSampler</span></code></a></p>
 <p>A class to interface with the zeus sliced Ensemble Sampler.</p>
-<p>Construct for the base optimization class.</p>
 <dl class="py method">
 <dt id="optimize.samplers.ZeusSampler.init_sampler">
-<code class="sig-name descname">init_sampler</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#optimize.samplers.ZeusSampler.init_sampler" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">init_sampler</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#optimize.samplers.ZeusSampler.init_sampler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initializes the zues Ensemble sampler.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="optimize.samplers.ZeusSampler.run_mcmc">
-<code class="sig-name descname">run_mcmc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">walkers</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">n_burn_steps</span><span class="o">=</span><span class="default_value">500</span></em>, <em class="sig-param"><span class="n">check_every</span><span class="o">=</span><span class="default_value">200</span></em>, <em class="sig-param"><span class="n">n_steps</span><span class="o">=</span><span class="default_value">75000</span></em>, <em class="sig-param"><span class="n">rel_tau_thresh</span><span class="o">=</span><span class="default_value">0.01</span></em>, <em class="sig-param"><span class="n">n_min_steps</span><span class="o">=</span><span class="default_value">1000</span></em>, <em class="sig-param"><span class="n">n_cores</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">n_taus_thresh</span><span class="o">=</span><span class="default_value">40</span></em>, <em class="sig-param"><span class="n">progress</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.samplers.ZeusSampler.run_mcmc" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">run_mcmc</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">walkers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_burn_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_every</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">75000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rel_tau_thresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_min_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_cores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_taus_thresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">40</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.samplers.ZeusSampler.run_mcmc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wrapper to perform a burn-in + full MCMC exploration.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>pars</strong> (<a class="reference internal" href="knowledge_api.html#optimize.parameters.Parameters" title="optimize.parameters.Parameters"><em>Parameters</em></a><em>, </em><em>optional</em>) – The starting parameters. Defaults to p0.</p></li>
+<li><p><strong>pars</strong> (<a class="reference internal" href="parameters_api.html#optimize.parameters.Parameters" title="optimize.parameters.Parameters"><em>Parameters</em></a><em>, </em><em>optional</em>) – The starting parameters. Defaults to p0.</p></li>
 <li><p><strong>walkers</strong> (<em>np.ndarray</em><em>, </em><em>optional</em>) – The starting walkers. Defaults to calling self.init_walkers(pars).</p></li>
 <li><p><strong>n_burn_steps</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of burn in steps. Defaults to 100 * pars.num_varied().</p></li>
 <li><p><strong>n_steps</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of mcmc steps to perform in the full phase (post burn-in). Defaults to 50_000 * pars.num_varied().</p></li>
@@ -280,12 +271,11 @@
 
 <dl class="py class">
 <dt id="optimize.samplers.emceeLikeSampler">
-<em class="property">class </em><code class="sig-prename descclassname">optimize.samplers.</code><code class="sig-name descname">emceeLikeSampler</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.samplers.emceeLikeSampler" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">optimize.samplers.</span></code><code class="sig-name descname"><span class="pre">emceeLikeSampler</span></code><a class="headerlink" href="#optimize.samplers.emceeLikeSampler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="optimizers_api.html#optimize.optimizers.Sampler" title="optimize.optimizers.Sampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.optimizers.Sampler</span></code></a></p>
-<p>Construct for the base optimization class.</p>
 <dl class="py method">
 <dt id="optimize.samplers.emceeLikeSampler.compute_obj">
-<code class="sig-name descname">compute_obj</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.samplers.emceeLikeSampler.compute_obj" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">compute_obj</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pars</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.samplers.emceeLikeSampler.compute_obj" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wrapper to compute the objective.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -302,7 +292,7 @@
 
 <dl class="py method">
 <dt id="optimize.samplers.emceeLikeSampler.corner_plot">
-<em class="property">static </em><code class="sig-name descname">corner_plot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mcmc_result</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.samplers.emceeLikeSampler.corner_plot" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">corner_plot</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mcmc_result</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.samplers.emceeLikeSampler.corner_plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Constructs a corner plot.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -319,11 +309,11 @@
 
 <dl class="py method">
 <dt id="optimize.samplers.emceeLikeSampler.init_walkers">
-<code class="sig-name descname">init_walkers</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.samplers.emceeLikeSampler.init_walkers" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">init_walkers</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.samplers.emceeLikeSampler.init_walkers" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initializes a set of walkers.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>pars</strong> (<a class="reference internal" href="knowledge_api.html#optimize.parameters.Parameters" title="optimize.parameters.Parameters"><em>Parameters</em></a><em>, </em><em>optional</em>) – The starting parameters. Defaults to p0.</p>
+<dd class="field-odd"><p><strong>pars</strong> (<a class="reference internal" href="parameters_api.html#optimize.parameters.Parameters" title="optimize.parameters.Parameters"><em>Parameters</em></a><em>, </em><em>optional</em>) – The starting parameters. Defaults to p0.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>A set of walkers as a numpy array with shape=(n_walkers, n_parameters_vary)</p>
@@ -336,7 +326,7 @@
 
 <dl class="py method">
 <dt id="optimize.samplers.emceeLikeSampler.n_walkers">
-<em class="property">property </em><code class="sig-name descname">n_walkers</code><a class="headerlink" href="#optimize.samplers.emceeLikeSampler.n_walkers" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">n_walkers</span></code><a class="headerlink" href="#optimize.samplers.emceeLikeSampler.n_walkers" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for the number of walkers.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -352,24 +342,23 @@
 
 <dl class="py class">
 <dt id="optimize.samplers.emceeSampler">
-<em class="property">class </em><code class="sig-prename descclassname">optimize.samplers.</code><code class="sig-name descname">emceeSampler</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.samplers.emceeSampler" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">optimize.samplers.</span></code><code class="sig-name descname"><span class="pre">emceeSampler</span></code><a class="headerlink" href="#optimize.samplers.emceeSampler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#optimize.samplers.emceeLikeSampler" title="optimize.samplers.emceeLikeSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.samplers.emceeLikeSampler</span></code></a></p>
 <p>An class to interface to the emcee affine invariant Ensemble Sampler.</p>
-<p>Construct for the base optimization class.</p>
 <dl class="py method">
 <dt id="optimize.samplers.emceeSampler.init_sampler">
-<code class="sig-name descname">init_sampler</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#optimize.samplers.emceeSampler.init_sampler" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">init_sampler</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#optimize.samplers.emceeSampler.init_sampler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initializes the emcee.Ensemble sampler.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="optimize.samplers.emceeSampler.run_mcmc">
-<code class="sig-name descname">run_mcmc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">walkers</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">n_burn_steps</span><span class="o">=</span><span class="default_value">500</span></em>, <em class="sig-param"><span class="n">check_every</span><span class="o">=</span><span class="default_value">200</span></em>, <em class="sig-param"><span class="n">n_steps</span><span class="o">=</span><span class="default_value">75000</span></em>, <em class="sig-param"><span class="n">rel_tau_thresh</span><span class="o">=</span><span class="default_value">0.01</span></em>, <em class="sig-param"><span class="n">n_min_steps</span><span class="o">=</span><span class="default_value">1000</span></em>, <em class="sig-param"><span class="n">n_cores</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">n_taus_thresh</span><span class="o">=</span><span class="default_value">40</span></em>, <em class="sig-param"><span class="n">progress</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.samplers.emceeSampler.run_mcmc" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">run_mcmc</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">walkers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_burn_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_every</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">75000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rel_tau_thresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_min_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_cores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_taus_thresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">40</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.samplers.emceeSampler.run_mcmc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wrapper to perform a burn-in + full MCMC exploration.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>pars</strong> (<a class="reference internal" href="knowledge_api.html#optimize.parameters.Parameters" title="optimize.parameters.Parameters"><em>Parameters</em></a><em>, </em><em>optional</em>) – The starting parameters. Defaults to p0.</p></li>
+<li><p><strong>pars</strong> (<a class="reference internal" href="parameters_api.html#optimize.parameters.Parameters" title="optimize.parameters.Parameters"><em>Parameters</em></a><em>, </em><em>optional</em>) – The starting parameters. Defaults to p0.</p></li>
 <li><p><strong>walkers</strong> (<em>np.ndarray</em><em>, </em><em>optional</em>) – The starting walkers. Defaults to calling self.init_walkers(pars).</p></li>
 <li><p><strong>n_burn_steps</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of burn in steps. Defaults to 100 * pars.num_varied.</p></li>
 <li><p><strong>n_steps</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of mcmc steps to perform in the full phase (post burn-in). Defaults to 50_000 * pars.num_varied().</p></li>
@@ -396,12 +385,23 @@
               </div>
               
         
-        <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="optimizers_api.html" title="previous page">optimize API reference</a>
-    <a class='right-next' id="next-link" href="frameworks_api.html" title="next page">optimize API reference</a>
 
-        </div>
+
+
+<div class='prev-next-bottom'>
+    
+    <div id="prev">
+        <a class="left-prev" href="optimizers_api.html" title="previous page">
+            <i class="prevnext-label fas fa-angle-left"></i>
+            <div class="prevnext-info">
+                <p class="prevnext-label">previous</p>
+                <p class="prevnext-title">optimize API reference</p>
+            </div>
+        </a>
+    </div>
+
+</div>
         
         </div>
     </div>

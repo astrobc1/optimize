@@ -23,7 +23,7 @@
 
     
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/sphinx-book-theme.acff12b8f9c144ce68a297486a2fa670.css" type="text/css" />
+    <link rel="stylesheet" href="_static/sphinx-book-theme.e8f53015daec13862f6db5e763c41738.css" type="text/css" />
     
   <link rel="preload" as="script" href="_static/js/index.1c5a1a01449ed65a7b51.js">
 
@@ -63,7 +63,7 @@
 </div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
   <i class="icon fas fa-search"></i>
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
-</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item active">
         <ul class="nav bd-sidenav">
  <li class="toctree-l1">
@@ -74,11 +74,6 @@
  <li class="toctree-l1">
   <a class="reference internal" href="tutorials.html">
    Tutorials
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="extending.html">
-   Extending optimize
   </a>
  </li>
  <li class="toctree-l1 has-children">
@@ -92,18 +87,23 @@
   </label>
   <ul>
    <li class="toctree-l2">
+    <a class="reference internal" href="frameworks_api.html">
+     Frameworks
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="data_api.html">
      Data
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="knowledge_api.html">
-     Knowledge
+    <a class="reference internal" href="models_api.html">
+     Models
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="models_api.html">
-     Models
+    <a class="reference internal" href="parameters_api.html">
+     Parameters
     </a>
    </li>
    <li class="toctree-l2">
@@ -124,11 +124,6 @@
    <li class="toctree-l2">
     <a class="reference internal" href="samplers_api.html">
      Samplers
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="frameworks_api.html">
-     Frameworks
     </a>
    </li>
   </ul>
@@ -202,7 +197,7 @@
             <div class="tocsection onthispage pt-5 pb-3">
                 <i class="fas fa-list"></i> Contents
             </div>
-            <nav id="bd-toc-nav">
+            <nav id="bd-toc-nav" aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
  <li class="toc-h1 nav-item toc-entry">
   <a class="reference internal nav-link" href="#">
@@ -227,34 +222,27 @@
                 
   <div class="section" id="optimize">
 <h1>optimize<a class="headerlink" href="#optimize" title="Permalink to this headline">¶</a></h1>
-<p>Simply put, an environment to model some data.</p>
+<p>A high level environment to model a dataset, including wrappers to scipy.optimize.minimize. Simple Bayesian regression with Gaussian distributions and basic priors is also supported.</p>
 <p>Below is the remaining documentation, tutorials, and API.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="tutorials.html#example-1-fitting-a-gaussian-with-an-mse-objective">Example 1: Fitting a Gaussian with an MSE objective.</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials.html#example-2-fitting-a-gaussian-with-a-chi-2-objective">Example 2: Fitting a Gaussian with a Chi-2 objective.</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials.html#example-3-fitting-a-gaussian-with-a-gaussian-likelihood">Example 3: Fitting a Gaussian with a Gaussian Likelihood.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#example-2-fitting-a-gaussian-to-a-dataset-with-errors-and-chi-2-objective">Example 2: Fitting a Gaussian to a dataset with errors and Chi-2 objective.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#example-3-fitting-a-gaussian-to-a-dataset-with-a-gaussian-likelihood">Example 3: Fitting a Gaussian to a dataset with a Gaussian Likelihood.</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials.html#indices-and-tables">Indices and tables</a></li>
-<li class="toctree-l1"><a class="reference internal" href="extending.html">Extending optimize</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="extending.html#models">Models</a></li>
-<li class="toctree-l2"><a class="reference internal" href="extending.html#data">Data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="extending.html#optimizers">Optimizers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="extending.html#samplers">Samplers</a></li>
-</ul>
-</li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="frameworks_api.html">Frameworks</a></li>
 <li class="toctree-l2"><a class="reference internal" href="data_api.html">Data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="knowledge_api.html">Knowledge</a></li>
 <li class="toctree-l2"><a class="reference internal" href="models_api.html">Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parameters_api.html">Parameters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="noise_api.html">Noise</a></li>
 <li class="toctree-l2"><a class="reference internal" href="objectives_api.html">Objectives</a></li>
 <li class="toctree-l2"><a class="reference internal" href="optimizers_api.html">Optimizers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="samplers_api.html">Samplers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="frameworks_api.html">Frameworks</a></li>
 </ul>
 </li>
 </ul>
@@ -273,11 +261,23 @@
               </div>
               
         
-        <div class='prev-next-bottom'>
             
-    <a class='right-next' id="next-link" href="installation.html" title="next page">Installation</a>
 
-        </div>
+
+
+<div class='prev-next-bottom'>
+    
+     <div id="next">
+        <a class="right-next" href="installation.html" title="next page">
+            <div class="prevnext-info">
+                <p class="prevnext-label">next</p>
+                <p class="prevnext-title">Installation</p>
+            </div>
+            <i class="prevnext-label fas fa-angle-right"></i>
+        </a>
+     </div>
+
+</div>
         
         </div>
     </div>

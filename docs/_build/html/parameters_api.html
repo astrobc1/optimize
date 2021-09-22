@@ -1,0 +1,1224 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>optimize API reference &#8212; optimize  documentation</title>
+    
+  <link href="_static/css/theme.css" rel="stylesheet" />
+  <link href="_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/sphinx-book-theme.e8f53015daec13862f6db5e763c41738.css" type="text/css" />
+    
+  <link rel="preload" as="script" href="_static/js/index.1c5a1a01449ed65a7b51.js">
+
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <link rel="shortcut icon" href="_static/optimize_logo.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="optimize API reference" href="noise_api.html" />
+    <link rel="prev" title="optimize API reference" href="models_api.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+      <img src="_static/optimize_logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">optimize  documentation</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="installation.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="tutorials.html">
+   Tutorials
+  </a>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="api.html">
+   API
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="frameworks_api.html">
+     Frameworks
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="data_api.html">
+     Data
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="models_api.html">
+     Models
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Parameters
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="noise_api.html">
+     Noise
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="objectives_api.html">
+     Objectives
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="optimizers_api.html">
+     Optimizers
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="samplers_api.html">
+     Samplers
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="_sources/parameters_api.rst.txt"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.rst</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-optimize.parameters">
+   Parameters
+  </a>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="optimize-api-reference">
+<h1>optimize API reference<a class="headerlink" href="#optimize-api-reference" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-optimize.parameters">
+<span id="parameters"></span><h2>Parameters<a class="headerlink" href="#module-optimize.parameters" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="optimize.parameters.BayesianParameter">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">optimize.parameters.</span></code><code class="sig-name descname"><span class="pre">BayesianParameter</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">priors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latex_str</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.parameters.BayesianParameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#optimize.parameters.Parameter" title="optimize.parameters.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.parameters.Parameter</span></code></a></p>
+<p>A class for a Bayesian model parameter.</p>
+<dl class="py attribute">
+<dt id="optimize.parameters.BayesianParameter.name">
+<code class="sig-name descname"><span class="pre">name</span></code><a class="headerlink" href="#optimize.parameters.BayesianParameter.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="optimize.parameters.BayesianParameter.value">
+<code class="sig-name descname"><span class="pre">value</span></code><a class="headerlink" href="#optimize.parameters.BayesianParameter.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>The current value of the parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="optimize.parameters.BayesianParameter.vary">
+<code class="sig-name descname"><span class="pre">vary</span></code><a class="headerlink" href="#optimize.parameters.BayesianParameter.vary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether or not to vary (optimize) this parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="optimize.parameters.BayesianParameter.priors">
+<code class="sig-name descname"><span class="pre">priors</span></code><a class="headerlink" href="#optimize.parameters.BayesianParameter.priors" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of priors to apply.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="optimize.parameters.BayesianParameter.scale">
+<code class="sig-name descname"><span class="pre">scale</span></code><a class="headerlink" href="#optimize.parameters.BayesianParameter.scale" title="Permalink to this definition">¶</a></dt>
+<dd><p>A search scale to initiate mcmc walkers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="optimize.parameters.BayesianParameter.latex_str">
+<code class="sig-name descname"><span class="pre">latex_str</span></code><a class="headerlink" href="#optimize.parameters.BayesianParameter.latex_str" title="Permalink to this definition">¶</a></dt>
+<dd><p>A string for plot formatting, most likely using latex formatting.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p>Creates a Bayesian Parameter object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – The name of the parameter.</p></li>
+<li><p><strong>value</strong> (<em>float</em>) – The starting value of the parameter.</p></li>
+<li><p><strong>vary</strong> (<em>bool</em>) – Whether or not to vary (optimize) this parameter.</p></li>
+<li><p><strong>priors</strong> (<em>list</em>) – A list of priors to apply.</p></li>
+<li><p><strong>latex_str</strong> (<em>str</em>) – A string for plot formatting, most likely using latex formatting.</p></li>
+<li><p><strong>scale</strong> (<em>float</em>) – A search scale to initiate mcmc walkers.</p></li>
+<li><p><strong>unc</strong> (<em>tuple</em>) – A tuple containing the uncertainty in this parameter (-, +).</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="optimize.parameters.BayesianParameter.add_prior">
+<code class="sig-name descname"><span class="pre">add_prior</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prior</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.parameters.BayesianParameter.add_prior" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a new prior. Equivalent to self.priors.append(prior)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>prior</strong> (<a class="reference internal" href="#optimize.priors.Prior" title="optimize.priors.Prior"><em>Prior</em></a>) – The prior to add.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.parameters.BayesianParameter.hard_bounds">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">hard_bounds</span></code><a class="headerlink" href="#optimize.parameters.BayesianParameter.hard_bounds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the hard bounds from uniform priors or Jeffreys prior if present, otherwise assumes +/- inf.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The lower bound.
+float: The upper bound.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.parameters.BayesianParameter.has_prior">
+<code class="sig-name descname"><span class="pre">has_prior</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prior_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.parameters.BayesianParameter.has_prior" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks whether or not the parameter contains a certain type of prior</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>prior_type</strong> (<em>type</em>) – The type of the prior.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if the parameter has the prior, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.parameters.BayesianParameter.lower_bound">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">lower_bound</span></code><a class="headerlink" href="#optimize.parameters.BayesianParameter.lower_bound" title="Permalink to this definition">¶</a></dt>
+<dd><p>The lower bound.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The lower bound.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="id0">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">scale</span></code><a class="headerlink" href="#id0" title="Permalink to this definition">¶</a></dt>
+<dd><p>The scale for the parameter to initiate MCMC walkers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The parameter scale.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.parameters.BayesianParameter.upper_bound">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">upper_bound</span></code><a class="headerlink" href="#optimize.parameters.BayesianParameter.upper_bound" title="Permalink to this definition">¶</a></dt>
+<dd><p>The upper bound.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The upper bound.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="optimize.parameters.BayesianParameters">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">optimize.parameters.</span></code><code class="sig-name descname"><span class="pre">BayesianParameters</span></code><a class="headerlink" href="#optimize.parameters.BayesianParameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#optimize.parameters.Parameters" title="optimize.parameters.Parameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.parameters.Parameters</span></code></a></p>
+<dl class="py method">
+<dt id="optimize.parameters.BayesianParameters.scales">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">scales</span></code><a class="headerlink" href="#optimize.parameters.BayesianParameters.scales" title="Permalink to this definition">¶</a></dt>
+<dd><p>The scales for each parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The scales for each parameter.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="optimize.parameters.BoundedParameter">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">optimize.parameters.</span></code><code class="sig-name descname"><span class="pre">BoundedParameter</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_bound</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">inf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper_bound</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">inf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latex_str</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.parameters.BoundedParameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#optimize.parameters.Parameter" title="optimize.parameters.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.parameters.Parameter</span></code></a></p>
+<p>A class for a bounded model parameter.</p>
+<dl class="py attribute">
+<dt id="optimize.parameters.BoundedParameter.name">
+<code class="sig-name descname"><span class="pre">name</span></code><a class="headerlink" href="#optimize.parameters.BoundedParameter.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="optimize.parameters.BoundedParameter.value">
+<code class="sig-name descname"><span class="pre">value</span></code><a class="headerlink" href="#optimize.parameters.BoundedParameter.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>The current value of the parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="optimize.parameters.BoundedParameter.vary">
+<code class="sig-name descname"><span class="pre">vary</span></code><a class="headerlink" href="#optimize.parameters.BoundedParameter.vary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether or not to vary (optimize) this parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="optimize.parameters.BoundedParameter.lower_bound">
+<code class="sig-name descname"><span class="pre">lower_bound</span></code><a class="headerlink" href="#optimize.parameters.BoundedParameter.lower_bound" title="Permalink to this definition">¶</a></dt>
+<dd><p>The lower bound.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="optimize.parameters.BoundedParameter.upper_bound">
+<code class="sig-name descname"><span class="pre">upper_bound</span></code><a class="headerlink" href="#optimize.parameters.BoundedParameter.upper_bound" title="Permalink to this definition">¶</a></dt>
+<dd><p>The upper bound.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="optimize.parameters.BoundedParameter.latex_str">
+<code class="sig-name descname"><span class="pre">latex_str</span></code><a class="headerlink" href="#optimize.parameters.BoundedParameter.latex_str" title="Permalink to this definition">¶</a></dt>
+<dd><p>A string for plot formatting, most likely using latex formatting.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p>Creates a Parameter object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – The name of the parameter.</p></li>
+<li><p><strong>value</strong> (<em>float</em>) – The starting value of the parameter.</p></li>
+<li><p><strong>vary</strong> (<em>bool</em>) – Whether or not to vary (optimize) this parameter.</p></li>
+<li><p><strong>lower_bound</strong> (<em>float</em>) – The lower bound.</p></li>
+<li><p><strong>upper_bound</strong> (<em>float</em>) – The upper bound.</p></li>
+<li><p><strong>latex_str</strong> (<em>str</em>) – A string for plot formatting, most likely using latex formatting.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="optimize.parameters.BoundedParameter.hard_bounds">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">hard_bounds</span></code><a class="headerlink" href="#optimize.parameters.BoundedParameter.hard_bounds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the current hard bounds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The lower bound.
+float: The upper bound.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.parameters.BoundedParameter.in_bounds">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">in_bounds</span></code><a class="headerlink" href="#optimize.parameters.BoundedParameter.in_bounds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines whether or not the current parameter value is in bounds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True if the parameter is in bounds, False if not.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.parameters.BoundedParameter.out_of_bounds">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">out_of_bounds</span></code><a class="headerlink" href="#optimize.parameters.BoundedParameter.out_of_bounds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines whether or not the current parameter value out of bounds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True if the parameter is out of bounds, False if not.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="optimize.parameters.BoundedParameters">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">optimize.parameters.</span></code><code class="sig-name descname"><span class="pre">BoundedParameters</span></code><a class="headerlink" href="#optimize.parameters.BoundedParameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#optimize.parameters.Parameters" title="optimize.parameters.Parameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.parameters.Parameters</span></code></a></p>
+<dl class="py method">
+<dt id="optimize.parameters.BoundedParameters.all_in_bounds">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">all_in_bounds</span></code><a class="headerlink" href="#optimize.parameters.BoundedParameters.all_in_bounds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks whether or not all parameters are in bounds (or not.)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True if the parameters are all in bounds, False otherwise.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.parameters.BoundedParameters.any_out_of_bounds">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">any_out_of_bounds</span></code><a class="headerlink" href="#optimize.parameters.BoundedParameters.any_out_of_bounds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks whether or not any parameters are out of bounds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True if any parameters are out of bounds, False otherwise.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.parameters.BoundedParameters.hard_bounds">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">hard_bounds</span></code><a class="headerlink" href="#optimize.parameters.BoundedParameters.hard_bounds" title="Permalink to this definition">¶</a></dt>
+<dd><p>The hard bounds as a tuple.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The lower bounds.
+np.ndarray: The upper bounds.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.parameters.BoundedParameters.hard_bounds_varied">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">hard_bounds_varied</span></code><a class="headerlink" href="#optimize.parameters.BoundedParameters.hard_bounds_varied" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the hard bounds, but only the varied params.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The lower bounds.
+np.ndarray: The upper bounds.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.parameters.BoundedParameters.lower_bounds">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">lower_bounds</span></code><a class="headerlink" href="#optimize.parameters.BoundedParameters.lower_bounds" title="Permalink to this definition">¶</a></dt>
+<dd><p>The lower bounds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The lower bounds.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.parameters.BoundedParameters.num_in_bounds">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">num_in_bounds</span></code><a class="headerlink" href="#optimize.parameters.BoundedParameters.num_in_bounds" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of parameters in bounds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The number of parameters in bounds.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.parameters.BoundedParameters.num_out_of_bounds">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">num_out_of_bounds</span></code><a class="headerlink" href="#optimize.parameters.BoundedParameters.num_out_of_bounds" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of parameters out of bounds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The number of parameters out of bounds.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.parameters.BoundedParameters.upper_bounds">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">upper_bounds</span></code><a class="headerlink" href="#optimize.parameters.BoundedParameters.upper_bounds" title="Permalink to this definition">¶</a></dt>
+<dd><p>The upper bounds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The upper bounds.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="optimize.parameters.Parameter">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">optimize.parameters.</span></code><code class="sig-name descname"><span class="pre">Parameter</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latex_str</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.parameters.Parameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A base class for a scalar model parameter.</p>
+<dl class="py attribute">
+<dt id="optimize.parameters.Parameter.name">
+<code class="sig-name descname"><span class="pre">name</span></code><a class="headerlink" href="#optimize.parameters.Parameter.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="optimize.parameters.Parameter.value">
+<code class="sig-name descname"><span class="pre">value</span></code><a class="headerlink" href="#optimize.parameters.Parameter.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>The current value of the parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="optimize.parameters.Parameter.vary">
+<code class="sig-name descname"><span class="pre">vary</span></code><a class="headerlink" href="#optimize.parameters.Parameter.vary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether or not to vary this parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="optimize.parameters.Parameter.latex_str">
+<code class="sig-name descname"><span class="pre">latex_str</span></code><a class="headerlink" href="#optimize.parameters.Parameter.latex_str" title="Permalink to this definition">¶</a></dt>
+<dd><p>A string for plot formatting, most likely using latex math-mode formatting $$.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p>Creates a Parameter object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – The name of the parameter.</p></li>
+<li><p><strong>value</strong> (<em>float</em>) – The starting value of the parameter.</p></li>
+<li><p><strong>vary</strong> (<em>bool</em>) – Whether or not to vary (optimize) this parameter.</p></li>
+<li><p><strong>latex_str</strong> (<em>str</em>) – A string for latex formatting in math mode.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="optimize.parameters.Parameter.set_name">
+<code class="sig-name descname"><span class="pre">set_name</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.parameters.Parameter.set_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the name for the parameter. Also sets the latex string of not already set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – The parameter name.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.parameters.Parameter.value_str">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">value_str</span></code><a class="headerlink" href="#optimize.parameters.Parameter.value_str" title="Permalink to this definition">¶</a></dt>
+<dd><p>The current value of the parameter as a string</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The value as a string</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="optimize.parameters.Parameters">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">optimize.parameters.</span></code><code class="sig-name descname"><span class="pre">Parameters</span></code><a class="headerlink" href="#optimize.parameters.Parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+<p>A container for a set of model parameters which extends the Python 3 dictionary, which is ordered by default.</p>
+<dl class="py method">
+<dt id="optimize.parameters.Parameters.add_par">
+<code class="sig-name descname"><span class="pre">add_par</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">par</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.parameters.Parameters.add_par" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a parameter to the Parameters dictionary with par.name as a key.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>par</strong> (<a class="reference internal" href="#optimize.parameters.Parameter" title="optimize.parameters.Parameter"><em>Parameter</em></a>) – The parameter to add.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.parameters.Parameters.get_locked">
+<code class="sig-name descname"><span class="pre">get_locked</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#optimize.parameters.Parameters.get_locked" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the locked parameters in a new parameters object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A parameters object containing pointers to only the locked parameters.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#optimize.parameters.Parameters" title="optimize.parameters.Parameters">Parameters</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.parameters.Parameters.get_varied">
+<code class="sig-name descname"><span class="pre">get_varied</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#optimize.parameters.Parameters.get_varied" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the varied parameters in a new parameters object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A parameters object containing pointers to only the varied parameters.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#optimize.parameters.Parameters" title="optimize.parameters.Parameters">Parameters</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.parameters.Parameters.get_view">
+<code class="sig-name descname"><span class="pre">get_view</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">par_names</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.parameters.Parameters.get_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets a subspace of parameter objects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pars</strong> (<em>iterable of str</em>) – An iterable of string objects (the names of the parameters to fetch).</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A parameters object containing pointers to the desired parameters. The class will be the same as the current instance.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>type(self)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.parameters.Parameters.index_from_par">
+<code class="sig-name descname"><span class="pre">index_from_par</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rel_vary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.parameters.Parameters.index_from_par" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the index of a given parameter name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – The name of the parameter.</p></li>
+<li><p><strong>rel_vary</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether or not to return an index which is relative to all parameters or only varied parameters. Defaults to False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The numerical index of the parameter.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.parameters.Parameters.num_locked">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">num_locked</span></code><a class="headerlink" href="#optimize.parameters.Parameters.num_locked" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of locked parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The number of locked parameters.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.parameters.Parameters.num_varied">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">num_varied</span></code><a class="headerlink" href="#optimize.parameters.Parameters.num_varied" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of varied parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The number of varied parameters.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.parameters.Parameters.par_from_index">
+<code class="sig-name descname"><span class="pre">par_from_index</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rel_vary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.parameters.Parameters.par_from_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the parameter at a given numerical index.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k</strong> (<em>int</em>) – The numerical index.</p></li>
+<li><p><strong>rel_vary</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether or not this index is relative to all parameters or only varied parameters. Defaults to False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The parameter at the given index.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#optimize.parameters.Parameter" title="optimize.parameters.Parameter">Parameter</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.parameters.Parameters.set_vec">
+<code class="sig-name descname"><span class="pre">set_vec</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">varied</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.parameters.Parameters.set_vec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets an attribute for all parameters given a vector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>np.ndarray</em>) – The vector to set.</p></li>
+<li><p><strong>attr</strong> (<em>str</em>) – The attribute to set for each parameter.</p></li>
+<li><p><strong>varied</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether or not to only set the varied parameters. Defaults to False.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.parameters.Parameters.unpack">
+<code class="sig-name descname"><span class="pre">unpack</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vary_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.parameters.Parameters.unpack" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unpacks values to a dict of numpy arrays.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>keys</strong> (<em>iterable</em><em> or </em><em>string</em>) – A tuple of strings containing the keys to unpack, defaults to None for all keys.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dictionary containing the numpy arrays.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="optimize.parameters.Parameters.varied_inds">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">varied_inds</span></code><a class="headerlink" href="#optimize.parameters.Parameters.varied_inds" title="Permalink to this definition">¶</a></dt>
+<dd><p>The indices of the varied parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The indices of the varied parameters.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.dnarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-optimize.priors"></span><dl class="py class">
+<dt id="optimize.priors.Gaussian">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">optimize.priors.</span></code><code class="sig-name descname"><span class="pre">Gaussian</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.priors.Gaussian" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#optimize.priors.Prior" title="optimize.priors.Prior"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.priors.Prior</span></code></a></p>
+<p>A prior defined by a normal distribution.</p>
+<dl class="py attribute">
+<dt id="optimize.priors.Gaussian.mu">
+<code class="sig-name descname"><span class="pre">mu</span></code><a class="headerlink" href="#optimize.priors.Gaussian.mu" title="Permalink to this definition">¶</a></dt>
+<dd><p>The center of the distribution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="optimize.priors.Gaussian.sigma">
+<code class="sig-name descname"><span class="pre">sigma</span></code><a class="headerlink" href="#optimize.priors.Gaussian.sigma" title="Permalink to this definition">¶</a></dt>
+<dd><p>The stddev. of the distribution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p>Constructor for a Gaussian prior.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mu</strong> (<em>float</em>) – The center of the distribution.</p></li>
+<li><p><strong>sigma</strong> (<em>float</em>) – The stddev. of the distribution.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="optimize.priors.Gaussian.logprob">
+<code class="sig-name descname"><span class="pre">logprob</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.priors.Gaussian.logprob" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the log probability given the current parameter value, x.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>float</em>) – The current parameter value.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The logarithm of the probability distribution for this value.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="optimize.priors.JeffreysSG">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">optimize.priors.</span></code><code class="sig-name descname"><span class="pre">JeffreysSG</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lower_bound</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper_bound</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">knee</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.priors.JeffreysSG" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#optimize.priors.Prior" title="optimize.priors.Prior"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.priors.Prior</span></code></a></p>
+<p>A Jeffrey’s prior for the stddev of a Gaussian likelihood, proportional to 1 / x.</p>
+<dl class="py attribute">
+<dt id="optimize.priors.JeffreysSG.lower_bound">
+<code class="sig-name descname"><span class="pre">lower_bound</span></code><a class="headerlink" href="#optimize.priors.JeffreysSG.lower_bound" title="Permalink to this definition">¶</a></dt>
+<dd><p>The lower bound.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="optimize.priors.JeffreysSG.upper_bound">
+<code class="sig-name descname"><span class="pre">upper_bound</span></code><a class="headerlink" href="#optimize.priors.JeffreysSG.upper_bound" title="Permalink to this definition">¶</a></dt>
+<dd><p>The upper bound.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p>Constructs a Jeffrey’s prior for a Gaussian likelihood.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lower_bound</strong> (<em>float</em>) – The lower bound of the prior.</p></li>
+<li><p><strong>upper_bound</strong> (<em>float</em>) – The upper bound of the prior.</p></li>
+<li><p><strong>knee</strong> (<em>int</em><em>, </em><em>optional</em>) – The knee of the distribution (x0) The distribution is proportional to 1 / (x - x0). Defaults to 0.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="optimize.priors.JeffreysSG.logprob">
+<code class="sig-name descname"><span class="pre">logprob</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.priors.JeffreysSG.logprob" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the log probability given the current parameter value, x.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>float</em>) – The current parameter value.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The logarithm of the probability distribution for this value.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="optimize.priors.Negative">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">optimize.priors.</span></code><code class="sig-name descname"><span class="pre">Negative</span></code><a class="headerlink" href="#optimize.priors.Negative" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#optimize.priors.Prior" title="optimize.priors.Prior"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.priors.Prior</span></code></a></p>
+<p>A prior to force x &lt; 0.</p>
+<p>Constructs a negative prior.</p>
+<dl class="py method">
+<dt id="optimize.priors.Negative.logprob">
+<code class="sig-name descname"><span class="pre">logprob</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.priors.Negative.logprob" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the log probability given the current parameter value, x.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>float</em>) – The current parameter value.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The logarithm of the probability distribution for this value.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="optimize.priors.Positive">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">optimize.priors.</span></code><code class="sig-name descname"><span class="pre">Positive</span></code><a class="headerlink" href="#optimize.priors.Positive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#optimize.priors.Prior" title="optimize.priors.Prior"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.priors.Prior</span></code></a></p>
+<p>A prior to force x &gt; 0.</p>
+<p>Constructs a positive prior.</p>
+<dl class="py method">
+<dt id="optimize.priors.Positive.logprob">
+<code class="sig-name descname"><span class="pre">logprob</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.priors.Positive.logprob" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the log probability given the current parameter value, x.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>float</em>) – The current parameter value.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The logarithm of the probability distribution for this value.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="optimize.priors.Prior">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">optimize.priors.</span></code><code class="sig-name descname"><span class="pre">Prior</span></code><a class="headerlink" href="#optimize.priors.Prior" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>An interface for a general Bayesian prior.</p>
+<dl class="py method">
+<dt id="optimize.priors.Prior.logprob">
+<code class="sig-name descname"><span class="pre">logprob</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.priors.Prior.logprob" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the logprobability given the current parameter value, x.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>float</em>) – The current parameter value.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The logarithm of the probability distribution for this value.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="optimize.priors.Uniform">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">optimize.priors.</span></code><code class="sig-name descname"><span class="pre">Uniform</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lower_bound</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper_bound</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.priors.Uniform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#optimize.priors.Prior" title="optimize.priors.Prior"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.priors.Prior</span></code></a></p>
+<p>A prior defined by hard bounds.</p>
+<dl class="py attribute">
+<dt id="optimize.priors.Uniform.lower_bound">
+<code class="sig-name descname"><span class="pre">lower_bound</span></code><a class="headerlink" href="#optimize.priors.Uniform.lower_bound" title="Permalink to this definition">¶</a></dt>
+<dd><p>The lower bound.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="optimize.priors.Uniform.upper_bound">
+<code class="sig-name descname"><span class="pre">upper_bound</span></code><a class="headerlink" href="#optimize.priors.Uniform.upper_bound" title="Permalink to this definition">¶</a></dt>
+<dd><p>The upper bound.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p>Constructor for a Uniform prior.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lower_bound</strong> (<em>float</em>) – The lower bound.</p></li>
+<li><p><strong>upper_bound</strong> (<em>float</em>) – The upper bound.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="optimize.priors.Uniform.logprob">
+<code class="sig-name descname"><span class="pre">logprob</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.priors.Uniform.logprob" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the log probability given the current parameter value, x.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>float</em>) – The current parameter value.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The logarithm of the probability distribution for this value.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+              </div>
+              
+        
+            
+
+
+
+<div class='prev-next-bottom'>
+    
+    <div id="prev">
+        <a class="left-prev" href="models_api.html" title="previous page">
+            <i class="prevnext-label fas fa-angle-left"></i>
+            <div class="prevnext-info">
+                <p class="prevnext-label">previous</p>
+                <p class="prevnext-title">optimize API reference</p>
+            </div>
+        </a>
+    </div>
+     <div id="next">
+        <a class="right-next" href="noise_api.html" title="next page">
+            <div class="prevnext-info">
+                <p class="prevnext-label">next</p>
+                <p class="prevnext-title">optimize API reference</p>
+            </div>
+            <i class="prevnext-label fas fa-angle-right"></i>
+        </a>
+     </div>
+
+</div>
+        
+        </div>
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Bryson Cale<br/>
+        
+            &copy; Copyright 2020, Bryson Cale.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="_static/js/index.1c5a1a01449ed65a7b51.js"></script>
+
+  
+  </body>
+</html>

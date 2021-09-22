@@ -18,8 +18,8 @@ The result ...
 
 
 
-Example 2: Fitting a Gaussian with a Chi-2 objective.
-++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Example 2: Fitting a Gaussian to a dataset with errors and Chi-2 objective.
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. literalinclude:: ../examples/gauss_fit_example2.py
     :language: python
@@ -28,8 +28,8 @@ Example 2: Fitting a Gaussian with a Chi-2 objective.
 
 
 
-Example 3: Fitting a Gaussian with a Gaussian Likelihood.
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Example 3: Fitting a Gaussian to a dataset with a Gaussian Likelihood.
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. literalinclude:: ../examples/gauss_fit_example3.py
     :language: python

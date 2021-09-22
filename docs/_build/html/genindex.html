@@ -23,7 +23,7 @@
 
     
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/sphinx-book-theme.acff12b8f9c144ce68a297486a2fa670.css" type="text/css" />
+    <link rel="stylesheet" href="_static/sphinx-book-theme.e8f53015daec13862f6db5e763c41738.css" type="text/css" />
     
   <link rel="preload" as="script" href="_static/js/index.1c5a1a01449ed65a7b51.js">
 
@@ -62,7 +62,7 @@
 </div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
   <i class="icon fas fa-search"></i>
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
-</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item active">
         <ul class="nav bd-sidenav">
  <li class="toctree-l1">
@@ -73,11 +73,6 @@
  <li class="toctree-l1">
   <a class="reference internal" href="tutorials.html">
    Tutorials
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="extending.html">
-   Extending optimize
   </a>
  </li>
  <li class="toctree-l1 has-children">
@@ -91,18 +86,23 @@
   </label>
   <ul>
    <li class="toctree-l2">
+    <a class="reference internal" href="frameworks_api.html">
+     Frameworks
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="data_api.html">
      Data
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="knowledge_api.html">
-     Knowledge
+    <a class="reference internal" href="models_api.html">
+     Models
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="models_api.html">
-     Models
+    <a class="reference internal" href="parameters_api.html">
+     Parameters
     </a>
    </li>
    <li class="toctree-l2">
@@ -123,11 +123,6 @@
    <li class="toctree-l2">
     <a class="reference internal" href="samplers_api.html">
      Samplers
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="frameworks_api.html">
-     Frameworks
     </a>
    </li>
   </ul>
@@ -221,15 +216,15 @@
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="knowledge_api.html#optimize.parameters.Parameters.add_par">add_par() (optimize.parameters.Parameters method)</a>
+      <li><a href="parameters_api.html#optimize.parameters.Parameters.add_par">add_par() (optimize.parameters.Parameters method)</a>
 </li>
-      <li><a href="knowledge_api.html#optimize.parameters.BayesianParameter.add_prior">add_prior() (optimize.parameters.BayesianParameter method)</a>
+      <li><a href="parameters_api.html#optimize.parameters.BayesianParameter.add_prior">add_prior() (optimize.parameters.BayesianParameter method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="knowledge_api.html#optimize.parameters.BoundedParameters.all_in_bounds">all_in_bounds() (optimize.parameters.BoundedParameters property)</a>
+      <li><a href="parameters_api.html#optimize.parameters.BoundedParameters.all_in_bounds">all_in_bounds() (optimize.parameters.BoundedParameters property)</a>
 </li>
-      <li><a href="knowledge_api.html#optimize.parameters.BoundedParameters.any_out_of_bounds">any_out_of_bounds() (optimize.parameters.BoundedParameters property)</a>
+      <li><a href="parameters_api.html#optimize.parameters.BoundedParameters.any_out_of_bounds">any_out_of_bounds() (optimize.parameters.BoundedParameters property)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -237,17 +232,17 @@
 <h2 id="B">B</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="knowledge_api.html#optimize.parameters.BayesianParameter">BayesianParameter (class in optimize.parameters)</a>
+      <li><a href="parameters_api.html#optimize.parameters.BayesianParameter">BayesianParameter (class in optimize.parameters)</a>
 </li>
-      <li><a href="knowledge_api.html#optimize.parameters.BayesianParameters">BayesianParameters (class in optimize.parameters)</a>
+      <li><a href="parameters_api.html#optimize.parameters.BayesianParameters">BayesianParameters (class in optimize.parameters)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="frameworks_api.html#optimize.frameworks.BayesianProblem">BayesianProblem (class in optimize.frameworks)</a>
 </li>
-      <li><a href="knowledge_api.html#optimize.parameters.BoundedParameter">BoundedParameter (class in optimize.parameters)</a>
+      <li><a href="parameters_api.html#optimize.parameters.BoundedParameter">BoundedParameter (class in optimize.parameters)</a>
 </li>
-      <li><a href="knowledge_api.html#optimize.parameters.BoundedParameters">BoundedParameters (class in optimize.parameters)</a>
+      <li><a href="parameters_api.html#optimize.parameters.BoundedParameters">BoundedParameters (class in optimize.parameters)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -259,6 +254,8 @@
 </li>
       <li><a href="data_api.html#optimize.data.CompositeDataset">CompositeDataset (class in optimize.data)</a>
 </li>
+      <li><a href="data_api.html#optimize.data.CompositeSimpleSeries">CompositeSimpleSeries (class in optimize.data)</a>
+</li>
       <li><a href="objectives_api.html#optimize.objectives.Chi2.compute_chi2">compute_chi2() (optimize.objectives.Chi2 static method)</a>
 </li>
       <li><a href="noise_api.html#optimize.kernels.QuasiPeriodic.compute_cov_matrix">compute_cov_matrix() (optimize.kernels.QuasiPeriodic method)</a>
@@ -266,7 +263,7 @@
       <li><a href="models_api.html#optimize.models.Model.compute_data_errors">compute_data_errors() (optimize.models.Model method)</a>
 
       <ul>
-        <li><a href="models_api.html#optimize.models.NoiseBasedModel.compute_data_errors">(optimize.models.NoiseBasedModel method)</a>
+        <li><a href="models_api.html#optimize.models.NoiseModel.compute_data_errors">(optimize.models.NoiseModel method)</a>
 </li>
         <li><a href="noise_api.html#optimize.noise.GaussianProcess.compute_data_errors">(optimize.noise.GaussianProcess method)</a>
 </li>
@@ -298,7 +295,7 @@
       <li><a href="models_api.html#optimize.models.Model.compute_residuals">compute_residuals() (optimize.models.Model method)</a>
 
       <ul>
-        <li><a href="models_api.html#optimize.models.NoiseBasedModel.compute_residuals">(optimize.models.NoiseBasedModel method)</a>
+        <li><a href="models_api.html#optimize.models.NoiseModel.compute_residuals">(optimize.models.NoiseModel method)</a>
 </li>
         <li><a href="noise_api.html#optimize.noise.CorrelatedNoiseProcess.compute_residuals">(optimize.noise.CorrelatedNoiseProcess method)</a>
 </li>
@@ -326,7 +323,7 @@
       <ul>
         <li><a href="models_api.html#optimize.models.Model.data">(optimize.models.Model attribute)</a>
 </li>
-        <li><a href="models_api.html#optimize.models.NoiseBasedModel.data">(optimize.models.NoiseBasedModel attribute)</a>
+        <li><a href="models_api.html#optimize.models.NoiseModel.data">(optimize.models.NoiseModel attribute)</a>
 </li>
         <li><a href="noise_api.html#optimize.noise.NoiseProcess.data">(optimize.noise.NoiseProcess attribute)</a>
 </li>
@@ -335,7 +332,7 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="data_api.html#optimize.data.Dataset">Dataset (class in optimize.data)</a>
 </li>
-      <li><a href="models_api.html#optimize.models.NoiseBasedModel.det_model">det_model (optimize.models.NoiseBasedModel attribute)</a>
+      <li><a href="models_api.html#optimize.models.NoiseModel.det_model">det_model (optimize.models.NoiseModel attribute)</a>
 </li>
       <li><a href="models_api.html#optimize.models.DeterministicModel">DeterministicModel (class in optimize.models)</a>
 </li>
@@ -357,71 +354,67 @@
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="knowledge_api.html#optimize.priors.Gaussian">Gaussian (class in optimize.priors)</a>
+      <li><a href="parameters_api.html#optimize.priors.Gaussian">Gaussian (class in optimize.priors)</a>
 </li>
       <li><a href="noise_api.html#optimize.noise.GaussianProcess">GaussianProcess (class in optimize.noise)</a>
 </li>
-      <li><a href="data_api.html#optimize.data.HomogeneousCompositeSimpleSeries.gen_indices">gen_indices() (optimize.data.HomogeneousCompositeSimpleSeries method)</a>
+      <li><a href="data_api.html#optimize.data.CompositeSimpleSeries.gen_indices">gen_indices() (optimize.data.CompositeSimpleSeries method)</a>
 </li>
-      <li><a href="data_api.html#optimize.data.HomogeneousCompositeSimpleSeries.gen_label_vec">gen_label_vec() (optimize.data.HomogeneousCompositeSimpleSeries method)</a>
+      <li><a href="data_api.html#optimize.data.CompositeSimpleSeries.gen_label_vec">gen_label_vec() (optimize.data.CompositeSimpleSeries method)</a>
 </li>
-      <li><a href="data_api.html#optimize.data.Dataset.get_apriori_errors">get_apriori_errors() (optimize.data.Dataset method)</a>
+      <li><a href="data_api.html#optimize.data.CompositeSimpleSeries.get_errors">get_errors() (optimize.data.CompositeSimpleSeries method)</a>
 
       <ul>
-        <li><a href="data_api.html#optimize.data.HomogeneousCompositeSimpleSeries.get_apriori_errors">(optimize.data.HomogeneousCompositeSimpleSeries method)</a>
+        <li><a href="data_api.html#optimize.data.Dataset.get_errors">(optimize.data.Dataset method)</a>
 </li>
-        <li><a href="data_api.html#optimize.data.SimpleSeries.get_apriori_errors">(optimize.data.SimpleSeries method)</a>
+        <li><a href="data_api.html#optimize.data.SimpleSeries.get_errors">(optimize.data.SimpleSeries method)</a>
 </li>
       </ul></li>
-      <li><a href="knowledge_api.html#optimize.parameters.Parameters.get_locked">get_locked() (optimize.parameters.Parameters method)</a>
+      <li><a href="parameters_api.html#optimize.parameters.Parameters.get_locked">get_locked() (optimize.parameters.Parameters method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="data_api.html#optimize.data.CompositeDataset.get_trainable">get_trainable() (optimize.data.CompositeDataset method)</a>
 
       <ul>
-        <li><a href="data_api.html#optimize.data.Dataset.get_trainable">(optimize.data.Dataset method)</a>
+        <li><a href="data_api.html#optimize.data.CompositeSimpleSeries.get_trainable">(optimize.data.CompositeSimpleSeries method)</a>
 </li>
-        <li><a href="data_api.html#optimize.data.HomogeneousCompositeSimpleSeries.get_trainable">(optimize.data.HomogeneousCompositeSimpleSeries method)</a>
+        <li><a href="data_api.html#optimize.data.Dataset.get_trainable">(optimize.data.Dataset method)</a>
 </li>
         <li><a href="data_api.html#optimize.data.SimpleSeries.get_trainable">(optimize.data.SimpleSeries method)</a>
 </li>
       </ul></li>
-      <li><a href="knowledge_api.html#optimize.parameters.Parameters.get_varied">get_varied() (optimize.parameters.Parameters method)</a>
+      <li><a href="parameters_api.html#optimize.parameters.Parameters.get_varied">get_varied() (optimize.parameters.Parameters method)</a>
 </li>
-      <li><a href="data_api.html#optimize.data.HomogeneousCompositeSimpleSeries.get_vec">get_vec() (optimize.data.HomogeneousCompositeSimpleSeries method)</a>
+      <li><a href="data_api.html#optimize.data.CompositeSimpleSeries.get_vec">get_vec() (optimize.data.CompositeSimpleSeries method)</a>
 </li>
       <li><a href="data_api.html#optimize.data.CompositeDataset.get_view">get_view() (optimize.data.CompositeDataset method)</a>
 
       <ul>
-        <li><a href="knowledge_api.html#optimize.parameters.Parameters.get_view">(optimize.parameters.Parameters method)</a>
+        <li><a href="parameters_api.html#optimize.parameters.Parameters.get_view">(optimize.parameters.Parameters method)</a>
 </li>
       </ul></li>
-      <li><a href="models_api.html#optimize.models.GPBasedModel">GPBasedModel (class in optimize.models)</a>
-</li>
   </ul></td>
 </tr></table>
 
 <h2 id="H">H</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="knowledge_api.html#optimize.parameters.BayesianParameter.hard_bounds">hard_bounds() (optimize.parameters.BayesianParameter property)</a>
+      <li><a href="parameters_api.html#optimize.parameters.BayesianParameter.hard_bounds">hard_bounds() (optimize.parameters.BayesianParameter property)</a>
 
       <ul>
-        <li><a href="knowledge_api.html#optimize.parameters.BoundedParameter.hard_bounds">(optimize.parameters.BoundedParameter property)</a>
+        <li><a href="parameters_api.html#optimize.parameters.BoundedParameter.hard_bounds">(optimize.parameters.BoundedParameter property)</a>
 </li>
-        <li><a href="knowledge_api.html#optimize.parameters.BoundedParameters.hard_bounds">(optimize.parameters.BoundedParameters property)</a>
+        <li><a href="parameters_api.html#optimize.parameters.BoundedParameters.hard_bounds">(optimize.parameters.BoundedParameters property)</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="knowledge_api.html#optimize.parameters.BoundedParameters.hard_bounds_varied">hard_bounds_varied() (optimize.parameters.BoundedParameters property)</a>
+      <li><a href="parameters_api.html#optimize.parameters.BoundedParameters.hard_bounds_varied">hard_bounds_varied() (optimize.parameters.BoundedParameters property)</a>
 </li>
-      <li><a href="knowledge_api.html#optimize.parameters.BayesianParameter.has_prior">has_prior() (optimize.parameters.BayesianParameter method)</a>
+      <li><a href="parameters_api.html#optimize.parameters.BayesianParameter.has_prior">has_prior() (optimize.parameters.BayesianParameter method)</a>
 </li>
       <li><a href="samplers_api.html#optimize.samplers.HNUT">HNUT (class in optimize.samplers)</a>
-</li>
-      <li><a href="data_api.html#optimize.data.HomogeneousCompositeSimpleSeries">HomogeneousCompositeSimpleSeries (class in optimize.data)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -429,11 +422,11 @@
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="knowledge_api.html#optimize.parameters.BoundedParameter.in_bounds">in_bounds() (optimize.parameters.BoundedParameter property)</a>
+      <li><a href="parameters_api.html#optimize.parameters.BoundedParameter.in_bounds">in_bounds() (optimize.parameters.BoundedParameter property)</a>
 </li>
-      <li><a href="knowledge_api.html#optimize.parameters.Parameters.index_from_par">index_from_par() (optimize.parameters.Parameters method)</a>
+      <li><a href="parameters_api.html#optimize.parameters.Parameters.index_from_par">index_from_par() (optimize.parameters.Parameters method)</a>
 </li>
-      <li><a href="data_api.html#optimize.data.HomogeneousCompositeSimpleSeries.indices">indices (optimize.data.HomogeneousCompositeSimpleSeries attribute)</a>
+      <li><a href="data_api.html#optimize.data.CompositeSimpleSeries.indices">indices (optimize.data.CompositeSimpleSeries attribute)</a>
 </li>
       <li><a href="optimizers_api.html#optimize.neldermead.IterativeNelderMead.init_params">init_params() (optimize.neldermead.IterativeNelderMead method)</a>
 </li>
@@ -465,7 +458,7 @@
 <h2 id="J">J</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="knowledge_api.html#optimize.priors.JeffreysG">JeffreysG (class in optimize.priors)</a>
+      <li><a href="parameters_api.html#optimize.priors.JeffreysSG">JeffreysSG (class in optimize.priors)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -478,42 +471,48 @@
       <ul>
         <li><a href="data_api.html#optimize.data.SimpleSeries.label">(optimize.data.SimpleSeries attribute)</a>
 </li>
-      </ul></li>
-      <li><a href="knowledge_api.html#optimize.parameters.BayesianParameter.latex_str">latex_str (optimize.parameters.BayesianParameter attribute)</a>
-
-      <ul>
-        <li><a href="knowledge_api.html#optimize.parameters.BoundedParameter.latex_str">(optimize.parameters.BoundedParameter attribute)</a>
+        <li><a href="models_api.html#optimize.models.Model.label">(optimize.models.Model attribute)</a>
 </li>
-        <li><a href="knowledge_api.html#optimize.parameters.Parameter.latex_str">(optimize.parameters.Parameter attribute)</a>
+        <li><a href="models_api.html#optimize.models.NoiseModel.label">(optimize.models.NoiseModel attribute)</a>
+</li>
+        <li><a href="noise_api.html#optimize.noise.NoiseProcess.label">(optimize.noise.NoiseProcess attribute)</a>
 </li>
       </ul></li>
-      <li><a href="knowledge_api.html#optimize.priors.Gaussian.logprob">logprob() (optimize.priors.Gaussian method)</a>
+      <li><a href="parameters_api.html#optimize.parameters.BayesianParameter.latex_str">latex_str (optimize.parameters.BayesianParameter attribute)</a>
 
       <ul>
-        <li><a href="knowledge_api.html#optimize.priors.JeffreysG.logprob">(optimize.priors.JeffreysG method)</a>
+        <li><a href="parameters_api.html#optimize.parameters.BoundedParameter.latex_str">(optimize.parameters.BoundedParameter attribute)</a>
 </li>
-        <li><a href="knowledge_api.html#optimize.priors.Negative.logprob">(optimize.priors.Negative method)</a>
+        <li><a href="parameters_api.html#optimize.parameters.Parameter.latex_str">(optimize.parameters.Parameter attribute)</a>
 </li>
-        <li><a href="knowledge_api.html#optimize.priors.Positive.logprob">(optimize.priors.Positive method)</a>
+      </ul></li>
+      <li><a href="parameters_api.html#optimize.priors.Gaussian.logprob">logprob() (optimize.priors.Gaussian method)</a>
+
+      <ul>
+        <li><a href="parameters_api.html#optimize.priors.JeffreysSG.logprob">(optimize.priors.JeffreysSG method)</a>
 </li>
-        <li><a href="knowledge_api.html#optimize.priors.Prior.logprob">(optimize.priors.Prior method)</a>
+        <li><a href="parameters_api.html#optimize.priors.Negative.logprob">(optimize.priors.Negative method)</a>
 </li>
-        <li><a href="knowledge_api.html#optimize.priors.Uniform.logprob">(optimize.priors.Uniform method)</a>
+        <li><a href="parameters_api.html#optimize.priors.Positive.logprob">(optimize.priors.Positive method)</a>
+</li>
+        <li><a href="parameters_api.html#optimize.priors.Prior.logprob">(optimize.priors.Prior method)</a>
+</li>
+        <li><a href="parameters_api.html#optimize.priors.Uniform.logprob">(optimize.priors.Uniform method)</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="knowledge_api.html#optimize.parameters.BoundedParameter.lower_bound">lower_bound (optimize.parameters.BoundedParameter attribute)</a>
+      <li><a href="parameters_api.html#optimize.parameters.BoundedParameter.lower_bound">lower_bound (optimize.parameters.BoundedParameter attribute)</a>
 
       <ul>
-        <li><a href="knowledge_api.html#optimize.priors.JeffreysG.lower_bound">(optimize.priors.JeffreysG attribute)</a>
+        <li><a href="parameters_api.html#optimize.priors.JeffreysSG.lower_bound">(optimize.priors.JeffreysSG attribute)</a>
 </li>
-        <li><a href="knowledge_api.html#optimize.priors.Uniform.lower_bound">(optimize.priors.Uniform attribute)</a>
+        <li><a href="parameters_api.html#optimize.priors.Uniform.lower_bound">(optimize.priors.Uniform attribute)</a>
 </li>
       </ul></li>
-      <li><a href="knowledge_api.html#optimize.parameters.BayesianParameter.lower_bound">lower_bound() (optimize.parameters.BayesianParameter property)</a>
+      <li><a href="parameters_api.html#optimize.parameters.BayesianParameter.lower_bound">lower_bound() (optimize.parameters.BayesianParameter property)</a>
 </li>
-      <li><a href="knowledge_api.html#optimize.parameters.BoundedParameters.lower_bounds">lower_bounds() (optimize.parameters.BoundedParameters property)</a>
+      <li><a href="parameters_api.html#optimize.parameters.BoundedParameters.lower_bounds">lower_bounds() (optimize.parameters.BoundedParameters property)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -551,9 +550,9 @@
 </li>
         <li><a href="optimizers_api.html#module-optimize.optimizers">optimize.optimizers</a>
 </li>
-        <li><a href="knowledge_api.html#module-optimize.parameters">optimize.parameters</a>
+        <li><a href="parameters_api.html#module-optimize.parameters">optimize.parameters</a>
 </li>
-        <li><a href="knowledge_api.html#module-optimize.priors">optimize.priors</a>
+        <li><a href="parameters_api.html#module-optimize.priors">optimize.priors</a>
 </li>
         <li><a href="samplers_api.html#module-optimize.samplers">optimize.samplers</a>
 </li>
@@ -564,7 +563,7 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="objectives_api.html#optimize.objectives.MSE">MSE (class in optimize.objectives)</a>
 </li>
-      <li><a href="knowledge_api.html#optimize.priors.Gaussian.mu">mu (optimize.priors.Gaussian attribute)</a>
+      <li><a href="parameters_api.html#optimize.priors.Gaussian.mu">mu (optimize.priors.Gaussian attribute)</a>
 </li>
       <li><a href="samplers_api.html#optimize.samplers.MultiNest">MultiNest (class in optimize.samplers)</a>
 </li>
@@ -574,43 +573,37 @@
 <h2 id="N">N</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="data_api.html#optimize.data.HomogeneousCompositeSimpleSeries.n">n() (optimize.data.HomogeneousCompositeSimpleSeries property)</a>
+      <li><a href="data_api.html#optimize.data.CompositeSimpleSeries.n">n() (optimize.data.CompositeSimpleSeries property)</a>
 </li>
       <li><a href="samplers_api.html#optimize.samplers.emceeLikeSampler.n_walkers">n_walkers() (optimize.samplers.emceeLikeSampler property)</a>
 </li>
-      <li><a href="models_api.html#optimize.models.Model.name">name (optimize.models.Model attribute)</a>
+      <li><a href="parameters_api.html#optimize.parameters.BayesianParameter.name">name (optimize.parameters.BayesianParameter attribute)</a>
 
       <ul>
-        <li><a href="models_api.html#optimize.models.NoiseBasedModel.name">(optimize.models.NoiseBasedModel attribute)</a>
+        <li><a href="parameters_api.html#optimize.parameters.BoundedParameter.name">(optimize.parameters.BoundedParameter attribute)</a>
 </li>
-        <li><a href="noise_api.html#optimize.noise.NoiseProcess.name">(optimize.noise.NoiseProcess attribute)</a>
-</li>
-        <li><a href="knowledge_api.html#optimize.parameters.BayesianParameter.name">(optimize.parameters.BayesianParameter attribute)</a>
-</li>
-        <li><a href="knowledge_api.html#optimize.parameters.BoundedParameter.name">(optimize.parameters.BoundedParameter attribute)</a>
-</li>
-        <li><a href="knowledge_api.html#optimize.parameters.Parameter.name">(optimize.parameters.Parameter attribute)</a>
+        <li><a href="parameters_api.html#optimize.parameters.Parameter.name">(optimize.parameters.Parameter attribute)</a>
 </li>
       </ul></li>
+      <li><a href="parameters_api.html#optimize.priors.Negative">Negative (class in optimize.priors)</a>
+</li>
+      <li><a href="models_api.html#optimize.models.NoiseModel.noise_process">noise_process (optimize.models.NoiseModel attribute)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="knowledge_api.html#optimize.priors.Negative">Negative (class in optimize.priors)</a>
-</li>
-      <li><a href="models_api.html#optimize.models.NoiseBasedModel.noise_process">noise_process (optimize.models.NoiseBasedModel attribute)</a>
-</li>
-      <li><a href="models_api.html#optimize.models.NoiseBasedModel">NoiseBasedModel (class in optimize.models)</a>
-</li>
       <li><a href="noise_api.html#optimize.kernels.NoiseKernel">NoiseKernel (class in optimize.kernels)</a>
+</li>
+      <li><a href="models_api.html#optimize.models.NoiseModel">NoiseModel (class in optimize.models)</a>
 </li>
       <li><a href="noise_api.html#optimize.noise.NoiseProcess">NoiseProcess (class in optimize.noise)</a>
 </li>
-      <li><a href="knowledge_api.html#optimize.parameters.BoundedParameters.num_in_bounds">num_in_bounds() (optimize.parameters.BoundedParameters property)</a>
+      <li><a href="parameters_api.html#optimize.parameters.BoundedParameters.num_in_bounds">num_in_bounds() (optimize.parameters.BoundedParameters property)</a>
 </li>
-      <li><a href="knowledge_api.html#optimize.parameters.Parameters.num_locked">num_locked() (optimize.parameters.Parameters property)</a>
+      <li><a href="parameters_api.html#optimize.parameters.Parameters.num_locked">num_locked() (optimize.parameters.Parameters property)</a>
 </li>
-      <li><a href="knowledge_api.html#optimize.parameters.BoundedParameters.num_out_of_bounds">num_out_of_bounds() (optimize.parameters.BoundedParameters property)</a>
+      <li><a href="parameters_api.html#optimize.parameters.BoundedParameters.num_out_of_bounds">num_out_of_bounds() (optimize.parameters.BoundedParameters property)</a>
 </li>
-      <li><a href="knowledge_api.html#optimize.parameters.Parameters.num_varied">num_varied() (optimize.parameters.Parameters property)</a>
+      <li><a href="parameters_api.html#optimize.parameters.Parameters.num_varied">num_varied() (optimize.parameters.Parameters property)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -619,11 +612,7 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="frameworks_api.html#optimize.frameworks.OptProblem.obj">obj (optimize.frameworks.OptProblem attribute)</a>
-
-      <ul>
-        <li><a href="optimizers_api.html#optimize.optimizers.Optimizer.obj">(optimize.optimizers.Optimizer attribute)</a>
 </li>
-      </ul></li>
       <li><a href="objectives_api.html#optimize.objectives.ObjectiveFunction">ObjectiveFunction (class in optimize.objectives)</a>
 </li>
       <li><a href="frameworks_api.html#optimize.frameworks.BayesianProblem.optimize">optimize() (optimize.frameworks.BayesianProblem method)</a>
@@ -696,14 +685,14 @@
     optimize.parameters
 
       <ul>
-        <li><a href="knowledge_api.html#module-optimize.parameters">module</a>
+        <li><a href="parameters_api.html#module-optimize.parameters">module</a>
 </li>
       </ul></li>
       <li>
     optimize.priors
 
       <ul>
-        <li><a href="knowledge_api.html#module-optimize.priors">module</a>
+        <li><a href="parameters_api.html#module-optimize.priors">module</a>
 </li>
       </ul></li>
       <li>
@@ -728,11 +717,9 @@
         <li><a href="frameworks_api.html#optimize.frameworks.OptProblem.optimizer">(optimize.frameworks.OptProblem attribute)</a>
 </li>
       </ul></li>
-      <li><a href="optimizers_api.html#optimize.optimizers.Optimizer.options">options (optimize.optimizers.Optimizer attribute)</a>
-</li>
       <li><a href="frameworks_api.html#optimize.frameworks.OptProblem">OptProblem (class in optimize.frameworks)</a>
 </li>
-      <li><a href="knowledge_api.html#optimize.parameters.BoundedParameter.out_of_bounds">out_of_bounds() (optimize.parameters.BoundedParameter property)</a>
+      <li><a href="parameters_api.html#optimize.parameters.BoundedParameter.out_of_bounds">out_of_bounds() (optimize.parameters.BoundedParameter property)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -742,23 +729,29 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="frameworks_api.html#optimize.frameworks.BayesianProblem.p0">p0 (optimize.frameworks.BayesianProblem attribute)</a>
 </li>
-      <li><a href="knowledge_api.html#optimize.parameters.Parameters.par_from_index">par_from_index() (optimize.parameters.Parameters method)</a>
+      <li><a href="parameters_api.html#optimize.parameters.Parameters.par_from_index">par_from_index() (optimize.parameters.Parameters method)</a>
 </li>
       <li><a href="noise_api.html#optimize.kernels.NoiseKernel.par_names">par_names (optimize.kernels.NoiseKernel attribute)</a>
 </li>
-      <li><a href="knowledge_api.html#optimize.parameters.Parameter">Parameter (class in optimize.parameters)</a>
+      <li><a href="parameters_api.html#optimize.parameters.Parameter">Parameter (class in optimize.parameters)</a>
+</li>
+      <li><a href="parameters_api.html#optimize.parameters.Parameters">Parameters (class in optimize.parameters)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="knowledge_api.html#optimize.parameters.Parameters">Parameters (class in optimize.parameters)</a>
+      <li><a href="optimizers_api.html#optimize.optimizers.Maximizer.penalize">penalize() (optimize.optimizers.Maximizer method)</a>
+
+      <ul>
+        <li><a href="optimizers_api.html#optimize.optimizers.Minimizer.penalize">(optimize.optimizers.Minimizer method)</a>
 </li>
-      <li><a href="knowledge_api.html#optimize.priors.Positive">Positive (class in optimize.priors)</a>
+      </ul></li>
+      <li><a href="parameters_api.html#optimize.priors.Positive">Positive (class in optimize.priors)</a>
 </li>
       <li><a href="frameworks_api.html#optimize.frameworks.BayesianProblem.post">post (optimize.frameworks.BayesianProblem attribute)</a>
 </li>
-      <li><a href="knowledge_api.html#optimize.priors.Prior">Prior (class in optimize.priors)</a>
+      <li><a href="parameters_api.html#optimize.priors.Prior">Prior (class in optimize.priors)</a>
 </li>
-      <li><a href="knowledge_api.html#optimize.parameters.BayesianParameter.priors">priors (optimize.parameters.BayesianParameter attribute)</a>
+      <li><a href="parameters_api.html#optimize.parameters.BayesianParameter.priors">priors (optimize.parameters.BayesianParameter attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -794,15 +787,15 @@
 </li>
       <li><a href="frameworks_api.html#optimize.frameworks.BayesianProblem.sampler">sampler (optimize.frameworks.BayesianProblem attribute)</a>
 </li>
-      <li><a href="knowledge_api.html#optimize.parameters.BayesianParameter.scale">scale (optimize.parameters.BayesianParameter attribute)</a>
+      <li><a href="parameters_api.html#optimize.parameters.BayesianParameter.scale">scale (optimize.parameters.BayesianParameter attribute)</a>
 </li>
-      <li><a href="knowledge_api.html#id0">scale() (optimize.parameters.BayesianParameter property)</a>
+      <li><a href="parameters_api.html#id0">scale() (optimize.parameters.BayesianParameter property)</a>
 </li>
-      <li><a href="knowledge_api.html#optimize.parameters.BayesianParameters.scales">scales() (optimize.parameters.BayesianParameters property)</a>
+      <li><a href="parameters_api.html#optimize.parameters.BayesianParameters.scales">scales() (optimize.parameters.BayesianParameters property)</a>
 </li>
       <li><a href="optimizers_api.html#optimize.scipy_optimizers.SciPyMinimizer">SciPyMinimizer (class in optimize.scipy_optimizers)</a>
 </li>
-      <li><a href="knowledge_api.html#optimize.parameters.Parameter.set_name">set_name() (optimize.parameters.Parameter method)</a>
+      <li><a href="parameters_api.html#optimize.parameters.Parameter.set_name">set_name() (optimize.parameters.Parameter method)</a>
 </li>
       <li><a href="frameworks_api.html#optimize.frameworks.OptProblem.set_obj">set_obj() (optimize.frameworks.OptProblem method)</a>
 </li>
@@ -820,9 +813,9 @@
 </li>
       <li><a href="frameworks_api.html#optimize.frameworks.BayesianProblem.set_sampler">set_sampler() (optimize.frameworks.BayesianProblem method)</a>
 </li>
-      <li><a href="knowledge_api.html#optimize.parameters.Parameters.set_vec">set_vec() (optimize.parameters.Parameters method)</a>
+      <li><a href="parameters_api.html#optimize.parameters.Parameters.set_vec">set_vec() (optimize.parameters.Parameters method)</a>
 </li>
-      <li><a href="knowledge_api.html#optimize.priors.Gaussian.sigma">sigma (optimize.priors.Gaussian attribute)</a>
+      <li><a href="parameters_api.html#optimize.priors.Gaussian.sigma">sigma (optimize.priors.Gaussian attribute)</a>
 </li>
       <li><a href="data_api.html#optimize.data.SimpleSeries">SimpleSeries (class in optimize.data)</a>
 </li>
@@ -840,23 +833,23 @@
 </li>
       <li><a href="noise_api.html#optimize.noise.UnCorrelatedNoiseProcess">UnCorrelatedNoiseProcess (class in optimize.noise)</a>
 </li>
-      <li><a href="knowledge_api.html#optimize.priors.Uniform">Uniform (class in optimize.priors)</a>
+      <li><a href="parameters_api.html#optimize.priors.Uniform">Uniform (class in optimize.priors)</a>
 </li>
-      <li><a href="knowledge_api.html#optimize.parameters.Parameters.unpack">unpack() (optimize.parameters.Parameters method)</a>
+      <li><a href="parameters_api.html#optimize.parameters.Parameters.unpack">unpack() (optimize.parameters.Parameters method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="knowledge_api.html#optimize.parameters.BoundedParameter.upper_bound">upper_bound (optimize.parameters.BoundedParameter attribute)</a>
+      <li><a href="parameters_api.html#optimize.parameters.BoundedParameter.upper_bound">upper_bound (optimize.parameters.BoundedParameter attribute)</a>
 
       <ul>
-        <li><a href="knowledge_api.html#optimize.priors.JeffreysG.upper_bound">(optimize.priors.JeffreysG attribute)</a>
+        <li><a href="parameters_api.html#optimize.priors.JeffreysSG.upper_bound">(optimize.priors.JeffreysSG attribute)</a>
 </li>
-        <li><a href="knowledge_api.html#optimize.priors.Uniform.upper_bound">(optimize.priors.Uniform attribute)</a>
+        <li><a href="parameters_api.html#optimize.priors.Uniform.upper_bound">(optimize.priors.Uniform attribute)</a>
 </li>
       </ul></li>
-      <li><a href="knowledge_api.html#optimize.parameters.BayesianParameter.upper_bound">upper_bound() (optimize.parameters.BayesianParameter property)</a>
+      <li><a href="parameters_api.html#optimize.parameters.BayesianParameter.upper_bound">upper_bound() (optimize.parameters.BayesianParameter property)</a>
 </li>
-      <li><a href="knowledge_api.html#optimize.parameters.BoundedParameters.upper_bounds">upper_bounds() (optimize.parameters.BoundedParameters property)</a>
+      <li><a href="parameters_api.html#optimize.parameters.BoundedParameters.upper_bounds">upper_bounds() (optimize.parameters.BoundedParameters property)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -864,26 +857,26 @@
 <h2 id="V">V</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="knowledge_api.html#optimize.parameters.BayesianParameter.value">value (optimize.parameters.BayesianParameter attribute)</a>
+      <li><a href="parameters_api.html#optimize.parameters.BayesianParameter.value">value (optimize.parameters.BayesianParameter attribute)</a>
 
       <ul>
-        <li><a href="knowledge_api.html#optimize.parameters.BoundedParameter.value">(optimize.parameters.BoundedParameter attribute)</a>
+        <li><a href="parameters_api.html#optimize.parameters.BoundedParameter.value">(optimize.parameters.BoundedParameter attribute)</a>
 </li>
-        <li><a href="knowledge_api.html#optimize.parameters.Parameter.value">(optimize.parameters.Parameter attribute)</a>
+        <li><a href="parameters_api.html#optimize.parameters.Parameter.value">(optimize.parameters.Parameter attribute)</a>
 </li>
       </ul></li>
-      <li><a href="knowledge_api.html#optimize.parameters.Parameter.value_str">value_str() (optimize.parameters.Parameter property)</a>
+      <li><a href="parameters_api.html#optimize.parameters.Parameter.value_str">value_str() (optimize.parameters.Parameter property)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="knowledge_api.html#optimize.parameters.Parameters.varied_inds">varied_inds() (optimize.parameters.Parameters property)</a>
+      <li><a href="parameters_api.html#optimize.parameters.Parameters.varied_inds">varied_inds() (optimize.parameters.Parameters property)</a>
 </li>
-      <li><a href="knowledge_api.html#optimize.parameters.BayesianParameter.vary">vary (optimize.parameters.BayesianParameter attribute)</a>
+      <li><a href="parameters_api.html#optimize.parameters.BayesianParameter.vary">vary (optimize.parameters.BayesianParameter attribute)</a>
 
       <ul>
-        <li><a href="knowledge_api.html#optimize.parameters.BoundedParameter.vary">(optimize.parameters.BoundedParameter attribute)</a>
+        <li><a href="parameters_api.html#optimize.parameters.BoundedParameter.vary">(optimize.parameters.BoundedParameter attribute)</a>
 </li>
-        <li><a href="knowledge_api.html#optimize.parameters.Parameter.vary">(optimize.parameters.Parameter attribute)</a>
+        <li><a href="parameters_api.html#optimize.parameters.Parameter.vary">(optimize.parameters.Parameter attribute)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -904,7 +897,7 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="data_api.html#optimize.data.HomogeneousCompositeSimpleSeries.x">x() (optimize.data.HomogeneousCompositeSimpleSeries property)</a>
+      <li><a href="data_api.html#optimize.data.CompositeSimpleSeries.x">x() (optimize.data.CompositeSimpleSeries property)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -914,13 +907,13 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="data_api.html#optimize.data.SimpleSeries.y">y (optimize.data.SimpleSeries attribute)</a>
 </li>
-      <li><a href="data_api.html#optimize.data.HomogeneousCompositeSimpleSeries.y">y() (optimize.data.HomogeneousCompositeSimpleSeries property)</a>
+      <li><a href="data_api.html#optimize.data.CompositeSimpleSeries.y">y() (optimize.data.CompositeSimpleSeries property)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="data_api.html#optimize.data.SimpleSeries.yerr">yerr (optimize.data.SimpleSeries attribute)</a>
 </li>
-      <li><a href="data_api.html#optimize.data.HomogeneousCompositeSimpleSeries.yerr">yerr() (optimize.data.HomogeneousCompositeSimpleSeries property)</a>
+      <li><a href="data_api.html#optimize.data.CompositeSimpleSeries.yerr">yerr() (optimize.data.CompositeSimpleSeries property)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -938,10 +931,14 @@
               </div>
               
         
-        <div class='prev-next-bottom'>
             
 
-        </div>
+
+
+<div class='prev-next-bottom'>
+    
+
+</div>
         
         </div>
     </div>

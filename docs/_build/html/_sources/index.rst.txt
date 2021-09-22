@@ -6,7 +6,7 @@
 optimize
 ========
 
-Simply put, an environment to model some data.
+A high level environment to model a dataset, including wrappers to scipy.optimize.minimize. Simple Bayesian regression with Gaussian distributions and basic priors is also supported.
 
 Below is the remaining documentation, tutorials, and API.
 
@@ -15,7 +15,6 @@ Below is the remaining documentation, tutorials, and API.
 
    Installation <installation>
    Tutorials <tutorials>
-   Extending optimize <extending>
    API <api>
 
 Indices and tables

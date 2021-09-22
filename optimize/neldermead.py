@@ -17,7 +17,7 @@ class IterativeNelderMead(optimizers.Minimizer):
     """A class to interact with the iterative Nelder Mead optimizer.
     """
     
-    def __init__(self, alpha=1.0, gamma=2.0, sigma=0.5, delta=0.5, xtol=1E-8, ftol=1E-6, n_iterations=None, no_improve_break=3, penalty=1E-6, max_f_evals=None, initial_scale_factor=0.5):
+    def __init__(self, alpha=1.0, gamma=2.0, sigma=0.5, delta=0.5, xtol=1E-8, ftol=1E-6, n_iterations=None, no_improve_break=3, penalty=1E6, max_f_evals=None, initial_scale_factor=0.5):
         self.alpha = alpha
         self.gamma = gamma
         self.sigma = sigma

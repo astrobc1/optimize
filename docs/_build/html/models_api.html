@@ -23,7 +23,7 @@
 
     
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/sphinx-book-theme.acff12b8f9c144ce68a297486a2fa670.css" type="text/css" />
+    <link rel="stylesheet" href="_static/sphinx-book-theme.e8f53015daec13862f6db5e763c41738.css" type="text/css" />
     
   <link rel="preload" as="script" href="_static/js/index.1c5a1a01449ed65a7b51.js">
 
@@ -35,8 +35,8 @@
     <link rel="shortcut icon" href="_static/optimize_logo.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="optimize API reference" href="noise_api.html" />
-    <link rel="prev" title="optimize API reference" href="knowledge_api.html" />
+    <link rel="next" title="optimize API reference" href="parameters_api.html" />
+    <link rel="prev" title="optimize API reference" href="data_api.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
     
@@ -64,7 +64,7 @@
 </div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
   <i class="icon fas fa-search"></i>
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
-</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item active">
         <ul class="current nav bd-sidenav">
  <li class="toctree-l1">
@@ -75,11 +75,6 @@
  <li class="toctree-l1">
   <a class="reference internal" href="tutorials.html">
    Tutorials
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="extending.html">
-   Extending optimize
   </a>
  </li>
  <li class="toctree-l1 current active has-children">
@@ -93,18 +88,23 @@
   </label>
   <ul class="current">
    <li class="toctree-l2">
-    <a class="reference internal" href="data_api.html">
-     Data
+    <a class="reference internal" href="frameworks_api.html">
+     Frameworks
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="knowledge_api.html">
-     Knowledge
+    <a class="reference internal" href="data_api.html">
+     Data
     </a>
    </li>
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
      Models
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="parameters_api.html">
+     Parameters
     </a>
    </li>
    <li class="toctree-l2">
@@ -125,11 +125,6 @@
    <li class="toctree-l2">
     <a class="reference internal" href="samplers_api.html">
      Samplers
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="frameworks_api.html">
-     Frameworks
     </a>
    </li>
   </ul>
@@ -203,7 +198,7 @@
             <div class="tocsection onthispage pt-5 pb-3">
                 <i class="fas fa-list"></i> Contents
             </div>
-            <nav id="bd-toc-nav">
+            <nav id="bd-toc-nav" aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#module-optimize.models">
@@ -227,33 +222,15 @@
 <span id="models"></span><h2>Models<a class="headerlink" href="#module-optimize.models" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="optimize.models.DeterministicModel">
-<em class="property">class </em><code class="sig-prename descclassname">optimize.models.</code><code class="sig-name descname">DeterministicModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.models.DeterministicModel" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">optimize.models.</span></code><code class="sig-name descname"><span class="pre">DeterministicModel</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.models.DeterministicModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#optimize.models.Model" title="optimize.models.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.models.Model</span></code></a></p>
 <p>This class primarily serves as a trait with little additional functionality.</p>
 <p>Base constructor for a model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<a class="reference internal" href="data_api.html#optimize.data.Dataset" title="optimize.data.Dataset"><em>Dataset</em></a><em>, </em><em>optional</em>) – The dataset for this model.</p></li>
-<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – The name of this model.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py class">
-<dt id="optimize.models.GPBasedModel">
-<em class="property">class </em><code class="sig-prename descclassname">optimize.models.</code><code class="sig-name descname">GPBasedModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">det_model</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">noise_process</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.models.GPBasedModel" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#optimize.models.NoiseBasedModel" title="optimize.models.NoiseBasedModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.models.NoiseBasedModel</span></code></a></p>
-<p>Class for a GP based noise model.</p>
-<p>Base constructor for a noise based model.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>det_model</strong> (<a class="reference internal" href="#optimize.models.DeterministicModel" title="optimize.models.DeterministicModel"><em>DeterministicModel</em></a>) – The deterministic model.</p></li>
-<li><p><strong>noise_process</strong> (<a class="reference internal" href="noise_api.html#optimize.noise.NoiseProcess" title="optimize.noise.NoiseProcess"><em>NoiseProcess</em></a>) – The noise process.</p></li>
 <li><p><strong>data</strong> (<a class="reference internal" href="data_api.html#optimize.data.Dataset" title="optimize.data.Dataset"><em>Dataset</em></a>) – The dataset for this model.</p></li>
-<li><p><strong>name</strong> (<em>str</em>) – The name of this model.</p></li>
+<li><p><strong>label</strong> (<em>str</em><em>, </em><em>optional</em>) – The label of this model.</p></li>
 </ul>
 </dd>
 </dl>
@@ -261,12 +238,12 @@
 
 <dl class="py class">
 <dt id="optimize.models.Model">
-<em class="property">class </em><code class="sig-prename descclassname">optimize.models.</code><code class="sig-name descname">Model</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.models.Model" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">optimize.models.</span></code><code class="sig-name descname"><span class="pre">Model</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.models.Model" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Base class for a model. This class provides a minimal api to work with the other objects. The model is assumed to hold an instance of the relevant data.</p>
 <dl class="py attribute">
 <dt id="optimize.models.Model.data">
-<code class="sig-name descname">data</code><a class="headerlink" href="#optimize.models.Model.data" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">data</span></code><a class="headerlink" href="#optimize.models.Model.data" title="Permalink to this definition">¶</a></dt>
 <dd><p>The dataset for this model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -276,9 +253,9 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="optimize.models.Model.name">
-<code class="sig-name descname">name</code><a class="headerlink" href="#optimize.models.Model.name" title="Permalink to this definition">¶</a></dt>
-<dd><p>The name of this model.</p>
+<dt id="optimize.models.Model.label">
+<code class="sig-name descname"><span class="pre">label</span></code><a class="headerlink" href="#optimize.models.Model.label" title="Permalink to this definition">¶</a></dt>
+<dd><p>The label of this model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>str</p>
@@ -290,18 +267,18 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<a class="reference internal" href="data_api.html#optimize.data.Dataset" title="optimize.data.Dataset"><em>Dataset</em></a><em>, </em><em>optional</em>) – The dataset for this model.</p></li>
-<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – The name of this model.</p></li>
+<li><p><strong>data</strong> (<a class="reference internal" href="data_api.html#optimize.data.Dataset" title="optimize.data.Dataset"><em>Dataset</em></a>) – The dataset for this model.</p></li>
+<li><p><strong>label</strong> (<em>str</em><em>, </em><em>optional</em>) – The label of this model.</p></li>
 </ul>
 </dd>
 </dl>
 <dl class="py method">
 <dt id="optimize.models.Model.compute_data_errors">
-<code class="sig-name descname">compute_data_errors</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.models.Model.compute_data_errors" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">compute_data_errors</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pars</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.models.Model.compute_data_errors" title="Permalink to this definition">¶</a></dt>
 <dd><p>Default method to generate the data errors, which may be parametrized. Here the data a priori error bars are returned.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>pars</strong> (<a class="reference internal" href="knowledge_api.html#optimize.parameters.Parameters" title="optimize.parameters.Parameters"><em>Parameters</em></a>) – The parameters.</p>
+<dd class="field-odd"><p><strong>pars</strong> (<a class="reference internal" href="parameters_api.html#optimize.parameters.Parameters" title="optimize.parameters.Parameters"><em>Parameters</em></a>) – The parameters.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The data errors.</p>
@@ -314,11 +291,11 @@
 
 <dl class="py method">
 <dt id="optimize.models.Model.compute_residuals">
-<code class="sig-name descname">compute_residuals</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.models.Model.compute_residuals" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">compute_residuals</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pars</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.models.Model.compute_residuals" title="Permalink to this definition">¶</a></dt>
 <dd><p>Default method to generate the residuals (data - model).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>pars</strong> (<a class="reference internal" href="knowledge_api.html#optimize.parameters.Parameters" title="optimize.parameters.Parameters"><em>Parameters</em></a>) – The parameters.</p>
+<dd class="field-odd"><p><strong>pars</strong> (<a class="reference internal" href="parameters_api.html#optimize.parameters.Parameters" title="optimize.parameters.Parameters"><em>Parameters</em></a>) – The parameters.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The residuals.</p>
@@ -332,13 +309,13 @@
 </dd></dl>
 
 <dl class="py class">
-<dt id="optimize.models.NoiseBasedModel">
-<em class="property">class </em><code class="sig-prename descclassname">optimize.models.</code><code class="sig-name descname">NoiseBasedModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">det_model</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">noise_process</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.models.NoiseBasedModel" title="Permalink to this definition">¶</a></dt>
+<dt id="optimize.models.NoiseModel">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">optimize.models.</span></code><code class="sig-name descname"><span class="pre">NoiseModel</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">det_model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise_process</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.models.NoiseModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#optimize.models.Model" title="optimize.models.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.models.Model</span></code></a></p>
 <p>A base class for models composed of a deterministic model and a noise process.</p>
 <dl class="py attribute">
-<dt id="optimize.models.NoiseBasedModel.det_model">
-<code class="sig-name descname">det_model</code><a class="headerlink" href="#optimize.models.NoiseBasedModel.det_model" title="Permalink to this definition">¶</a></dt>
+<dt id="optimize.models.NoiseModel.det_model">
+<code class="sig-name descname"><span class="pre">det_model</span></code><a class="headerlink" href="#optimize.models.NoiseModel.det_model" title="Permalink to this definition">¶</a></dt>
 <dd><p>The deterministic model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -348,8 +325,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="optimize.models.NoiseBasedModel.noise_process">
-<code class="sig-name descname">noise_process</code><a class="headerlink" href="#optimize.models.NoiseBasedModel.noise_process" title="Permalink to this definition">¶</a></dt>
+<dt id="optimize.models.NoiseModel.noise_process">
+<code class="sig-name descname"><span class="pre">noise_process</span></code><a class="headerlink" href="#optimize.models.NoiseModel.noise_process" title="Permalink to this definition">¶</a></dt>
 <dd><p>The noise process.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -359,8 +336,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="optimize.models.NoiseBasedModel.data">
-<code class="sig-name descname">data</code><a class="headerlink" href="#optimize.models.NoiseBasedModel.data" title="Permalink to this definition">¶</a></dt>
+<dt id="optimize.models.NoiseModel.data">
+<code class="sig-name descname"><span class="pre">data</span></code><a class="headerlink" href="#optimize.models.NoiseModel.data" title="Permalink to this definition">¶</a></dt>
 <dd><p>The dataset for this model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -370,9 +347,9 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="optimize.models.NoiseBasedModel.name">
-<code class="sig-name descname">name</code><a class="headerlink" href="#optimize.models.NoiseBasedModel.name" title="Permalink to this definition">¶</a></dt>
-<dd><p>The name of this model.</p>
+<dt id="optimize.models.NoiseModel.label">
+<code class="sig-name descname"><span class="pre">label</span></code><a class="headerlink" href="#optimize.models.NoiseModel.label" title="Permalink to this definition">¶</a></dt>
+<dd><p>The label of this model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>str</p>
@@ -387,17 +364,17 @@
 <li><p><strong>det_model</strong> (<a class="reference internal" href="#optimize.models.DeterministicModel" title="optimize.models.DeterministicModel"><em>DeterministicModel</em></a>) – The deterministic model.</p></li>
 <li><p><strong>noise_process</strong> (<a class="reference internal" href="noise_api.html#optimize.noise.NoiseProcess" title="optimize.noise.NoiseProcess"><em>NoiseProcess</em></a>) – The noise process.</p></li>
 <li><p><strong>data</strong> (<a class="reference internal" href="data_api.html#optimize.data.Dataset" title="optimize.data.Dataset"><em>Dataset</em></a>) – The dataset for this model.</p></li>
-<li><p><strong>name</strong> (<em>str</em>) – The name of this model.</p></li>
+<li><p><strong>label</strong> (<em>str</em>) – The label of this model.</p></li>
 </ul>
 </dd>
 </dl>
 <dl class="py method">
-<dt id="optimize.models.NoiseBasedModel.compute_data_errors">
-<code class="sig-name descname">compute_data_errors</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em>, <em class="sig-param"><span class="n">include_corr_error</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.models.NoiseBasedModel.compute_data_errors" title="Permalink to this definition">¶</a></dt>
+<dt id="optimize.models.NoiseModel.compute_data_errors">
+<code class="sig-name descname"><span class="pre">compute_data_errors</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pars</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_corr_error</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.models.NoiseModel.compute_data_errors" title="Permalink to this definition">¶</a></dt>
 <dd><p>Default method to generate the data errors, which may be parametrized. Here the data a priori error bars are returned.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>pars</strong> (<a class="reference internal" href="knowledge_api.html#optimize.parameters.Parameters" title="optimize.parameters.Parameters"><em>Parameters</em></a>) – The parameters.</p>
+<dd class="field-odd"><p><strong>pars</strong> (<a class="reference internal" href="parameters_api.html#optimize.parameters.Parameters" title="optimize.parameters.Parameters"><em>Parameters</em></a>) – The parameters.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The data errors.</p>
@@ -409,12 +386,12 @@
 </dd></dl>
 
 <dl class="py method">
-<dt id="optimize.models.NoiseBasedModel.compute_residuals">
-<code class="sig-name descname">compute_residuals</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pars</span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.models.NoiseBasedModel.compute_residuals" title="Permalink to this definition">¶</a></dt>
+<dt id="optimize.models.NoiseModel.compute_residuals">
+<code class="sig-name descname"><span class="pre">compute_residuals</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pars</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.models.NoiseModel.compute_residuals" title="Permalink to this definition">¶</a></dt>
 <dd><p>Default method to generate the residuals (data - model).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>pars</strong> (<a class="reference internal" href="knowledge_api.html#optimize.parameters.Parameters" title="optimize.parameters.Parameters"><em>Parameters</em></a>) – The parameters.</p>
+<dd class="field-odd"><p><strong>pars</strong> (<a class="reference internal" href="parameters_api.html#optimize.parameters.Parameters" title="optimize.parameters.Parameters"><em>Parameters</em></a>) – The parameters.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The residuals.</p>
@@ -434,12 +411,32 @@
               </div>
               
         
-        <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="knowledge_api.html" title="previous page">optimize API reference</a>
-    <a class='right-next' id="next-link" href="noise_api.html" title="next page">optimize API reference</a>
 
-        </div>
+
+
+<div class='prev-next-bottom'>
+    
+    <div id="prev">
+        <a class="left-prev" href="data_api.html" title="previous page">
+            <i class="prevnext-label fas fa-angle-left"></i>
+            <div class="prevnext-info">
+                <p class="prevnext-label">previous</p>
+                <p class="prevnext-title">optimize API reference</p>
+            </div>
+        </a>
+    </div>
+     <div id="next">
+        <a class="right-next" href="parameters_api.html" title="next page">
+            <div class="prevnext-info">
+                <p class="prevnext-label">next</p>
+                <p class="prevnext-title">optimize API reference</p>
+            </div>
+            <i class="prevnext-label fas fa-angle-right"></i>
+        </a>
+     </div>
+
+</div>
         
         </div>
     </div>
