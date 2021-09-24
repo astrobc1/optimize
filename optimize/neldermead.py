@@ -362,7 +362,7 @@ class IterativeNelderMead(optimizers.Minimizer):
         self.fcalls += 1
 
         # Penalize
-        self.penalize(self.test_pars, f)
+        f = self.penalize(self.test_pars, f)
             
         # Return max or min of obj
         if isinstance(self.obj, optobj.MaxObjectiveFunction):
