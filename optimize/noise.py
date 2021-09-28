@@ -2,6 +2,9 @@
 import numpy as np
 from scipy.linalg import cho_solve, cho_factor
 
+# Plots
+import matplotlib.pyplot as plt
+
 ####################
 #### BASE TYPES ####
 ####################
@@ -95,7 +98,7 @@ class WhiteNoiseProcess(UnCorrelatedNoiseProcess):
         """
     
         # Get intrinsic data errors
-        errors = self.data.get_errors()
+        errors = np.copy(self.data.get_errors())
         
         # Add jitter in quadrature
         errors = np.sqrt(errors**2 + pars[f"jitter_{self.data.label}"].value**2)
@@ -115,7 +118,7 @@ class GaussianProcess(CorrelatedNoiseProcess):
         
         # Compute GP kernel
         K = self.kernel.compute_cov_matrix(pars)
-        
+
         # Uncorrelated errors (intrinsic error bars and additional per-data label jitter)
         if include_uncorr_error:
             assert K.shape[0] ==  K.shape[1]
@@ -138,7 +141,7 @@ class GaussianProcess(CorrelatedNoiseProcess):
         """
     
         # Get intrinsic data errors
-        errors = self.data.get_errors()
+        errors = np.copy(self.data.get_errors())
         
         # Add any jitter
         if isinstance(self.data, dict):
@@ -171,6 +174,7 @@ class GaussianProcess(CorrelatedNoiseProcess):
 
         # Avoid overflow errors by reducing the matrix.
         L = cho_factor(K)
+
         alpha = cho_solve(L, linpred)
         mu = np.dot(Ks, alpha).flatten()
         

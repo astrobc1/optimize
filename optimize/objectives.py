@@ -80,12 +80,12 @@ class MSE(MinObjectiveFunction):
     def compute_rms(residuals):
         """Computes the RMS (Root mean squared) loss. This method does not account for 
 
-        Args_data
+        Args:
             data_arr (np.ndarray): The data array.
             model_arr (np.ndarray): The model array.
 
         Returns:
-            float: The RMS.
+            (float): The RMS.
         """
         return optmath.compute_rms(residuals)
     
@@ -103,7 +103,7 @@ class Chi2(MinObjectiveFunction):
             pars (Parameters): The parameters to use.
 
         Returns:
-            float: The RMS.
+            float: The reduced chi2.
         """
         residuals = self.model.compute_residuals(pars)
         errors = self.model.compute_data_errors(pars)

@@ -3,10 +3,14 @@
 import numpy as np
 from scipy.linalg import cho_factor, cho_solve
 
+# Plots
+import matplotlib.pyplot as plt
+
 # Optimize deps
 from optimize.noise import CorrelatedNoiseProcess
 from optimize.objectives import MaxObjectiveFunction
 import optimize.maths as optmath
+
 
 ####################
 #### Likelihood ####
@@ -173,12 +177,14 @@ class Posterior(dict, MaxObjectiveFunction):
         Returns:
             float: The log likelihood, ln(L).
         """
+
         lnL = self.compute_prior_logprob(pars)
         if not np.isfinite(lnL):
             return -np.inf
         lnL += self.compute_logL(pars)
         if not np.isfinite(lnL):
             return -np.inf
+        
         return lnL
     
     def compute_logL(self, pars):

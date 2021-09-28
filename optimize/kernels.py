@@ -2,6 +2,9 @@
 import numpy as np
 from scipy.linalg import cho_solve, cho_factor
 
+# Plots
+import matplotlib.pyplot as plt
+
 # optimize deps
 import optimize.maths as optmath
 

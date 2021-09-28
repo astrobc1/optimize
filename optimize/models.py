@@ -38,7 +38,7 @@ class Model:
         Returns:
             np.ndarray: The residuals.
         """
-        data_arr = self.data.get_trainable()
+        data_arr = np.copy(self.data.get_trainable())
         model_arr = self.build(pars)
         return data_arr - model_arr
     
@@ -108,7 +108,7 @@ class NoiseModel(Model):
         if self.det_model is not None:
             return self.data.get_trainable() - self.build(pars)
         else:
-            return self.data.get_trainable()
+            return np.copy(self.data.get_trainable())
         
     def compute_residuals(self, pars):
         residuals = self.compute_raw_residuals(pars)
