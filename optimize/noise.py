@@ -138,10 +138,14 @@ class GaussianProcess(CorrelatedNoiseProcess):
         """
     
         # Get intrinsic data errors
-        errors = self.data.get_apriori_errors()
+        errors = self.data.get_errors()
         
         # Add any jitter
-        errors += pars[f"jitter_{next(iter(self.data.items()))[1].label}"].value
+        if isinstance(self.data, dict):
+            errors += pars[f"jitter_{next(iter(self.data.items()))[1].label}"].value
+        else:
+            errors += pars[f"jitter_{self.data.label}"].value
+
             
         # Add in quadrature the gp error
         if include_corr_error:

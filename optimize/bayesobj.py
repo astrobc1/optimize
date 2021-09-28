@@ -86,12 +86,12 @@ class GaussianLikelihood(Likelihood):
         
         # Compute the determiniant and inverse of K
         try:
-            
+
             if isinstance(self.model.noise_process, CorrelatedNoiseProcess):
                 
                 # Compute the cov matrix
                 K = self.model.noise_process.compute_cov_matrix(pars)
-                
+
                 # Reduce the cov matrix
                 alpha = cho_solve(cho_factor(K), residuals)
 
@@ -115,7 +115,7 @@ class GaussianLikelihood(Likelihood):
                 # Return
                 return lnL
     
-        except:
+        except scipy.linalg.LinAlgError:
             
             # If things fail, return -inf
             return -np.inf
