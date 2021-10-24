@@ -110,7 +110,7 @@ class IterativeNelderMead(optimizers.Minimizer):
             for pname in s:
                 self.subspace_inds[-1].append(self.obj.p0.index_from_par(pname))
                 self.subspace_inds_vary[-1].append(self.obj.p0.index_from_par(pname, rel_vary=True))
-
+        
     def init_space(self, subspace_index=None):
         
         if subspace_index is not None:
@@ -141,6 +141,9 @@ class IterativeNelderMead(optimizers.Minimizer):
         
         # Alias the simplex
         simplex = self.current_simplex
+
+        # Current status
+        self.status = "failed"
         
         # Alias the hyperparams
         alpha, gamma, sigma, delta = self.alpha, self.gamma, self.sigma, self.delta
@@ -197,10 +200,11 @@ class IterativeNelderMead(optimizers.Minimizer):
             else:
                 n_converged += 1
             if n_converged >= self.no_improve_break:
+                self.status = "success"
                 break
 
             # Idea of NM: Given a sorted simplex; N + 1 Vectors of N parameters,
-            # We want to iteratively replace the worst point with a better point.
+            # We want to iteratively replace the worst vector with a better vector.
             
             # The "average" vector, ignoring the worst point
             # We first anchor points off this average Vector
@@ -252,15 +256,15 @@ class IterativeNelderMead(optimizers.Minimizer):
             fmin = fvals[0]
             pmin = simplex[:, 0]
             
-        # Update current simplex
-        self.current_simplex = np.copy(simplex)
         
         # Update full simplex
-        if subspace_index is not None:
-            self.current_full_simplex[self.subspace_inds_vary[subspace_index], self.subspace_inds_vary[subspace_index][0]] = np.tile(pmin.reshape(pmin.size, 1), (len(self.subspace_inds_vary[subspace_index]) - 1)).flatten()
-        else:
-            self.current_full_simplex = np.copy(self.current_simplex)
+        # if subspace_index is not None:
+        #     self.current_full_simplex[self.subspace_inds_vary[subspace_index], self.subspace_inds_vary[subspace_index][0]] = np.tile(pmin.reshape(pmin.size, 1), (len(self.subspace_inds_vary[subspace_index]) - 1)).flatten()
+        # else:
+        #     self.current_full_simplex = np.copy(self.current_simplex)
         
+        #breakpoint()
+        # Update current simplex and best fit parameters with results
         if subspace_index is None:
             self.current_full_simplex = np.copy(simplex)
             for i, p in enumerate(self.p0_numpy_vary['name']):
@@ -268,6 +272,7 @@ class IterativeNelderMead(optimizers.Minimizer):
         else:
             for i, p in enumerate(self.subspaces[subspace_index]):
                 self.pmin[p].value = pmin[i]
+            self.current_full_simplex[:, subspace_index] = self.pmin.unpack(vary_only=True)["value"]
         
         # Update the current function minimum
         self.fmin = fmin
@@ -316,11 +321,12 @@ class IterativeNelderMead(optimizers.Minimizer):
         # Output variable
         out = {}
         
+        # Store status, fbest, fcalls
         out['status'] = self.status
         out['fbest'] = self.fmin
         out['fcalls'] = self.fcalls
             
-        # Recreate new parameter obejcts
+        # Store best fit parameters
         out['pbest'] = self.pmin
 
         return out
