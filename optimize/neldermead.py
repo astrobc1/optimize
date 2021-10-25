@@ -26,7 +26,7 @@ class IterativeNelderMead(optimizers.Minimizer):
             sigma (float, optional): Nelder-Mead hyper-parameter. Defaults to 0.5.
             delta (float, optional): Nelder-Mead hyper-parameter. Defaults to 0.5.
             xtol (float, optional): The relative x tolderance for convergence. Defaults to 1E-8.
-            ftol (float, optional): The relative f tolerance for convergence. Defaults to 1E-6.
+            ftol (float, optional): The relative f tolerance for convergence. Defaults to 1E-8.
             n_iterations (int, optional): The number of iterations. Defaults to len(p0).
             no_improve_break (int, optional): The number of times in a row the solver must converge before actually breaking. Defaults to 3.
             penalty (float, optional): The penalty to add to the objective for each BoundedParameter. Defaults to 1E6.
@@ -63,15 +63,11 @@ class IterativeNelderMead(optimizers.Minimizer):
         self.p0_numpy = self.obj.p0.unpack()
         self.p0_numpy_vary = self.obj.p0.unpack(vary_only=True)
         self.p0_vary_inds = np.where(self.p0_numpy['vary'])[0]
-        
-        # Initialize a simplex
-        self.current_full_simplex = np.zeros(shape=(self.n_pars_vary, self.n_pars_vary + 1), dtype=float)
 
-        # Fill each column with the initial parameters
-        self.current_full_simplex[:, :] = np.tile(self.p0_numpy_vary['value'].reshape(self.n_pars_vary, 1), (1, self.n_pars_vary + 1))
-        
-        # For each column, offset a uniqe parameter according to p=initial_scale_factor*p
+        # Initiate full simplex
+        self.current_full_simplex = np.tile(self.p0_numpy_vary['value'].reshape(self.n_pars_vary, 1), (1, self.n_pars_vary + 1))
         self.current_full_simplex[:, :-1] += np.diag(self.initial_scale_factor * self.p0_numpy_vary['value'])
+
 
     ####################
     #### INITIALIZE ####
@@ -87,7 +83,7 @@ class IterativeNelderMead(optimizers.Minimizer):
         
         # Resolve the number of fevals
         if self.max_f_evals is None:
-            self.max_f_evals = p0.num_varied * 500
+            self.max_f_evals = p0.num_varied * 10_000
         
         # Number of ameoba iterations
         if self.n_iterations is None:
@@ -101,6 +97,9 @@ class IterativeNelderMead(optimizers.Minimizer):
         for i in range(len(pars_varied) - 1):
             self.subspaces.append([pars_varied[i].name, pars_varied[i + 1].name])
         self.subspaces.append([pars_varied[-1].name, pars_varied[0].name])
+        
+        if len(pars_varied) > 3:
+            self.subspaces.append([pars_varied[1].name, pars_varied[-2].name])
             
         self.subspace_inds = []
         self.subspace_inds_vary = []
@@ -115,20 +114,22 @@ class IterativeNelderMead(optimizers.Minimizer):
         
         if subspace_index is not None:
             n = len(self.subspaces[subspace_index])
-            inds = [self.obj.p0.index_from_par(pname) for pname in self.subspaces[subspace_index]]
-            self.current_simplex = np.zeros((n, n+1))
-            pbest = self.pmin.unpack(keys='value')['value'][inds]
+            inds = self.subspace_inds[subspace_index]
+            simplex = np.zeros((n, n+1))
+            pmin = self.pmin.unpack(keys='value')['value'][inds]
             pinit = self.p0_numpy['value'][inds]
-            self.current_simplex[:, 0] = np.copy(pbest)
-            self.current_simplex[:, 1] = np.copy(pinit)
+            simplex[:, 0] = np.copy(pinit)
+            simplex[:, 1] = np.copy(pmin)
             for i in range(2, n + 1):
-                self.current_simplex[:, i] = np.copy(pbest)
+                simplex[:, i] = np.copy(pmin)
                 j = i - 2
-                self.current_simplex[j, i] = np.copy(pinit[j])
+                simplex[j, i] = np.copy(pinit[j])
         else:
-            self.current_simplex = np.copy(self.current_full_simplex)
+            simplex = np.copy(self.current_full_simplex)
             
         self.test_pars = copy.deepcopy(self.pmin)
+
+        return simplex
 
     ##################
     #### OPTIMIZE ####
@@ -137,15 +138,13 @@ class IterativeNelderMead(optimizers.Minimizer):
     def optimize_space(self, subspace_index=None):
         
         # Generate a simplex for this subspace
-        self.init_space(subspace_index=subspace_index)
-        
-        # Alias the simplex
-        simplex = self.current_simplex
+        simplex = self.init_space(subspace_index=subspace_index)
 
         # Current status
         self.status = "failed"
         
         # Alias the hyperparams
+        # 1, 2, 0.5, 0.5
         alpha, gamma, sigma, delta = self.alpha, self.gamma, self.sigma, self.delta
         
         # Define these as they are used often
@@ -255,20 +254,18 @@ class IterativeNelderMead(optimizers.Minimizer):
             simplex = simplex[:, ind]
             fmin = fvals[0]
             pmin = simplex[:, 0]
-            
+
+        ind = np.argsort(fvals)
+        fvals = fvals[ind]
+        simplex = simplex[:, ind]
+        fmin = fvals[0]
+        pmin = simplex[:, 0]
         
-        # Update full simplex
-        # if subspace_index is not None:
-        #     self.current_full_simplex[self.subspace_inds_vary[subspace_index], self.subspace_inds_vary[subspace_index][0]] = np.tile(pmin.reshape(pmin.size, 1), (len(self.subspace_inds_vary[subspace_index]) - 1)).flatten()
-        # else:
-        #     self.current_full_simplex = np.copy(self.current_simplex)
-        
-        #breakpoint()
-        # Update current simplex and best fit parameters with results
+        # Update the full simplex
         if subspace_index is None:
-            self.current_full_simplex = np.copy(simplex)
             for i, p in enumerate(self.p0_numpy_vary['name']):
                 self.pmin[p].value = pmin[i]
+            #self.current_full_simplex = np.copy(simplex)
         else:
             for i, p in enumerate(self.subspaces[subspace_index]):
                 self.pmin[p].value = pmin[i]
@@ -350,7 +347,8 @@ class IterativeNelderMead(optimizers.Minimizer):
     @staticmethod
     @njit(numba.types.float64(numba.types.float64, numba.types.float64))
     def compute_df(a, b):
-        return np.abs(a - b)
+        avg = (np.abs(a) + np.abs(b)) / 2
+        return np.abs(a - b) / avg
     
     def compute_obj(self, x, subspace_index=None):
         
