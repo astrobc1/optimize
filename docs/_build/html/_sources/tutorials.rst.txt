@@ -6,36 +6,51 @@
 Tutorials
 =========
 
-Example 1: Fitting a Gaussian with an MSE objective.
-++++++++++++++++++++++++++++++++++++++++++++++++++++
+Example 1: Curve fitting with the numpy interface
++++++++++++++++++++++++++++++++++++++++++++++++++
 
-.. literalinclude:: ../examples/gauss_fit_example1.py
+.. literalinclude:: ../examples/gauss_fit_example1_numpy.py
     :language: python
 
 The result ...
 
-.. image:: ../examples/gaussfit_example1.png
+.. image:: ../examples/gauss_fit1.png
 
 
+Example 2: Curve fitting with the parameters interface
+++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-Example 2: Fitting a Gaussian to a dataset with errors and Chi-2 objective.
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+.. literalinclude:: ../examples/gauss_fit_example1_parameters.py
+    :language: python
+
+.. image:: ../examples/gauss_fit2.png
+
+
+Example 3: Curve fitting with uncorrelated known errors (Chi-squared)
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. literalinclude:: ../examples/gauss_fit_example2.py
     :language: python
 
-.. image:: ../examples/gaussfit_example2.png
 
-
-
-Example 3: Fitting a Gaussian to a dataset with a Gaussian Likelihood.
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Example 4: Curve fitting with uncorrelated known errors (Chi-squared) with class based API
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. literalinclude:: ../examples/gauss_fit_example3.py
     :language: python
 
-.. image:: ../examples/gaussfit_example3.png
+
+Example 5: Curve fitting with uncorrelated unknown errors (Bayesian)
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Here we again use the class based API.
+
+.. literalinclude:: ../examples/gauss_fit_example4.py
+    :language: python
+
+.. image:: ../examples/gauss_fit4.png
 .. image:: ../examples/corner.png
+
 
 Indices and tables
 ==================

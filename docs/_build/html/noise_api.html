@@ -7,8 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>optimize API reference &#8212; optimize  documentation</title>
     
-  <link href="_static/css/theme.css" rel="stylesheet" />
-  <link href="_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
+  <link href="_static/css/theme.css" rel="stylesheet">
+  <link href="_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
 
     
   <link rel="stylesheet"
@@ -22,23 +22,26 @@
       
 
     
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/sphinx-book-theme.e8f53015daec13862f6db5e763c41738.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-book-theme.css?digest=84ace793992934648b4de8eed757e5a2" />
     
-  <link rel="preload" as="script" href="_static/js/index.1c5a1a01449ed65a7b51.js">
+  <link rel="preload" as="script" href="_static/js/index.be7d3bbb2ef33a8344ce.js">
 
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script src="_static/sphinx-book-theme.9d8b4a8b9bb19db25eeaddc40d639ba2.js"></script>
     <link rel="shortcut icon" href="_static/optimize_logo.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="optimize API reference" href="objectives_api.html" />
-    <link rel="prev" title="optimize API reference" href="parameters_api.html" />
+    <link rel="next" title="optimize API reference" href="parameters_api.html" />
+    <link rel="prev" title="optimize API reference" href="objectives_api.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="docsearch:language" content="en" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
     
   </head>
   <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
@@ -50,10 +53,19 @@
     <div class="container-xl">
       <div class="row">
           
-<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<div class="col-12 col-md-3 bd-sidebar site-navigation " id="site-navigation">
     
         <div class="navbar-brand-box">
     <a class="navbar-brand text-wrap" href="index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
       
       <img src="_static/optimize_logo.png" class="logo" alt="logo">
       
@@ -88,33 +100,23 @@
   </label>
   <ul class="current">
    <li class="toctree-l2">
-    <a class="reference internal" href="frameworks_api.html">
-     Frameworks
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="data_api.html">
-     Data
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="models_api.html">
-     Models
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="parameters_api.html">
-     Parameters
-    </a>
-   </li>
-   <li class="toctree-l2 current active">
-    <a class="current reference internal" href="#">
-     Noise
+    <a class="reference internal" href="problems_api.html">
+     Optimization Problems
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="objectives_api.html">
      Objectives
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Noise Modeling
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="parameters_api.html">
+     Parameters
     </a>
    </li>
    <li class="toctree-l2">
@@ -145,22 +147,22 @@
 
 
           
+<!-- This is an invisible pixel that we watch to see if we've scrolled. -->
+<div class="sbt-scroll-pixel-helper"></div>
 <main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
     
     <div class="topbar container-xl fixed-top">
     <div class="topbar-contents row">
         <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
         <div class="col pl-md-4 topbar-main">
-            
-            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
-                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
-                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
-                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
-                <i class="fas fa-bars"></i>
-                <i class="fas fa-arrow-left"></i>
-                <i class="fas fa-arrow-up"></i>
-            </button>
-            
+            <div class="topbar-left">
+                
+                <label class="nav-toggle-button" for="__navigation">
+                    <div class="visually-hidden">Toggle navigation</div>
+                    <i class="fas fa-bars"></i>
+                </label>
+                
+            </div>
             
 <div class="dropdown-buttons-trigger">
     <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
@@ -175,7 +177,7 @@
                 data-placement="left">.rst</button></a>
         <!-- Download PDF via print -->
         <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
-            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
     </div>
 </div>
 
@@ -193,7 +195,7 @@
         </div>
 
         <!-- Table of contents -->
-        <div class="d-none d-md-block col-md-2 bd-toc show">
+        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
             
             <div class="tocsection onthispage pt-5 pb-3">
                 <i class="fas fa-list"></i> Contents
@@ -213,7 +215,30 @@
 </div>
     <div id="main-content" class="row">
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
-        
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>optimize API reference</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-optimize.noise">
+   Noise
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            
               <div>
                 
   <div class="section" id="optimize-api-reference">
@@ -221,92 +246,27 @@
 <div class="section" id="module-optimize.noise">
 <span id="noise"></span><h2>Noise<a class="headerlink" href="#module-optimize.noise" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
-<dt id="optimize.noise.CorrelatedNoiseProcess">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">optimize.noise.</span></code><code class="sig-name descname"><span class="pre">CorrelatedNoiseProcess</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.noise.CorrelatedNoiseProcess" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="optimize.noise.CorrelatedNoiseProcess">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">optimize.noise.</span></span><span class="sig-name descname"><span class="pre">CorrelatedNoiseProcess</span></span><a class="headerlink" href="#optimize.noise.CorrelatedNoiseProcess" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#optimize.noise.NoiseProcess" title="optimize.noise.NoiseProcess"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.noise.NoiseProcess</span></code></a></p>
-<dl class="py method">
-<dt id="optimize.noise.CorrelatedNoiseProcess.compute_residuals">
-<code class="sig-name descname"><span class="pre">compute_residuals</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pars</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linpred</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.noise.CorrelatedNoiseProcess.compute_residuals" title="Permalink to this definition">¶</a></dt>
-<dd><p>Computes the final residuals (linpred - noise process)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>pars</strong> (<a class="reference internal" href="parameters_api.html#optimize.parameters.Parameters" title="optimize.parameters.Parameters"><em>Parameters</em></a>) – The parameters to use.</p></li>
-<li><p><strong>linpred</strong> (<em>np.ndarray</em>) – The linear predictor.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The final residuals.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>np.ndarray</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="optimize.noise.CorrelatedNoiseProcess.initialize">
-<code class="sig-name descname"><span class="pre">initialize</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xpred</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.noise.CorrelatedNoiseProcess.initialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Default initializer for correlated noise kernels. By default, only the distance matrix is constructed.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x1</strong> (<em>np.ndarray</em><em>, </em><em>optional</em>) – The x1 vector. Defaults to the Data grid (self.x).</p></li>
-<li><p><strong>xpred</strong> (<em>np.ndarray</em><em>, </em><em>optional</em>) – The vector to make predictions on. Defaults to x1.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
+<p>Trait.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="optimize.noise.GaussianProcess">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">optimize.noise.</span></code><code class="sig-name descname"><span class="pre">GaussianProcess</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.noise.GaussianProcess" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="optimize.noise.GaussianProcess">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">optimize.noise.</span></span><span class="sig-name descname"><span class="pre">GaussianProcess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kernel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.noise.GaussianProcess" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#optimize.noise.CorrelatedNoiseProcess" title="optimize.noise.CorrelatedNoiseProcess"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.noise.CorrelatedNoiseProcess</span></code></a></p>
 <p>A noise kernel defined through a single GP and diagonal error terms with an additional “jitter” parameter. Each jitter parameter must be named “jitter_label” where label is the data label.</p>
-<dl class="py method">
-<dt id="optimize.noise.GaussianProcess.compute_data_errors">
-<code class="sig-name descname"><span class="pre">compute_data_errors</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pars</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_corr_error</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linpred</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.noise.GaussianProcess.compute_data_errors" title="Permalink to this definition">¶</a></dt>
-<dd><p>Computes the errors added in quadrature for all datasets corresponding to this kernel.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>pars</strong> (<a class="reference internal" href="parameters_api.html#optimize.parameters.Parameters" title="optimize.parameters.Parameters"><em>Parameters</em></a>) – The parameters to use.</p></li>
-<li><p><strong>include_gp_error</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether or not to include the gp error. Defaults to False.</p></li>
-<li><p><strong>linear_pred</strong> (<em>np.ndarray</em>) – The linear predictor; the data vector containing noise.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The data errors.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>np.ndarray</p>
-</dd>
-</dl>
-</dd></dl>
-
 </dd></dl>
 
 <dl class="py class">
-<dt id="optimize.noise.NoiseProcess">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">optimize.noise.</span></code><code class="sig-name descname"><span class="pre">NoiseProcess</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.noise.NoiseProcess" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="optimize.noise.NoiseProcess">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">optimize.noise.</span></span><span class="sig-name descname"><span class="pre">NoiseProcess</span></span><a class="headerlink" href="#optimize.noise.NoiseProcess" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A base noise process class defined through a covariance matrix. This class is not useful to instantiate on its own.</p>
 <dl class="py attribute">
-<dt id="optimize.noise.NoiseProcess.data">
-<code class="sig-name descname"><span class="pre">data</span></code><a class="headerlink" href="#optimize.noise.NoiseProcess.data" title="Permalink to this definition">¶</a></dt>
-<dd><p>The dataset for this noise process.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="data_api.html#optimize.data.Dataset" title="optimize.data.Dataset">Dataset</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="optimize.noise.NoiseProcess.label">
-<code class="sig-name descname"><span class="pre">label</span></code><a class="headerlink" href="#optimize.noise.NoiseProcess.label" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="optimize.noise.NoiseProcess.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#optimize.noise.NoiseProcess.name" title="Permalink to this definition">¶</a></dt>
 <dd><p>The name of this noise process. Defaults to None.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -318,68 +278,33 @@
 </dd></dl>
 
 <dl class="py class">
-<dt id="optimize.noise.StationaryNoiseProcess">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">optimize.noise.</span></code><code class="sig-name descname"><span class="pre">StationaryNoiseProcess</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.noise.StationaryNoiseProcess" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#optimize.noise.CorrelatedNoiseProcess" title="optimize.noise.CorrelatedNoiseProcess"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.noise.CorrelatedNoiseProcess</span></code></a></p>
-<p>Trait.</p>
-</dd></dl>
-
-<dl class="py class">
-<dt id="optimize.noise.UnCorrelatedNoiseProcess">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">optimize.noise.</span></code><code class="sig-name descname"><span class="pre">UnCorrelatedNoiseProcess</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.noise.UnCorrelatedNoiseProcess" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="optimize.noise.UnCorrelatedNoiseProcess">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">optimize.noise.</span></span><span class="sig-name descname"><span class="pre">UnCorrelatedNoiseProcess</span></span><a class="headerlink" href="#optimize.noise.UnCorrelatedNoiseProcess" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#optimize.noise.NoiseProcess" title="optimize.noise.NoiseProcess"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.noise.NoiseProcess</span></code></a></p>
 <p>Trait.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="optimize.noise.WhiteNoiseProcess">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">optimize.noise.</span></code><code class="sig-name descname"><span class="pre">WhiteNoiseProcess</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.noise.WhiteNoiseProcess" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="optimize.noise.WhiteNoiseProcess">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">optimize.noise.</span></span><span class="sig-name descname"><span class="pre">WhiteNoiseProcess</span></span><a class="headerlink" href="#optimize.noise.WhiteNoiseProcess" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#optimize.noise.UnCorrelatedNoiseProcess" title="optimize.noise.UnCorrelatedNoiseProcess"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.noise.UnCorrelatedNoiseProcess</span></code></a></p>
-<dl class="py method">
-<dt id="optimize.noise.WhiteNoiseProcess.compute_data_errors">
-<code class="sig-name descname"><span class="pre">compute_data_errors</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pars</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.noise.WhiteNoiseProcess.compute_data_errors" title="Permalink to this definition">¶</a></dt>
-<dd><p>Computes the errors added in quadrature for all datasets corresponding to this kernel.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>pars</strong> (<a class="reference internal" href="parameters_api.html#optimize.parameters.Parameters" title="optimize.parameters.Parameters"><em>Parameters</em></a>) – The parameters to use.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The final data errors.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>np.ndarray</p>
-</dd>
-</dl>
-</dd></dl>
-
 </dd></dl>
 
 <span class="target" id="module-optimize.kernels"></span><dl class="py class">
-<dt id="optimize.kernels.CorrelatedNoiseKernel">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">optimize.kernels.</span></code><code class="sig-name descname"><span class="pre">CorrelatedNoiseKernel</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">par_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.kernels.CorrelatedNoiseKernel" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="optimize.kernels.CorrelatedNoiseKernel">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">optimize.kernels.</span></span><span class="sig-name descname"><span class="pre">CorrelatedNoiseKernel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">par_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.kernels.CorrelatedNoiseKernel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#optimize.kernels.NoiseKernel" title="optimize.kernels.NoiseKernel"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.kernels.NoiseKernel</span></code></a></p>
 <p>Behaves as a trait for now.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="optimize.kernels.NoiseKernel">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">optimize.kernels.</span></code><code class="sig-name descname"><span class="pre">NoiseKernel</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">par_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.kernels.NoiseKernel" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="optimize.kernels.NoiseKernel">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">optimize.kernels.</span></span><span class="sig-name descname"><span class="pre">NoiseKernel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">par_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.kernels.NoiseKernel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A base noise kernel class defined through a covariance matrix. This class is not useful to instantiate on its own.</p>
 <dl class="py attribute">
-<dt id="optimize.kernels.NoiseKernel.data">
-<code class="sig-name descname"><span class="pre">data</span></code><a class="headerlink" href="#optimize.kernels.NoiseKernel.data" title="Permalink to this definition">¶</a></dt>
-<dd><p>The dataset using this noise kernel.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="data_api.html#optimize.data.Dataset" title="optimize.data.Dataset">Dataset</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="optimize.kernels.NoiseKernel.par_names">
-<code class="sig-name descname"><span class="pre">par_names</span></code><a class="headerlink" href="#optimize.kernels.NoiseKernel.par_names" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="optimize.kernels.NoiseKernel.par_names">
+<span class="sig-name descname"><span class="pre">par_names</span></span><a class="headerlink" href="#optimize.kernels.NoiseKernel.par_names" title="Permalink to this definition">¶</a></dt>
 <dd><p>The parameter names for this kernel, optional.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -389,21 +314,21 @@
 </dd></dl>
 
 <dl class="py method">
-<dt id="optimize.kernels.NoiseKernel.initialize">
-<code class="sig-name descname"><span class="pre">initialize</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.kernels.NoiseKernel.initialize" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="optimize.kernels.NoiseKernel.initialize">
+<span class="sig-name descname"><span class="pre">initialize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.kernels.NoiseKernel.initialize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Default wrapper to initialize the kernel, storing the parameters.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt id="optimize.kernels.QuasiPeriodic">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">optimize.kernels.</span></code><code class="sig-name descname"><span class="pre">QuasiPeriodic</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">par_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.kernels.QuasiPeriodic" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="optimize.kernels.QuasiPeriodic">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">optimize.kernels.</span></span><span class="sig-name descname"><span class="pre">QuasiPeriodic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">par_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.kernels.QuasiPeriodic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#optimize.kernels.StationaryNoiseKernel" title="optimize.kernels.StationaryNoiseKernel"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.kernels.StationaryNoiseKernel</span></code></a></p>
 <p>A Quasiperiodic kernel. The hyperparameters may be called anything, but must be in the order of amplitude, exp length scale, period length scale, and period.</p>
 <dl class="py method">
-<dt id="optimize.kernels.QuasiPeriodic.compute_cov_matrix">
-<code class="sig-name descname"><span class="pre">compute_cov_matrix</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pars</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.kernels.QuasiPeriodic.compute_cov_matrix" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="optimize.kernels.QuasiPeriodic.compute_cov_matrix">
+<span class="sig-name descname"><span class="pre">compute_cov_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pars</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.kernels.QuasiPeriodic.compute_cov_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the QP kernel.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -421,13 +346,13 @@
 </dd></dl>
 
 <dl class="py class">
-<dt id="optimize.kernels.StationaryNoiseKernel">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">optimize.kernels.</span></code><code class="sig-name descname"><span class="pre">StationaryNoiseKernel</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">par_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.kernels.StationaryNoiseKernel" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="optimize.kernels.StationaryNoiseKernel">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">optimize.kernels.</span></span><span class="sig-name descname"><span class="pre">StationaryNoiseKernel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">par_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.kernels.StationaryNoiseKernel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#optimize.kernels.CorrelatedNoiseKernel" title="optimize.kernels.CorrelatedNoiseKernel"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.kernels.CorrelatedNoiseKernel</span></code></a></p>
 <p>Noise kernel which only dependes on the relative difference between 2 values. Also has trait like behavior.</p>
 <dl class="py method">
-<dt id="optimize.kernels.StationaryNoiseKernel.compute_dist_matrix">
-<code class="sig-name descname"><span class="pre">compute_dist_matrix</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.kernels.StationaryNoiseKernel.compute_dist_matrix" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="optimize.kernels.StationaryNoiseKernel.compute_dist_matrix">
+<span class="sig-name descname"><span class="pre">compute_dist_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.kernels.StationaryNoiseKernel.compute_dist_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the stationary distance matrix, D_ij = <a href="#id1"><span class="problematic" id="id2">|x_i - x_j|</span></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -445,26 +370,11 @@
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="optimize.kernels.StationaryNoiseKernel.initialize">
-<code class="sig-name descname"><span class="pre">initialize</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xpred</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.kernels.StationaryNoiseKernel.initialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initializes the noise kernel by computing the stationary distance matrix.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>p0</strong> (<a class="reference internal" href="parameters_api.html#optimize.parameters.Parameters" title="optimize.parameters.Parameters"><em>Parameters</em></a>) – The parameters to use.</p></li>
-<li><p><strong>x1</strong> (<em>np.ndarray</em><em>, </em><em>optional</em>) – The first vector. Defaults to data.x.</p></li>
-<li><p><strong>xpred</strong> (<em>np.ndarray</em><em>, </em><em>optional</em>) – The vector to make predictions on. Defaults to x1.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
 </dd></dl>
 
 <dl class="py class">
-<dt id="optimize.kernels.UnCorrelatedNoiseKernel">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">optimize.kernels.</span></code><code class="sig-name descname"><span class="pre">UnCorrelatedNoiseKernel</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">par_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.kernels.UnCorrelatedNoiseKernel" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="optimize.kernels.UnCorrelatedNoiseKernel">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">optimize.kernels.</span></span><span class="sig-name descname"><span class="pre">UnCorrelatedNoiseKernel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">par_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.kernels.UnCorrelatedNoiseKernel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#optimize.kernels.NoiseKernel" title="optimize.kernels.NoiseKernel"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.kernels.NoiseKernel</span></code></a></p>
 <p>Behaves as a trait for now.</p>
 </dd></dl>
@@ -475,54 +385,42 @@
 
               </div>
               
-        
             
-
-
-
-<div class='prev-next-bottom'>
-    
-    <div id="prev">
-        <a class="left-prev" href="parameters_api.html" title="previous page">
-            <i class="prevnext-label fas fa-angle-left"></i>
-            <div class="prevnext-info">
-                <p class="prevnext-label">previous</p>
-                <p class="prevnext-title">optimize API reference</p>
-            </div>
-        </a>
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
+    <a class='left-prev' id="prev-link" href="objectives_api.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">optimize API reference</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="parameters_api.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">optimize API reference</p>
     </div>
-     <div id="next">
-        <a class="right-next" href="objectives_api.html" title="next page">
-            <div class="prevnext-info">
-                <p class="prevnext-label">next</p>
-                <p class="prevnext-title">optimize API reference</p>
-            </div>
-            <i class="prevnext-label fas fa-angle-right"></i>
-        </a>
-     </div>
-
+    <i class="fas fa-angle-right"></i>
+    </a>
 </div>
-        
+            
         </div>
     </div>
-    <footer class="footer mt-5 mt-md-0">
-    <div class="container">
-      <p>
-        
-          By Bryson Cale<br/>
-        
-            &copy; Copyright 2020, Bryson Cale.<br/>
-      </p>
-    </div>
-  </footer>
+    <footer class="footer">
+  <p>
+    
+      By Bryson Cale<br/>
+    
+        &copy; Copyright 2020, Bryson Cale.<br/>
+  </p>
+</footer>
 </main>
 
 
       </div>
     </div>
   
-  <script src="_static/js/index.1c5a1a01449ed65a7b51.js"></script>
+  <script src="_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
 
-  
   </body>
 </html>

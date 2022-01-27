@@ -89,10 +89,7 @@ class GaussianLikelihood(Likelihood):
 
         # Check if noise is correlated
         if isinstance(self.noise_process, UnCorrelatedNoiseProcess):
-            n_dof = len(residuals) - pars.num_varied
-            assert n_dof > 0
-            chi2 = self.redchi2loss(residuals, errors, n_dof)
-            lnL = -0.5 * chi2
+            lnL = -0.5 * (np.sum((residuals / errors)**2) + np.sum(np.log(errors**2)) + n * LOG_2PI)
             return lnL
         
         else:

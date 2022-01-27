@@ -21,7 +21,7 @@ class IterativeNelderMead:
     #### CONSTRUCTOR ####
     #####################
     
-    def __init__(self, obj=None, alpha=1.0, gamma=2.0, sigma=0.5, delta=0.5, xtol_rel=1E-10, ftol_rel=1E-10, n_iterations=None, no_improve_break=3, penalize=None, penalty=1E6, max_f_evals=None, initial_scale_factor=0.5, obj_args=None, obj_kwargs=None, maximize=False):
+    def __init__(self, obj=None, alpha=1.0, gamma=2.0, sigma=0.5, delta=0.5, xtol_rel=1E-10, ftol_rel=1E-10, n_iterations=None, no_improve_break=3, apply_penalty=None, penalty=1E6, max_f_evals=None, initial_scale_factor=0.5, obj_args=None, obj_kwargs=None, maximize=False):
         """Construct the iterative Nelder-Mead optimizer.
 
         Args:
@@ -49,7 +49,7 @@ class IterativeNelderMead:
         self.max_f_evals = max_f_evals
         self.n_iterations = n_iterations
         self.no_improve_break = no_improve_break
-        self.penalize = penalize
+        self.apply_penalty = apply_penalty
         self.penalty = penalty
         self.initial_scale_factor = initial_scale_factor
         self.obj_args = () if obj_args is None else obj_args
@@ -420,7 +420,7 @@ class IterativeNelderMead:
         self.fcalls += 1
 
         # Penalize
-        if self.penalize:
+        if self.apply_penalty:
             f = self.penalize(self.test_pars, f)
 
         # Last resort, can't return inf or nan at this stage

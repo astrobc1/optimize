@@ -36,7 +36,7 @@ model_guess = gauss(x, pars_guess)
 # Create objective.
 # The x, data, and errors attributes can be named anything but must be kwargs and used appropriatly below
 # Chi2Loss doesn't expect us to compute the actual objective now, but we still must define the default methods compute_residuals and compute_data_errors.
-# Alternatively, we could just override compute_obj(self, pars).
+# Alternatively, we could just override compute_obj(self, pars) and handle everything in there.
 # Alternatively, alternatively, we could define a new class extending Chi2Loss and override these methods there.
 obj = opt.Chi2Loss(x=x, data=y_true, errors=y_errors)
 

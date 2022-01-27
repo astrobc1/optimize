@@ -15,7 +15,7 @@ def gauss(x, pars):
     return pars['amp'].value * np.exp(-0.5 * ((x - pars['mu'].value) / pars['sigma'].value)**2)
 
 # An x grid
-dx = 0.2
+dx = 0.01
 x = np.arange(-10, 10 + dx, dx)
 
 # True parameters
@@ -26,7 +26,6 @@ pars_true["sigma"] = opt.BayesianParameter(value=0.8)
 
 # Noisy data
 y_true = gauss(x, pars_true)
-#y_errors = np.random.uniform(0.05, 0.08, size=len(y_true))
 y_errors = np.full(len(y_true), 0.05)
 y_true += np.array([y_errors[i] * np.random.randn() for i in range(len(y_true))])
 
@@ -66,23 +65,22 @@ opt_result = optprob.optimize(optimizer=opt.IterativeNelderMead(maximize=True))
 # # Get best fit pars
 pbest = opt_result["pbest"]
 
-# # Build the best fit model
-# model_best = gauss(x, pbest)
+# Build the best fit model
+model_best = gauss(x, pbest)
 
-# # Plot
-# plt.errorbar(x, y_true, yerr=y_errors, marker='o', lw=0, elinewidth=1, label="my data", c='grey', alpha=0.8, zorder=0)
-# plt.plot(x, model_guess, label='Starting Model', c='blue')
-# plt.plot(x, model_best, label='Best Fit Model', c='red')
-# plt.xlabel('x')
-# plt.ylabel('y')
-# plt.legend()
-# plt.show()
+# Plot
+plt.errorbar(x, y_true, yerr=y_errors, marker='o', lw=0, elinewidth=1, label="my data", c='grey', alpha=0.8, zorder=0)
+plt.plot(x, model_guess, label='Starting Model', c='blue')
+plt.plot(x, model_best, label='Best Fit Model', c='red')
+plt.xlabel('x')
+plt.ylabel('y')
+plt.legend()
+plt.show()
 
 # MCMC
 mcmc_result = optprob.run_mcmc(opt.emceeSampler(), p0=pbest)
 
 # Corner plot
-breakpoint()
 pmed = mcmc_result['pmed']
 fig = corner.corner(mcmc_result['chains'], truths=pmed.unpack(keys=['value'])['value'], labels=pmed.unpack(keys=['name'])['name'], show_titles=True)
 fig.show()

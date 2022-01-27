@@ -7,8 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>optimize API reference &#8212; optimize  documentation</title>
     
-  <link href="_static/css/theme.css" rel="stylesheet" />
-  <link href="_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
+  <link href="_static/css/theme.css" rel="stylesheet">
+  <link href="_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
 
     
   <link rel="stylesheet"
@@ -22,23 +22,26 @@
       
 
     
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/sphinx-book-theme.e8f53015daec13862f6db5e763c41738.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-book-theme.css?digest=84ace793992934648b4de8eed757e5a2" />
     
-  <link rel="preload" as="script" href="_static/js/index.1c5a1a01449ed65a7b51.js">
+  <link rel="preload" as="script" href="_static/js/index.be7d3bbb2ef33a8344ce.js">
 
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script src="_static/sphinx-book-theme.9d8b4a8b9bb19db25eeaddc40d639ba2.js"></script>
     <link rel="shortcut icon" href="_static/optimize_logo.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="optimize API reference" href="samplers_api.html" />
-    <link rel="prev" title="optimize API reference" href="objectives_api.html" />
+    <link rel="prev" title="optimize API reference" href="parameters_api.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="docsearch:language" content="en" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
     
   </head>
   <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
@@ -50,10 +53,19 @@
     <div class="container-xl">
       <div class="row">
           
-<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<div class="col-12 col-md-3 bd-sidebar site-navigation " id="site-navigation">
     
         <div class="navbar-brand-box">
     <a class="navbar-brand text-wrap" href="index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
       
       <img src="_static/optimize_logo.png" class="logo" alt="logo">
       
@@ -88,33 +100,23 @@
   </label>
   <ul class="current">
    <li class="toctree-l2">
-    <a class="reference internal" href="frameworks_api.html">
-     Frameworks
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="data_api.html">
-     Data
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="models_api.html">
-     Models
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="parameters_api.html">
-     Parameters
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="noise_api.html">
-     Noise
+    <a class="reference internal" href="problems_api.html">
+     Optimization Problems
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="objectives_api.html">
      Objectives
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="noise_api.html">
+     Noise Modeling
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="parameters_api.html">
+     Parameters
     </a>
    </li>
    <li class="toctree-l2 current active">
@@ -145,22 +147,22 @@
 
 
           
+<!-- This is an invisible pixel that we watch to see if we've scrolled. -->
+<div class="sbt-scroll-pixel-helper"></div>
 <main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
     
     <div class="topbar container-xl fixed-top">
     <div class="topbar-contents row">
         <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
         <div class="col pl-md-4 topbar-main">
-            
-            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
-                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
-                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
-                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
-                <i class="fas fa-bars"></i>
-                <i class="fas fa-arrow-left"></i>
-                <i class="fas fa-arrow-up"></i>
-            </button>
-            
+            <div class="topbar-left">
+                
+                <label class="nav-toggle-button" for="__navigation">
+                    <div class="visually-hidden">Toggle navigation</div>
+                    <i class="fas fa-bars"></i>
+                </label>
+                
+            </div>
             
 <div class="dropdown-buttons-trigger">
     <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
@@ -175,7 +177,7 @@
                 data-placement="left">.rst</button></a>
         <!-- Download PDF via print -->
         <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
-            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
     </div>
 </div>
 
@@ -193,7 +195,7 @@
         </div>
 
         <!-- Table of contents -->
-        <div class="d-none d-md-block col-md-2 bd-toc show">
+        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
             
             <div class="tocsection onthispage pt-5 pb-3">
                 <i class="fas fa-list"></i> Contents
@@ -201,7 +203,7 @@
             <nav id="bd-toc-nav" aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-optimize.optimizers">
+  <a class="reference internal nav-link" href="#module-optimize.neldermead">
    Optimizers
   </a>
  </li>
@@ -213,113 +215,88 @@
 </div>
     <div id="main-content" class="row">
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
-        
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>optimize API reference</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-optimize.neldermead">
+   Optimizers
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            
               <div>
                 
   <div class="section" id="optimize-api-reference">
 <h1>optimize API reference<a class="headerlink" href="#optimize-api-reference" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="module-optimize.optimizers">
-<span id="optimizers"></span><h2>Optimizers<a class="headerlink" href="#module-optimize.optimizers" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-optimize.neldermead">
+<span id="optimizers"></span><h2>Optimizers<a class="headerlink" href="#module-optimize.neldermead" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
-<dt id="optimize.optimizers.Maximizer">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">optimize.optimizers.</span></code><code class="sig-name descname"><span class="pre">Maximizer</span></code><a class="headerlink" href="#optimize.optimizers.Maximizer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#optimize.optimizers.Optimizer" title="optimize.optimizers.Optimizer"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.optimizers.Optimizer</span></code></a></p>
-<p>Trait.</p>
-<dl class="py method">
-<dt id="optimize.optimizers.Maximizer.penalize">
-<code class="sig-name descname"><span class="pre">penalize</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pars</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.optimizers.Maximizer.penalize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Penalize the objective function for bounded parameters.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="optimize.optimizers.Minimizer">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">optimize.optimizers.</span></code><code class="sig-name descname"><span class="pre">Minimizer</span></code><a class="headerlink" href="#optimize.optimizers.Minimizer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#optimize.optimizers.Optimizer" title="optimize.optimizers.Optimizer"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.optimizers.Optimizer</span></code></a></p>
-<p>Trait.</p>
-<dl class="py method">
-<dt id="optimize.optimizers.Minimizer.penalize">
-<code class="sig-name descname"><span class="pre">penalize</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pars</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.optimizers.Minimizer.penalize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Penalize the objective function for bounded parameters.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="optimize.optimizers.Optimizer">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">optimize.optimizers.</span></code><code class="sig-name descname"><span class="pre">Optimizer</span></code><a class="headerlink" href="#optimize.optimizers.Optimizer" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="optimize.neldermead.IterativeNelderMead">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">optimize.neldermead.</span></span><span class="sig-name descname"><span class="pre">IterativeNelderMead</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xtol_rel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ftol_rel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_iterations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_improve_break</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">penalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">penalty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_f_evals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_scale_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.neldermead.IterativeNelderMead" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>An base optimizer class.</p>
-<dl class="py method">
-<dt id="optimize.optimizers.Optimizer.compute_obj">
-<code class="sig-name descname"><span class="pre">compute_obj</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pars</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.optimizers.Optimizer.compute_obj" title="Permalink to this definition">¶</a></dt>
-<dd><p>A wrapper to computes the objective function. This method may further take in any number of args or kwargs, unlike the obj.compute_obj method.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="optimize.optimizers.Sampler">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">optimize.optimizers.</span></code><code class="sig-name descname"><span class="pre">Sampler</span></code><a class="headerlink" href="#optimize.optimizers.Sampler" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#optimize.optimizers.Optimizer" title="optimize.optimizers.Optimizer"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.optimizers.Optimizer</span></code></a></p>
-<p>Base class for MCMC samplers.</p>
-</dd></dl>
-
-<span class="target" id="module-optimize.neldermead"></span><dl class="py class">
-<dt id="optimize.neldermead.IterativeNelderMead">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">optimize.neldermead.</span></code><code class="sig-name descname"><span class="pre">IterativeNelderMead</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xtol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ftol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_iterations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_improve_break</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">penalty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_f_evals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_scale_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.neldermead.IterativeNelderMead" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#optimize.optimizers.Minimizer" title="optimize.optimizers.Minimizer"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.optimizers.Minimizer</span></code></a></p>
-<p>A class to interact with the iterative Nelder Mead optimizer.</p>
-<dl class="py method">
-<dt id="optimize.neldermead.IterativeNelderMead.compute_obj">
-<code class="sig-name descname"><span class="pre">compute_obj</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subspace_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.neldermead.IterativeNelderMead.compute_obj" title="Permalink to this definition">¶</a></dt>
-<dd><p>A wrapper to computes the objective function. This method may further take in any number of args or kwargs, unlike the obj.compute_obj method.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="optimize.neldermead.IterativeNelderMead.init_params">
-<code class="sig-name descname"><span class="pre">init_params</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#optimize.neldermead.IterativeNelderMead.init_params" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize the parameters</p>
-<p>Args:</p>
-</dd></dl>
-
-</dd></dl>
-
-<span class="target" id="module-optimize.scipy_optimizers"></span><dl class="py class">
-<dt id="optimize.scipy_optimizers.SciPyMinimizer">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">optimize.scipy_optimizers.</span></code><code class="sig-name descname"><span class="pre">SciPyMinimizer</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Nelder-Mead'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.scipy_optimizers.SciPyMinimizer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#optimize.optimizers.Minimizer" title="optimize.optimizers.Minimizer"><code class="xref py py-class docutils literal notranslate"><span class="pre">optimize.optimizers.Minimizer</span></code></a></p>
-<p>A class that interfaces to scipy.optimize.minimize.</p>
-<dl class="py method">
-<dt id="optimize.scipy_optimizers.SciPyMinimizer.compute_obj">
-<code class="sig-name descname"><span class="pre">compute_obj</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pars</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.scipy_optimizers.SciPyMinimizer.compute_obj" title="Permalink to this definition">¶</a></dt>
-<dd><p>Computes the objective.</p>
+<p>An iterative Nelder-Mead optimizer for high-dimensional parameter spaces.</p>
+<p>Construct the iterative Nelder-Mead optimizer.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>pars</strong> (<em>np.ndarray</em>) – The parameters to use, as a numpy array to interface with scipy.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj</strong> (<em>callable</em><em>, </em><em>optional</em>) – The objective to call. Defaults to None and must be set later.</p></li>
+<li><p><strong>alpha</strong> (<em>float</em><em>, </em><em>optional</em>) – Nelder-Mead hyper-parameter. Defaults to 1.0.</p></li>
+<li><p><strong>gamma</strong> (<em>float</em><em>, </em><em>optional</em>) – Nelder-Mead hyper-parameter. Defaults to 2.0.</p></li>
+<li><p><strong>sigma</strong> (<em>float</em><em>, </em><em>optional</em>) – Nelder-Mead hyper-parameter. Defaults to 0.5.</p></li>
+<li><p><strong>delta</strong> (<em>float</em><em>, </em><em>optional</em>) – Nelder-Mead hyper-parameter. Defaults to 0.5.</p></li>
+<li><p><strong>xtol</strong> (<em>float</em><em>, </em><em>optional</em>) – The relative x tolderance for convergence. Defaults to 1E-10.</p></li>
+<li><p><strong>ftol</strong> (<em>float</em><em>, </em><em>optional</em>) – The relative f tolerance for convergence. Defaults to 1E-10.</p></li>
+<li><p><strong>n_iterations</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of iterations. Defaults to len(p0).</p></li>
+<li><p><strong>no_improve_break</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of times in a row the solver must converge before actually breaking. Defaults to 3.</p></li>
+<li><p><strong>penalty</strong> (<em>float</em><em>, </em><em>optional</em>) – The penalty to add to the objective for each BoundedParameter. Defaults to 1E6.</p></li>
+<li><p><strong>max_f_evals</strong> (<em>float</em><em>, </em><em>optional</em>) – The maximum number of f evaluations. Defaults to 500 * len(p0).</p></li>
+<li><p><strong>initial_scale_factor</strong> (<em>float</em><em> or </em><em>str</em><em>, </em><em>optional</em>) – A scale factor to initiate the initial simplex. Defaults to 0.5.</p></li>
+<li><p><strong>obj_args</strong> (<em>tuple</em><em>, </em><em>optional</em>) – Additional argument</p></li>
+</ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The objective.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>float</p>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="optimize.neldermead.IterativeNelderMead.initialize_parameters">
+<span class="sig-name descname"><span class="pre">initialize_parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_bounds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper_bounds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameter_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.neldermead.IterativeNelderMead.initialize_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the remaining solver options with the initial parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p0</strong> (<a class="reference internal" href="parameters_api.html#optimize.parameters.Parameters" title="optimize.parameters.Parameters"><em>Parameters</em></a><em> or </em><em>np.ndarray</em>) – The initial parameters.</p></li>
+<li><p><strong>lower_bounds</strong> (<em>np.ndarray</em><em>, </em><em>optional</em>) – The lower bounds if using numpy vectors.</p></li>
+<li><p><strong>upper_bounds</strong> (<em>np.ndarray</em><em>, </em><em>optional</em>) – The upper bounds if using numpy vectors.</p></li>
+<li><p><strong>parameter_names</strong> (<em>np.ndarray</em><em>, </em><em>optional</em>) – The parameter names if using numpy vectors.</p></li>
+<li><p><strong>vary</strong> (<em>np.ndarray</em><em>, </em><em>optional</em>) – An array of ones and zeros of whether or not to vary that parameter if using numpy vectors.</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt id="optimize.scipy_optimizers.SciPyMinimizer.optimize">
-<code class="sig-name descname"><span class="pre">optimize</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#optimize.scipy_optimizers.SciPyMinimizer.optimize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calls the scipy.optimize.minimize routine.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The optimization result.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>dict</p>
-</dd>
-</dl>
+<dt class="sig sig-object py" id="optimize.neldermead.IterativeNelderMead.initialize_simplex">
+<span class="sig-name descname"><span class="pre">initialize_simplex</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#optimize.neldermead.IterativeNelderMead.initialize_simplex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the initial full simplex.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="optimize.neldermead.IterativeNelderMead.penalize">
+<span class="sig-name descname"><span class="pre">penalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pars</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimize.neldermead.IterativeNelderMead.penalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Penalize the objective function for bounded parameters.</p>
 </dd></dl>
 
 </dd></dl>
@@ -330,54 +307,42 @@
 
               </div>
               
-        
             
-
-
-
-<div class='prev-next-bottom'>
-    
-    <div id="prev">
-        <a class="left-prev" href="objectives_api.html" title="previous page">
-            <i class="prevnext-label fas fa-angle-left"></i>
-            <div class="prevnext-info">
-                <p class="prevnext-label">previous</p>
-                <p class="prevnext-title">optimize API reference</p>
-            </div>
-        </a>
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
+    <a class='left-prev' id="prev-link" href="parameters_api.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">optimize API reference</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="samplers_api.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">optimize API reference</p>
     </div>
-     <div id="next">
-        <a class="right-next" href="samplers_api.html" title="next page">
-            <div class="prevnext-info">
-                <p class="prevnext-label">next</p>
-                <p class="prevnext-title">optimize API reference</p>
-            </div>
-            <i class="prevnext-label fas fa-angle-right"></i>
-        </a>
-     </div>
-
+    <i class="fas fa-angle-right"></i>
+    </a>
 </div>
-        
+            
         </div>
     </div>
-    <footer class="footer mt-5 mt-md-0">
-    <div class="container">
-      <p>
-        
-          By Bryson Cale<br/>
-        
-            &copy; Copyright 2020, Bryson Cale.<br/>
-      </p>
-    </div>
-  </footer>
+    <footer class="footer">
+  <p>
+    
+      By Bryson Cale<br/>
+    
+        &copy; Copyright 2020, Bryson Cale.<br/>
+  </p>
+</footer>
 </main>
 
 
       </div>
     </div>
   
-  <script src="_static/js/index.1c5a1a01449ed65a7b51.js"></script>
+  <script src="_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
 
-  
   </body>
 </html>
