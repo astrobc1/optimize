@@ -7,33 +7,17 @@ import tqdm
 # Maths
 import numpy as np
 
-# optimize deps
-from optimize.optimizers import Sampler
-
-# Third party deps
+# emcee
 import emcee
 import corner
 import zeus
 
-class emceeLikeSampler(Sampler):
-        
-    def init_walkers(self, pars=None):
-        """Initializes a set of walkers.
+class emceeLikeSampler:
 
-        Args:
-            pars (Parameters, optional): The starting parameters. Defaults to p0.
-
-        Returns:
-            np.ndarray: A set of walkers as a numpy array with shape=(n_walkers, n_parameters_vary)
-        """
-        
-        if pars is None:
-            pars = self.obj.p0
-        pars_vary_dict = pars.unpack(vary_only=True)
-        n_pars_vary = pars.num_varied
-        search_scales = np.array([par.scale for par in pars.values() if par.vary])
-        walkers = pars_vary_dict['value'] + search_scales * np.random.randn(self.n_walkers, n_pars_vary)
-        return walkers
+    def __init__(self, obj=None, obj_args=None, obj_kwargs=None):
+        self.obj = obj
+        self.obj_args = obj_args
+        self.obj_kwargs = obj_kwargs
 
     def compute_obj(self, pars):
         """Wrapper to compute the objective.
@@ -49,17 +33,46 @@ class emceeLikeSampler(Sampler):
         logprob = self.obj.compute_logaprob(self.test_pars)
         return logprob
 
-    def initialize(self, obj):
-        super().initialize(obj)
-        p0_dict = self.obj.p0.unpack()
-        self.test_pars = copy.deepcopy(self.obj.p0)
-        self.test_pars_vec = np.copy(p0_dict['value'])
-        self.p0_vary_inds = np.where(p0_dict["vary"])[0]
-        self.init_sampler()
-        
-    def init_sampler(self):
-        pass
+    ####################
+    #### INITIALIZE ####
+    ####################
 
+    def initialize(self, p0, obj=None, obj_args=None, obj_kwargs=None):
+
+        # Objective
+        if self.obj is None and obj is not None:
+            self.obj = obj
+
+        # Objective args
+        if obj_args is not None:
+            self.obj_args = obj_args
+        elif self.obj_args is None and obj_args is None:
+            self.obj_args = ()
+
+        # Objective kwargs
+        if obj_kwargs is not None:
+            self.obj_kwargs = obj_kwargs
+        elif self.obj_kwargs is None and obj_kwargs is None:
+            self.obj_kwargs = {}
+
+    def initialize_walkers(self, p0):
+        """Initializes a set of walkers.
+
+        Args:
+            pars (Parameters, optional): The starting parameters. Defaults to p0.
+
+        Returns:
+            np.ndarray: A set of walkers as a numpy array with shape=(n_walkers, n_parameters_vary)
+        """
+        
+        self.p0 = p0
+        pars_vary_dict = self.p0.unpack(vary_only=True)
+        n_pars_vary = self.p0.num_varied
+        search_scales = np.array([par.scale for par in p0.values() if par.vary])
+        n_walkers = 2 * n_pars_vary
+        walkers = pars_vary_dict['value'] + search_scales * np.random.randn(n_walkers, n_pars_vary)
+        return walkers
+        
     @property
     def n_walkers(self):
         """Alias for the number of walkers.
@@ -69,8 +82,7 @@ class emceeLikeSampler(Sampler):
         """
         return self.sampler.nwalkers
 
-    @staticmethod
-    def chain_uncertainty(flat_chain, percentiles=[15.9, 50, 84.1]):
+    def chain_uncertainty(self, flat_chain, percentiles=[15.9, 50, 84.1]):
         
         # Compute percentiles
         par_quantiles = np.percentile(flat_chain, percentiles)
@@ -80,39 +92,28 @@ class emceeLikeSampler(Sampler):
         
         return out
 
-    @staticmethod
-    def corner_plot(mcmc_result):
-        """Constructs a corner plot.
-
-        Args:
-            mcmc_result (dict): The mcmc result.
-            
-        Returns:
-            fig: A matplotlib figure.
-        """
-        pbest_vary_dict = mcmc_result["pmed"].unpack(vary_only=True)
-        truths = pbest_vary_dict["value"]
-        labels = [par.latex_str for par in mcmc_result["pbest"].values() if par.vary]
-        corner_plot = corner.corner(mcmc_result["chains"], labels=labels, truths=truths, show_titles=True)
-        return corner_plot
-
-    
 class emceeSampler(emceeLikeSampler):
     """An class to interface to the emcee affine invariant Ensemble Sampler.
     """
+
+    def initialize(self, p0, obj=None, obj_args=None, obj_kwargs=None):
+        super().initialize(p0, obj=obj, obj_args=obj_args, obj_kwargs=obj_kwargs)
+        walkers = self.initialize_walkers(p0)
+        self.initialize_sampler()
+        return walkers
     
-    def init_sampler(self):
+    def initialize_sampler(self):
         """Initializes the emcee.Ensemble sampler.
         """
-        p0_dict = self.obj.p0.unpack()
-        self.test_pars = copy.deepcopy(self.obj.p0)
+        p0_dict = self.p0.unpack()
+        self.test_pars = copy.deepcopy(self.p0)
         self.test_pars_vec = np.copy(p0_dict['value'])
         self.p0_vary_inds = np.where(p0_dict["vary"])[0]
-        n_pars_vary = self.obj.p0.num_varied
+        n_pars_vary = self.p0.num_varied
         n_walkers = 2 * n_pars_vary
-        self.sampler = emcee.EnsembleSampler(n_walkers, n_pars_vary, self.compute_obj)
+        self.sampler = emcee.EnsembleSampler(n_walkers, n_pars_vary, self.compute_obj, args=self.obj_args, kwargs=self.obj_kwargs)
         
-    def run_mcmc(self, pars=None, walkers=None, n_burn_steps=500, check_every=200, n_steps=75_000, rel_tau_thresh=0.01, n_min_steps=1000, n_cores=1, n_taus_thresh=40, progress=True):
+    def run_mcmc(self, p0=None, obj=None, obj_args=None, obj_kwargs=None, n_burn_steps=500, check_every=200, n_steps=75_000, rel_tau_thresh=0.01, n_min_steps=1000, n_cores=1, n_taus_thresh=40, progress=True):
         """Wrapper to perform a burn-in + full MCMC exploration.
 
         Args:
@@ -127,15 +128,9 @@ class emceeSampler(emceeLikeSampler):
         Returns:
             dict: The sampler result, with keys: flat_chains, autocorrs, steps, pbest, errors, lnL.
         """
-        
-        self.n_cores = n_cores
-        
-        # Init pars
-        if pars is None and walkers is None:
-            walkers = self.init_walkers()
-            pars = self.obj.p0
-        elif pars is not None:
-            walkers = self.init_walkers(pars)
+
+        # Initialize
+        walkers = self.initialize(p0, obj=obj, obj_args=obj_args, obj_kwargs=obj_kwargs)
 
         # Burn in
         if n_burn_steps > 0:
@@ -149,7 +144,7 @@ class emceeSampler(emceeLikeSampler):
             
             flat_chains = self.sampler.flatchain
             pars_best = flat_chains[np.nanargmax(self.sampler.flatlnprobability)]
-            _pbest = copy.deepcopy(self.obj.p0)
+            _pbest = copy.deepcopy(self.p0)
             _par_vec = np.copy(self.test_pars_vec)
             _par_vec[self.p0_vary_inds] = pars_best
             _pbest.set_vec(_par_vec, "value", varied=False)
@@ -208,7 +203,7 @@ class emceeSampler(emceeLikeSampler):
         
         # Best parameters from best sampled like (sampling must be dense enough, probably is)
         pars_best = self.sampler.chain[1, np.argmax(self.sampler.lnprobability[1, :]), :]
-        pbest = copy.deepcopy(self.obj.p0)
+        pbest = copy.deepcopy(self.p0)
         par_vec = np.copy(self.test_pars_vec)
         par_vec[self.p0_vary_inds] = pars_best
         pbest.set_vec(par_vec, "value", varied=False)
@@ -217,7 +212,7 @@ class emceeSampler(emceeLikeSampler):
         
         # Parameter uncertainties
         pnames_vary = mcmc_result["pbest"].unpack(keys='name', vary_only=True)['name']
-        pmed = copy.deepcopy(self.obj.p0)
+        pmed = copy.deepcopy(self.p0)
         for i, pname in enumerate(pnames_vary):
             _pmed, unc_lower, unc_upper = self.chain_uncertainty(mcmc_result["chains"][:, i])
             pmed[pname].value = _pmed
@@ -227,8 +222,7 @@ class emceeSampler(emceeLikeSampler):
         mcmc_result["pmed"] = pmed
         
         return mcmc_result
-    
-    
+
 class ZeusSampler(emceeLikeSampler):
     """A class to interface with the zeus sliced Ensemble Sampler.
     """
@@ -236,11 +230,11 @@ class ZeusSampler(emceeLikeSampler):
     def init_sampler(self):
         """Initializes the zues Ensemble sampler.
         """
-        p0_dict = self.obj.p0.unpack()
-        self.test_pars = copy.deepcopy(self.obj.p0)
+        p0_dict = self.p0.unpack()
+        self.test_pars = copy.deepcopy(self.p0)
         self.test_pars_vec = np.copy(p0_dict['value'])
         self.p0_vary_inds = np.where(p0_dict["vary"])[0]
-        n_pars_vary = self.obj.p0.num_varied
+        n_pars_vary = self.p0.num_varied
         n_walkers = 2 * n_pars_vary
         self.sampler = zeus.EnsembleSampler(n_walkers, n_pars_vary, self.compute_obj)
         
@@ -265,7 +259,7 @@ class ZeusSampler(emceeLikeSampler):
         # Init pars
         if pars is None and walkers is None:
             walkers = self.init_walkers()
-            pars = self.obj.p0
+            pars = self.p0
         elif pars is not None:
             walkers = self.init_walkers(pars)
 
@@ -282,7 +276,7 @@ class ZeusSampler(emceeLikeSampler):
             flat_chains = self.sampler.get_chain(flat=True)
             flat_lnprob = self.sampler.get_log_prob(flat=True)
             pars_best = flat_chains[np.nanargmax(flat_lnprob)]
-            _pbest = copy.deepcopy(self.obj.p0)
+            _pbest = copy.deepcopy(self.p0)
             _par_vec = np.copy(self.test_pars_vec)
             _par_vec[self.p0_vary_inds] = pars_best
             _pbest.set_vec(_par_vec, "value")
@@ -342,7 +336,7 @@ class ZeusSampler(emceeLikeSampler):
         # Best parameters from best sampled like (sampling must be dense enough, probably is)
         flat_chains = self.get_parameter_chains(flat=True)
         pars_best = flat_chains[np.nanargmax(mcmc_result["lnLs"]), :]
-        pbest = copy.deepcopy(self.obj.p0)
+        pbest = copy.deepcopy(self.p0)
         par_vec = np.copy(self.test_pars_vec)
         par_vec[self.p0_vary_inds] = pars_best
         pbest.set_vec(par_vec, "value")
@@ -351,7 +345,7 @@ class ZeusSampler(emceeLikeSampler):
         
         # Parameter uncertainties
         pnames_vary = mcmc_result["pbest"].unpack(keys='name', vary_only=True)['name']
-        pmed = copy.deepcopy(self.obj.p0)
+        pmed = copy.deepcopy(self.p0)
         for i, pname in enumerate(pnames_vary):
             _pmed, unc_lower, unc_upper = self.chain_uncertainty(mcmc_result["chains"][:, i])
             pmed[pname].value = _pmed
@@ -387,15 +381,3 @@ class ZeusSampler(emceeLikeSampler):
         if flat:
             logprob_chains = logprob_chains.reshape((n_steps * n_walkers))
         return logprob_chains
-        
-    
-    
-# NOT IMPLEMENTED YET
-# Pymultinest
-class MultiNest(Sampler):
-    pass
-
-# NOT IMPLEMENTED YET
-# (Hamiltonian No U-Turn)
-class HNUT(Sampler):
-    pass

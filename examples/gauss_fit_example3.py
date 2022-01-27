@@ -1,87 +1,73 @@
 
 # Standard imports
 import numpy as np
+np.random.seed(1)
 import matplotlib.pyplot as plt
 
 # Import optimize
 import optimize as opt
 
-def gauss(x, amp, mu, sigma):
-    return amp * np.exp(-0.5 * ((x - mu) / sigma)**2)
-
-
-# Define a model for a Gaussian function.
-class GaussianModel(opt.DeterministicModel):
-
-    def build(self, pars):
-        return gauss(self.data.x, pars["amp"].value, pars["mu"].value, pars["sigma"].value)
+# Gaussian function
+def gauss(x, pars):
+    return pars['amp'].value * np.exp(-0.5 * ((x - pars['mu'].value) / pars['sigma'].value)**2)
 
 # An x grid
-dx = 0.05
+dx = 0.01
 x = np.arange(-10, 10 + dx, dx)
 
 # True parameters
-pars_true = opt.BayesianParameters()
-pars_true["amp"] = opt.BayesianParameter(value=2.5)
-pars_true["mu"] = opt.BayesianParameter(value=-1)
-pars_true["sigma"] = opt.BayesianParameter(value=0.8)
+pars_true = opt.Parameters()
+pars_true["amp"] = opt.Parameter(value=2.5)
+pars_true["mu"] = opt.Parameter(value=-1)
+pars_true["sigma"] = opt.Parameter(value=0.8)
 
 # Noisy data
-y_true = gauss(x, pars_true["amp"].value, pars_true["mu"].value, pars_true["sigma"].value)
-noise_level = 0.1
-y_true += noise_level * np.random.randn(y_true.size)
-
-# Create the opt problem
-optprob = opt.BayesianProblem()
-
-# Create a data object
-data = opt.SimpleSeries(x=x, y=y_true, yerr=np.full(y_true.size, 0), label="my_data")
+y_true = gauss(x, pars_true)
+y_errors = np.random.uniform(0.05, 0.08, size=len(y_true))
+y_true += np.array([y_errors[i] * np.random.randn() for i in range(len(y_true))])
 
 # Guess parameters and model
-pars_guess = opt.BayesianParameters()
-pars_guess["amp"] = opt.BayesianParameter(value=2.0)
-pars_guess["amp"].add_prior(opt.priors.Positive())
+pars_guess = opt.Parameters()
+pars_guess["amp"] = opt.Parameter(value=2.0)
+pars_guess["mu"] = opt.Parameter(value=-0.4)
+pars_guess["sigma"] = opt.Parameter(value=0.4)
+model_guess = gauss(x, pars_guess)
 
-pars_guess["mu"] = opt.BayesianParameter(value=-0.4, latex_str="$\mu$")
-pars_guess["sigma"] = opt.BayesianParameter(value=0.4, latex_str="$\sigma$")
-pars_guess["sigma"].add_prior(opt.priors.Positive())
-pars_guess["jitter_my_data"] = opt.BayesianParameter(value=0.5, latex_str="$\mathrm{JIT}_{my-data}$")
-pars_guess["jitter_my_data"].add_prior(opt.priors.Positive())
-model_guess = gauss(x, pars_guess["amp"].value, pars_guess["mu"].value, pars_guess["sigma"].value)
+# Create objective.
+# The x, data, and errors attributes can be named anything but must be kwargs and used appropriatly below
+# Chi2Loss doesn't expect us to compute the actual objective now, but we still must define the default methods compute_residuals and compute_data_errors.
+# Alternatively, we could just override compute_obj(self, pars).
+# Alternatively, alternatively, we could define a new class extending Chi2Loss and override these methods there.
+obj = opt.Chi2Loss(x=x, data=y_true, errors=y_errors)
 
-# Make a model
-model = opt.NoiseModel(det_model=GaussianModel(data=data), noise_process=opt.WhiteNoiseProcess(data=data), data=data)
+# Here self is a modified instance of Chi2Loss (obj above)
+# One liner >>> obj.compute_residuals = lambda self, pars: self.data - gauss(self.x, pars)
+def compute_residuals(self, pars):
+    return self.data - gauss(self.x, pars)
 
-# Create a Posterior obj function
-post = opt.Posterior()
-post["my_like"] = opt.GaussianLikelihood(model=model)
+def compute_data_errors(self, pars):
+    return self.errors
 
-# Bayesian problem
-optprob = opt.BayesianProblem(p0=pars_guess, post=post, optimizer=opt.SciPyMinimizer(method="Nelder-Mead"), sampler=opt.emceeSampler())
+obj.compute_residuals = compute_residuals
+obj.compute_data_errors = compute_data_errors
+
+# Create the Optimization Problem
+optprob = opt.OptProblem(obj=obj, p0=pars_guess)
 
 # Optimize the model
-opt_result = optprob.optimize()
-pars_best = opt_result["pbest"]
+opt_result = optprob.optimize(optimizer=opt.IterativeNelderMead())
 
-# Print the best fit pars
-print(pars_best)
+# Get best fit pars
+pbest = opt_result["pbest"]
 
 # Build the best fit model
-model_best = model.build(pars_best)
+model_best = gauss(x, pbest)
 
 # Plot
-plt.errorbar(x, y_true, yerr=model.compute_data_errors(pars_best), marker='o', lw=0, label="my data", c='grey', alpha=0.8, elinewidth=1)
+plt.errorbar(x, y_true, yerr=y_errors, marker='o', lw=0, elinewidth=1, label="my data", c='grey', alpha=0.8, zorder=0)
 plt.plot(x, model_guess, label='Starting Model', c='blue')
 plt.plot(x, model_best, label='Best Fit Model', c='red')
 plt.xlabel('x')
 plt.ylabel('y')
 plt.legend()
 plt.show()
-
-# Run the mcmc
-# The mccmc will break once converged according to the auto-correlation time
-mcmc_result = optprob.run_mcmc()
-fig = optprob.corner_plot(mcmc_result)
-
-# Show the corner plot
-fig.show()

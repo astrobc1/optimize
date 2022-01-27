@@ -1,14 +1,10 @@
 name = 'optimize'
 
-# Top level
-from optimize.frameworks import OptProblem, BayesianProblem
-from optimize.models import Model, DeterministicModel, NoiseModel
-from optimize.parameters import Parameter, Parameters, BoundedParameter, BoundedParameters, BayesianParameter, BayesianParameters
-from optimize.data import Dataset, CompositeDataset, SimpleSeries, CompositeSimpleSeries
-from optimize.objectives import MSE, Chi2, GaussianLikelihood, Posterior
-from optimize.optimizers import IterativeNelderMead, SciPyMinimizer, emceeSampler, ZeusSampler
-from optimize.noise import WhiteNoiseProcess, GaussianProcess, QuasiPeriodic
+from optimize.problems import OptProblem
+from optimize.neldermead import IterativeNelderMead
+from optimize.parameters import Parameter, BoundedParameter, BayesianParameter, Parameters, BoundedParameters, BayesianParameters
 
-
-# Second level
-import optimize.priors as priors
+from optimize.noise import *
+from optimize.objectives import *
+from optimize.bayesobjectives import *
+from optimize.samplers import *

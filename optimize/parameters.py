@@ -1,6 +1,12 @@
-import numpy as np
+# Base Python
 import copy
+
+# Maths
+import numpy as np
+
+# Optimize Deps
 import optimize.priors as optpriors
+
 
 ##########################
 #### SINGLE PARAMETER ####
@@ -216,6 +222,14 @@ class BayesianParameter(Parameter):
         """
         self.priors.append(prior)
             
+    def compute_prior_logprob(self):
+        lnL = 0
+        for prior in self.priors:
+            lnL += prior.logprob(self.value)
+            if not np.isfinite(lnL):
+                return -np.inf
+        return lnL
+    
     ###############
     #### MISC. ####
     ###############
@@ -301,7 +315,7 @@ class BayesianParameter(Parameter):
             for prior in self.priors:
                 s += "   " + prior.__repr__() + "\n"
         return s
-    
+
 
 #############################
 #### MULTIPLE PARAMETERS ####
@@ -621,6 +635,20 @@ class BoundedParameters(Parameters):
 class BayesianParameters(Parameters):
     
     default_keys = BayesianParameter.__slots__
+
+
+    ################
+    #### PRIORS ####
+    ################
+
+    def compute_prior_logprob(self):
+        lnL = 0
+        for par in self.values():
+            if par.vary:
+                lnL += par.compute_prior_logprob()
+            if not np.isfinite(lnL):
+                return -np.inf
+        return lnL
     
     @property
     def scales(self):

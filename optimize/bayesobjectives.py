@@ -1,69 +1,67 @@
 
 # Maths
 import numpy as np
+import scipy.linalg
 from scipy.linalg import cho_factor, cho_solve
 
-# Plots
-import matplotlib.pyplot as plt
-
 # Optimize deps
-from optimize.noise import CorrelatedNoiseProcess
-from optimize.objectives import MaxObjectiveFunction
-import optimize.maths as optmath
+from optimize.objectives import ObjectiveFunction
+from optimize.noise import UnCorrelatedNoiseProcess
+
+TWO_PI = 2 * np.pi
+LOG_2PI = np.log(TWO_PI)
 
 
 ####################
 #### Likelihood ####
 ####################
 
-class Likelihood(MaxObjectiveFunction):
+class Likelihood(ObjectiveFunction):
     """A Bayesian likelihood objective function.
     """
-    
-    #####################
-    #### CONSTRUCTOR ####
-    #####################
-    
-    def __init__(self, label=None, model=None):
-        
-        # Super
-        super().__init__(model=model)
-        
-        # Label for the likelihood.
-        self.label = label
-        
-    #####################
-    #### COMPUTE OBJ ####
-    #####################
 
-    def compute_obj(self, pars):
-        """Forwards to compute_logL, the log-likelihood.
-        
-        Args:
-            pars (Parameters): The parameters.
+    def __init__(self, noise_process=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.noise_process = noise_process
 
-        Returns:
-            float: ln(L).
-        """
-        return self.compute_logL(pars)
+    def compute_obj(self, *args, **kwargs):
+        return self.compute_logL(*args, **kwargs)
+
+    def compute_logL(self, *args, **kwargs):
+        raise NotImplementedError(f"Must implement method compute_logL for class {self.__class__.__name__}")
+
+    def compute_data_errors(self, *args, **kwargs):
+        raise NotImplementedError(f"Must implement method compute_data_errors for class {self.__class__.__name__}")
+
+    def compute_dof(self, residuals, pars):
+        n_good = np.where(np.isfinite(residuals) & (residuals != 0))[0].size
+        n_dof = n_good - pars.num_varied
+        return n_dof
+
+    def compute_cov_matrix(self, *args, **kwargs):
+        return self.noise_process.compute_cov_matrix(*args, **kwargs)
+
+    @staticmethod
+    def redchi2loss(residuals, errors, n_dof):
+        return np.nansum((residuals / errors)**2) / n_dof
         
     def compute_logL(self, pars):
         raise NotImplementedError(f"Must implement the method compute_logL for class {self.__class__.__name__}")
-                
-    ###############
-    #### MISC. ####
-    ###############
-    
-    def compute_n_dof(self, pars):
-        """Computes the number of degrees of freedom, n_data_points - n_vary_pars.
 
-        Returns:
-            int: The degrees of freedom.
-        """
-        return len(self.data.get_trainable()) - pars.num_varied
+    @property
+    def datax(self):
+        raise NotImplementedError(f"Must implement the property datax for class {self.__class__.__name__}")
+
+    @property
+    def datay(self):
+        raise NotImplementedError(f"Must implement the property datay for class {self.__class__.__name__}")
     
+    @property
+    def datayerr(self):
+        raise NotImplementedError(f"Must implement the property datay for class {self.__class__.__name__}")
+                
     def __repr__(self):
-        return "Likelihood"
+        return "Generic Likelihood"
 
 
 class GaussianLikelihood(Likelihood):
@@ -85,16 +83,25 @@ class GaussianLikelihood(Likelihood):
         """
 
         # Compute the residuals
-        residuals = self.model.compute_raw_residuals(pars)
+        residuals = self.compute_residuals(pars)
+        errors = self.compute_data_errors(pars)
         n = len(residuals)
-        
-        # Compute the determiniant and inverse of K
-        try:
 
-            if isinstance(self.model.noise_process, CorrelatedNoiseProcess):
-                
+        # Check if noise is correlated
+        if isinstance(self.noise_process, UnCorrelatedNoiseProcess):
+            n_dof = len(residuals) - pars.num_varied
+            assert n_dof > 0
+            chi2 = self.redchi2loss(residuals, errors, n_dof)
+            lnL = -0.5 * chi2
+            return lnL
+        
+        else:
+        
+            # Compute the determiniant and inverse of K
+            try:
+                    
                 # Compute the cov matrix
-                K = self.model.noise_process.compute_cov_matrix(pars)
+                K = self.compute_cov_matrix(pars, self.datax, self.datax, data_errors=errors, include_uncorrelated_error=True)
 
                 # Reduce the cov matrix
                 alpha = cho_solve(cho_factor(K), residuals)
@@ -103,26 +110,15 @@ class GaussianLikelihood(Likelihood):
                 _, lndetK = np.linalg.slogdet(K)
 
                 # Compute the Gaussian likelihood
-                lnL = -0.5 * (np.dot(residuals, alpha) + lndetK + n * np.log(2 * np.pi))
+                lnL = -0.5 * (np.dot(residuals, alpha) + lndetK + n * LOG_2PI)
 
                 # Return
                 return lnL
-            
-            else:
+        
+            except scipy.linalg.LinAlgError:
                 
-                # Errors
-                errors = self.model.compute_data_errors(pars)
-                
-                # LogL for uncorrelated errors
-                lnL = -0.5 * (np.nansum((residuals / errors)**2) + np.nansum(np.log(errors**2)) + n * np.log(2 * np.pi))
-                
-                # Return
-                return lnL
-    
-        except scipy.linalg.LinAlgError:
-            
-            # If things fail, return -inf
-            return -np.inf
+                # If things fail, return -inf
+                return -np.inf
     
     def __repr__(self):
         return "Gaussian Likelihood"
@@ -132,7 +128,7 @@ class GaussianLikelihood(Likelihood):
 #### POSTERIOR ####
 ###################
 
-class Posterior(dict, MaxObjectiveFunction):
+class Posterior(ObjectiveFunction):
     """A class for joint, additive log-likelihood classes.
     """
     
@@ -140,44 +136,20 @@ class Posterior(dict, MaxObjectiveFunction):
     #### CONSTRUCTOR ####
     #####################
     
-    def __init__(self):
-        dict.__init__(self)
+    def __init__(self, likes=None):
+        self.likes = likes
     
     #####################
     #### COMPUTE OBJ ####
     #####################
 
-    def compute_obj(self, pars):
-        """Computes the log of the a posteriori probability.
-        
-        Args:
-            pars (Parameters): The parameters.
-
-        Returns:
-            float: ln(L).
-        """
-        return self.compute_logaprob(pars)
+    def compute_obj(self, *args, **kwargs):
+        return self.compute_logaprob(*args, **kwargs)
     
     def compute_prior_logprob(self, pars):
-        lnL = 0
-        for par in pars.values():
-            if par.vary:
-                for prior in par.priors:
-                    lnL += prior.logprob(par.value)
-                    if not np.isfinite(lnL):
-                        return -np.inf
-        return lnL
+        return pars.compute_prior_logprob()
     
     def compute_logaprob(self, pars):
-        """Computes the log of the a posteriori probability.
-    
-        Args:
-            pars (Parameters): The parameters to use.
-
-        Returns:
-            float: The log likelihood, ln(L).
-        """
-
         lnL = self.compute_prior_logprob(pars)
         if not np.isfinite(lnL):
             return -np.inf
@@ -189,7 +161,7 @@ class Posterior(dict, MaxObjectiveFunction):
     
     def compute_logL(self, pars):
         lnL = 0
-        for like in self.likes:
+        for like in self.likes.values():
             lnL += like.compute_logL(pars)
             if not np.isfinite(lnL):
                 return -np.inf
@@ -266,40 +238,16 @@ class Posterior(dict, MaxObjectiveFunction):
 
         return aicc
     
-    ####################
-    #### INITIALIZE ####
-    ####################
-    
-    def initialize(self, p0):
-        self.p0 = p0
-        for like in self.values():
-            like.initialize(self.p0)
-
     ###############
     #### MISC. ####
     ###############
     
-    def __setitem__(self, label, like):
-        """Overrides the default Python dict setter.
-
-        Args:
-            label (str): How to identify this likelihood.
-            like (Likelihood): The likelihood object to set.
-        """
-        if like.label is None:
-            like.label = label
-        super().__setitem__(label, like)
-    
     @property
     def like0(self):
-        return next(iter(self.values()))
-    
-    @property
-    def likes(self):
-        return self.values()
+        return next(iter(self.likes.values()))
 
     def __repr__(self):
-        s = ""
-        for like in self.values():
-            s += repr(like) + "\n"
+        s = "Posterior with Likelihoods:\n"
+        for like in self.likes.values():
+            s += f"{like}\n"
         return s

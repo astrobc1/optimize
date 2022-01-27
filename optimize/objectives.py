@@ -1,9 +1,9 @@
+# Base Python
+import types
+import inspect
+
 # Maths
 import numpy as np
-
-# optimize deps
-import optimize.maths as optmath
-
 
 ####################
 #### BASE TYPES ####
@@ -12,140 +12,132 @@ import optimize.maths as optmath
 class ObjectiveFunction:
     """An base class for a general objective function. Not useful to instantiate on its own.
     """
-    
-    def __init__(self, model):
-        self.model = model
 
-    def compute_obj(self, pars):
-        """Computes the score from a given set of parameters. This method must be implemented for each score function.
+    def __init__(self, **kwargs):
+        # Set all kwargs by default
+        for key in kwargs:
+            setattr(self, key, kwargs[key])
 
-        Args:
-            pars (Parameters): The parameters to use.
+    ###########################
+    #### COMPUTE OBJECTIVE ####
+    ###########################
 
-        Raises:
-            NotImplementedError: Must implement this method.
-        """
-        raise NotImplementedError(f"Must implement a compute_obj method for class {self.__class__.__name__}.")
-    
-    ####################
-    #### INITIALIZE ####
-    ####################
-    
-    def initialize(self, p0):
-        self.p0 = p0
-        self.model.initialize(self.p0)
-    
+    def __call__(self, *args, **kwargs):
+        return self.compute_obj(*args, **kwargs)
+
+    def compute_obj(self, *args, **kwargs):
+        raise NotImplementedError(f"Must implement method compute_obj for class {self.__class__.__name__}")
+
+    ###################
+    #### RESIDUALS ####
+    ###################
+
+    def compute_residuals(self, *args, **kwargs):
+        raise NotImplementedError(f"Must implement method compute_residuals for class {self.__class__.__name__}")
+
+
     ###############
     #### MISC. ####
     ###############
 
     def __repr__(self):
-        return f"Objective function: {self.__class__.__name__}"
+        return f"Objective Function: {self.__class__.__name__}"
 
-class MinObjectiveFunction(ObjectiveFunction):
-    def __repr__(self):
-        return "Minimum Objective function"
+    def __setattr__(self, key, attr):
+        if callable(attr) and not inspect.isclass(attr):
+            self.register_method(attr, key)
+        else:
+            super().__setattr__(key, attr)
 
-class MaxObjectiveFunction(ObjectiveFunction):
-    def __repr__(self):
-        return "Max Objective function"
+    def register_method(self, method, method_name):
+        if '.' not in method.__qualname__ and method.__code__.co_varnames[0] == "self":
+            super().__setattr__(method_name, types.MethodType(method, self))
+        else:
+            super().__setattr__(method_name, method)
 
 
-#################################
-#### MEAN SQUARE ERROR (RMS) ####
-#################################
+class RMSLoss(ObjectiveFunction):
 
-class MSE(MinObjectiveFunction):
-    """A class for the standard mean squared error (MSE=RMS) loss.
-    """
-    
-    #####################
-    #### COMPUTE OBJ ####
-    #####################
-    
-    def compute_obj(self, pars):
-        """Computes the unweighted mean squared error loss.
+    def __init__(self, flag_worst=0, remove_edges=0, **kwargs):
+        super().__init__(**kwargs)
+        self.flag_worst = flag_worst
+        self.remove_edges = remove_edges
 
-        Args:
-            pars (Parameters): The parameters to use.
-
-        Returns:
-            float: The RMS.
-        """
-        residuals = self.model.compute_residuals(pars)
-        rms = self.compute_rms(residuals)
+    def compute_obj(self, pars, *args, **kwargs):
+        residuals = self.compute_residuals(pars)
+        rms = self.rmsloss(residuals, flag_worst=self.flag_worst, remove_edges=self.remove_edges)
         return rms
-    
+        
     @staticmethod
-    def compute_rms(residuals):
-        """Computes the RMS (Root mean squared) loss. This method does not account for 
+    def rmsloss(residuals, weights=None, flag_worst=0, remove_edges=0):
+        """Convenient method to compute the weighted RMS between two vectors x and y.
 
         Args:
-            data_arr (np.ndarray): The data array.
-            model_arr (np.ndarray): The model array.
+            residuals (np.ndarray): The residuals array, where residuals = data - model.
+            weights (np.ndarray, optional): The weights. Defaults to uniform weights.
+            flag_worst (int, optional): Flag the largest outliers (with weights applied). Defaults to 0.
+            remove_edges (int, optional): Ignore this number of edges on each side. Note this is only relevant for 1d data. Defaults to 0.
 
         Returns:
-            (float): The RMS.
+            float: The weighted RMS.
         """
-        return optmath.compute_rms(residuals)
-    
-    def __repr__(self):
-        return "Objective: Mean Squared Error"
+        
+        # Compute diffs2
+        if weights is not None:
+            good = np.where(np.isfinite(residuals) & np.isfinite(weights) & (weights > 0))[0]
+            res2, ww = residuals[good]**2, weights[good]
+        else:
+            good = np.where(np.isfinite(residuals))[0]
+            res2 = residuals[good]**2
+        
+        # Ignore worst N pixels
+        if flag_worst > 0:
+            ss = np.argsort(res2)
+            res2[ss[-1*flag_worst:]] = np.nan
+            if weights is not None:
+                ww[ss[-1*flag_worst:]] = 0
+                    
+        # Remove edges
+        if remove_edges > 0:
+            xi, xf = good.min(), good.max()
+            res2[xi:xi+remove_edges] = np.nan
+            res2[xf-remove_edges:] = np.nan
+            if weights is not None:
+                ww[xi:xi+remove_edges] = 0
+                ww[xf-remove_edges:] = 0
+            
+        # Compute rms
+        if weights is not None:
+            rms = np.sqrt(np.nansum(res2) / np.nansum(ww))
+        else:
+            n_good = np.where(np.isfinite(res2) & (res2 > 0))[0].size
+            rms = np.sqrt(np.nansum(res2) / n_good)
 
-class Chi2(MinObjectiveFunction):
-    """A class for a simple reduced chi square loss.
-    """
-    
+        return rms
+
+
+class Chi2Loss(ObjectiveFunction):
+
+    def __init__(self, flag_worst=0, remove_edges=0, **kwargs):
+        super().__init__(**kwargs)
+        self.flag_worst = flag_worst
+        self.remove_edges = remove_edges
+
     def compute_obj(self, pars):
-        """Computes the reduced chi2 statistic.
-
-        Args:
-            pars (Parameters): The parameters to use.
-
-        Returns:
-            float: The reduced chi2.
-        """
-        residuals = self.model.compute_residuals(pars)
-        errors = self.model.compute_data_errors(pars)
-        n_dof = len(residuals) - pars.num_varied
-        redchi2 = self.compute_redchi2(residuals, errors, n_dof=n_dof)
+        residuals = self.compute_residuals(pars)
+        errors = self.compute_data_errors(pars)
+        n_dof = self.compute_dof(residuals, pars)
+        redchi2 = self.redchi2loss(residuals, errors, n_dof)
         return redchi2
-    
+
+    def compute_data_errors(self, *args, **kwargs):
+        raise NotImplementedError(f"Must implement method compute_data_errors for class {self.__class__.__name__}")
+
+    def compute_dof(self, residuals, pars):
+        n_good = np.where(np.isfinite(residuals) & (residuals != 0))[0].size
+        n_dof = n_good - pars.num_varied
+        return n_dof
+
     @staticmethod
-    def compute_chi2(residuals, errors):
-        """Computes the (non-reduced) chi2 statistic (weighted MSE).
-
-        Args:
-            residuals (np.ndarray): The residuals array.
-            errors (np.ndarray): The effective errorbars.
-
-        Returns:
-            float: The chi-squared statistic.
-        """
-        return optmath.compute_chi2(residuals, errors)
-    
-    @staticmethod
-    def compute_redchi2(residuals, errors, n_dof=None):
-        """Computes the reduced chi2 statistic (weighted MSE).
-
-        Args:
-            residuals (np.ndarray): The residuals = data - model
-            errors (np.ndarray): The effective errorbars (intrinsic and any white noise).
-            n_dof (int): The degrees of freedom, defaults to len(res) - 1.
-
-        Returns:
-            float: The reduced chi-squared statistic.
-        """
-        if n_dof is None:
-            n_dof = len(residuals) - 1
-        return optmath.compute_redchi2(residuals, errors, n_dof)
-
-    def __repr__(self):
-        return "Objective: Chi 2"
-
-
-##############################
-#### BAYESIAN OOBJECTIVES ####
-##############################
-
-from .bayesobj import *
+    def redchi2loss(residuals, errors, n_dof):
+        return np.nansum((residuals / errors)**2) / n_dof
