@@ -21,7 +21,7 @@ class IterativeNelderMead:
     #### CONSTRUCTOR ####
     #####################
     
-    def __init__(self, obj=None, alpha=1.0, gamma=2.0, sigma=0.5, delta=0.5, xtol_rel=1E-6, ftol_rel=1E-6, n_iterations=None, no_improve_break=3, apply_penalty=None, penalty=1E6, max_f_evals=None, initial_scale_factor=0.5, obj_args=None, obj_kwargs=None, maximize=False):
+    def __init__(self, obj=None, alpha=1.0, gamma=2.0, sigma=0.5, delta=0.5, xtol_rel=1E-8, ftol_rel=1E-8, n_iterations=None, no_improve_break=3, apply_penalty=None, penalty=1E6, max_f_evals=None, initial_scale_factor=0.5, obj_args=None, obj_kwargs=None, maximize=False):
         """Construct the iterative Nelder-Mead optimizer.
 
         Args:
@@ -30,8 +30,8 @@ class IterativeNelderMead:
             gamma (float, optional): Nelder-Mead hyper-parameter. Defaults to 2.0.
             sigma (float, optional): Nelder-Mead hyper-parameter. Defaults to 0.5.
             delta (float, optional): Nelder-Mead hyper-parameter. Defaults to 0.5.
-            xtol (float, optional): The relative x tolderance for convergence. Defaults to 1E-6.
-            ftol (float, optional): The relative f tolerance for convergence. Defaults to 1E-6.
+            xtol (float, optional): The relative x tolderance for convergence. Defaults to 1E-8.
+            ftol (float, optional): The relative f tolerance for convergence. Defaults to 1E-8.
             n_iterations (int, optional): The number of iterations. Defaults to len(p0).
             no_improve_break (int, optional): The number of times in a row the solver must converge before actually breaking. Defaults to 3.
             penalty (float, optional): The penalty to add to the objective for each BoundedParameter. Defaults to 1E6.
