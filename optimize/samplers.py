@@ -82,7 +82,8 @@ class emceeLikeSampler:
         """
         return self.sampler.nwalkers
 
-    def chain_uncertainty(self, flat_chain, percentiles=[15.9, 50, 84.1]):
+    @staticmethod
+    def chain_uncertainty(flat_chain, percentiles=[15.9, 50, 84.1]):
         
         # Compute percentiles
         par_quantiles = np.percentile(flat_chain, percentiles)
