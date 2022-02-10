@@ -21,7 +21,7 @@ class IterativeNelderMead:
     #### CONSTRUCTOR ####
     #####################
     
-    def __init__(self, obj=None, alpha=1.0, gamma=2.0, sigma=0.5, delta=0.5, xtol_rel=1E-8, ftol_rel=1E-8, n_iterations=None, no_improve_break=3, apply_penalty=None, penalty=1E6, max_f_evals=None, initial_scale_factor=0.5, obj_args=None, obj_kwargs=None, maximize=False):
+    def __init__(self, obj=None, alpha=1.0, gamma=2.0, sigma=0.5, delta=0.5, xtol_rel=1E-6, ftol_rel=1E-6, n_iterations=None, no_improve_break=3, penalty=1E6, max_f_evals=None, initial_scale_factor=0.5, obj_args=None, obj_kwargs=None, maximize=False):
         """Construct the iterative Nelder-Mead optimizer.
 
         Args:
@@ -49,7 +49,6 @@ class IterativeNelderMead:
         self.max_f_evals = max_f_evals
         self.n_iterations = n_iterations
         self.no_improve_break = no_improve_break
-        self.apply_penalty = apply_penalty
         self.penalty = penalty
         self.initial_scale_factor = initial_scale_factor
         self.obj_args = () if obj_args is None else obj_args
@@ -99,6 +98,7 @@ class IterativeNelderMead:
 
         # The current status
         self.status = "failed"
+            
 
     def initialize_parameters(self, p0, lower_bounds=None, upper_bounds=None, parameter_names=None, vary=None):
         """Initialize the remaining solver options with the initial parameters.
@@ -132,6 +132,12 @@ class IterativeNelderMead:
             for i in range(self.n_pars):
                 self.p0[parameter_names[i]] = optimize.parameters.BoundedParameter(value=p0[i], lower_bound=lower_bounds[i], upper_bound=upper_bounds[i], vary=vary[i])
             self.n_pars_vary = self.p0.num_varied
+
+        # Don't penalize Bayesian Parameters
+        if isinstance(p0, optimize.parameters.BoundedParameters):
+            self.apply_penalty = True
+        else:
+            self.apply_penalty = False
 
         
         # Test pars
@@ -229,7 +235,6 @@ class IterativeNelderMead:
         else:
             out['pbest'] = self.pmin
             
-
         return out
 
     def optimize_space(self, subspace_index=None):
@@ -362,7 +367,7 @@ class IterativeNelderMead:
         if subspace_index is None:
             for i, p in enumerate(self.p0_numpy_vary['name']):
                 self.pmin[p].value = pmin[i]
-            #self.current_full_simplex = np.copy(simplex)
+            self.current_full_simplex = np.copy(simplex)
         else:
             for i, p in enumerate(self.subspaces[subspace_index]):
                 self.pmin[p].value = pmin[i]
@@ -411,13 +416,13 @@ class IterativeNelderMead:
             f = self.obj(test_pars_vec, *self.obj_args, **self.obj_kwargs)
         else:
             f = self.obj(self.test_pars, *self.obj_args, **self.obj_kwargs)
+        
+        # Update fcalls
+        self.fcalls += 1
 
         # Max or min
         if self.maximize:
             f *= -1
-        
-        # Update fcalls
-        self.fcalls += 1
 
         # Penalize
         if self.apply_penalty:
@@ -425,8 +430,8 @@ class IterativeNelderMead:
 
         # Last resort, can't return inf or nan at this stage
         if not np.isfinite(f):
-            f = 1E6
-        
+            f = self.penalty
+
         # Return
         return f
 

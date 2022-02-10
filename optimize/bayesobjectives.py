@@ -98,7 +98,7 @@ class GaussianLikelihood(Likelihood):
             try:
                     
                 # Compute the cov matrix
-                K = self.compute_cov_matrix(pars, self.datax, self.datax, data_errors=errors, include_uncorrelated_error=True)
+                K = self.compute_cov_matrix(pars, self.datax, self.datax, include_uncorrelated_error=True)
 
                 # Reduce the cov matrix
                 alpha = cho_solve(cho_factor(K), residuals)
@@ -176,10 +176,10 @@ class Posterior(ObjectiveFunction):
         
         chi2 = 0
         n_dof = 0
-        for like in self.values():
-            residuals = like.model.compute_residuals(pars)
-            errors = like.model.compute_data_errors(pars)
-            chi2 += optmath.compute_chi2(residuals, errors)
+        for like in self.likes.values():
+            residuals = like.compute_residuals(pars)
+            errors = like.compute_data_errors(pars)
+            chi2 += np.nansum((residuals / errors)**2)
             n_dof += len(residuals)
         n_dof -= pars.num_varied
         redchi2 = chi2 / n_dof
@@ -195,8 +195,8 @@ class Posterior(ObjectiveFunction):
             float: The BIC.
         """
         n = 0
-        for like in self.likes:
-            n += len(like.model.data.get_trainable())
+        for like in self.likes.values():
+            n += len(like.model.data.t)
         k = pars.num_varied
         lnL = self.compute_logL(pars)
         bic = k * np.log(n) - 2.0 * lnL
@@ -214,8 +214,8 @@ class Posterior(ObjectiveFunction):
         
         # Number of data points
         n = 0
-        for like in self.values():
-            n += len(like.model.data.get_trainable())
+        for like in self.likes.values():
+            n += len(like.model.data.t)
             
         # Number of estimated parameters
         k = pars.num_varied
