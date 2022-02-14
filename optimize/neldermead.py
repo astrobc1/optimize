@@ -380,7 +380,6 @@ class IterativeNelderMead:
         if subspace_index is not None:
             n = len(self.subspaces[subspace_index])
             inds = self.subspace_inds[subspace_index]
-            #breakpoint()
             simplex = np.zeros((n, n+1))
             pmin = self.pmin.unpack(keys='value')['value'][inds]
             pinit = self.p0_numpy['value'][inds]
