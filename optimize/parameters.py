@@ -118,7 +118,10 @@ class BoundedParameter(Parameter):
             self.vary = False
 
     def __repr__(self):
-        s = f"Name: {self.name} | Value: {self.value}"
+        if self.out_of_bounds and self.vary:
+            s = f"Name: {self.name} | X Value: {self.value}"
+        else:
+            s = f"Name: {self.name} | Value: {self.value}"
         if not self.vary:
             s += ' (Locked)'
         s += f" | Bounds: {self.lower_bound}, {self.upper_bound}"
