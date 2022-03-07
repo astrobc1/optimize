@@ -201,13 +201,7 @@ class IterativeNelderMead:
         self.initialize(p0, obj=obj, lower_bounds=lower_bounds, upper_bounds=upper_bounds, parameter_names=parameter_names, obj_args=obj_args, obj_kwargs=obj_kwargs)
         
         # Loop over iterations
-        for iteration in range(self.n_iterations):
-            
-            if iteration > 0:
-                dx_rel = self.compute_dx_rel(self.current_full_simplex)
-                if dx_rel < self.xtol_rel:
-                    self.status = "success"
-                    break
+        for _ in range(self.n_iterations):
 
             # Perform Ameoba call for all parameters
             self.optimize_space(None)

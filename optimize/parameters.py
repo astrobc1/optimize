@@ -155,6 +155,19 @@ class BoundedParameter(Parameter):
         """
         return not self.in_bounds
 
+    @property
+    def scale(self):
+        """The scale for the parameter.
+
+        Returns:
+            float: The parameter scale.
+        """
+        if np.isfinite(self.lower_bound) and np.isfinite(self.upper_bound) and self.lower_bound != self.upper_bound:
+            return (self.upper_bound - self.lower_bound) / 10
+        else:
+            return np.abs(self.value) / 100
+
+
 class BayesianParameter(Parameter):
     
     """A class for a Bayesian model parameter.
@@ -237,7 +250,7 @@ class BayesianParameter(Parameter):
     #### MISC. ####
     ###############
         
-    @property    
+    @property
     def scale(self):
         """The scale for the parameter to initiate MCMC walkers.
 
@@ -628,6 +641,11 @@ class BoundedParameters(Parameters):
             bool: True if any parameters are out of bounds, False otherwise.
         """
         return not self.all_in_bounds
+
+    @property
+    def scales(self):
+        return np.array([par.scale for par in self.values()])
+
 
     def __repr__(self):
         s = "Bounded Parameters:\n"
